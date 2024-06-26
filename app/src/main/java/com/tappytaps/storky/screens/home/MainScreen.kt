@@ -72,7 +72,7 @@ fun MainScreen(
 
     //check if is it possible to show StorkyPopUpDialog automatically:
     LaunchedEffect(lengthOfInterval, lengthOfContraction, averageContractionLength, averageLengthBetweenContractions) {
-        if ((averageContractionLength > lengthOfContraction) && (averageLengthBetweenContractions < lengthOfInterval) && !dialogShownAutomatically.value) {
+        if ((averageContractionLength > lengthOfContraction) && (averageLengthBetweenContractions < lengthOfInterval) && (averageLengthBetweenContractions > 0) && !dialogShownAutomatically.value) {
             showDialogAutomatically = true
 
         }

@@ -160,20 +160,20 @@ fun calculateAverageLengthOfIntervalTime(
     } else {
         var intervalLengths = listOfContractions.map { it.timeBetweenContractions }
 
-        // Seřadit délky kontrakcí v sestupném pořadí:
+        // Arrange contraction lengths in descending order:
         val sortedLengths = intervalLengths.sortedDescending()
 
-        // Vypočítat počet prvků, které se nebudou počítat (20%):
+        // Count the number of elements that will not be counted (20%):
         val excludedCount = (0.2 * sortedLengths.size).toInt()
 
 
-        // Získat délky kontrakcí, které se budou počítat:
+        // Get the contraction lengths to be counted:
         val includedLengths = sortedLengths.subList(excludedCount, sortedLengths.size)
 
-        // Vypočítat průměr zahrnutých délek kontrakcí:
+        // Calculate the average of the included contraction lengths:
         val averageLength = includedLengths.sum() / includedLengths.size
 
-        // Vrátit průměr:
+        // Return the average:
         return averageLength
 
     }
