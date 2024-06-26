@@ -124,5 +124,14 @@ class HistoryScreenViewModel @Inject constructor(
         }
     }
 
+    fun deleteContraction(contraction: Contraction) {
+        viewModelScope.launch {
+            try {
+                repository.deleteContraction(contraction)
+            } catch (e: Exception) {
+            }
+        }
+    }
+
 
 }

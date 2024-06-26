@@ -13,7 +13,6 @@ enum class StorkyScreens {
     SettingsScreen,
     RemoveAdsScreen,
     BibinoAppScreen,
-    ShareEmailSenderScreen,
     IndicatorHelpScreen;
 
     companion object {
@@ -30,7 +29,6 @@ enum class StorkyScreens {
             RemoveAdsScreen.name -> RemoveAdsScreen
             BibinoAppScreen.name -> BibinoAppScreen
             IndicatorHelpScreen.name -> IndicatorHelpScreen
-            ShareEmailSenderScreen.name -> ShareEmailSenderScreen
             null -> HomeScreen
             else -> throw IllegalArgumentException("Route $route is not recognized")
         }

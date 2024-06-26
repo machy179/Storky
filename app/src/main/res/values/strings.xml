@@ -142,5 +142,15 @@
     <!--  share e-mail screens -->
     <string name="share_email">Share by e-mail</string>
 
+    <!--  remove ads screens -->
+    <string name="remove_ads_screen_title">Measure contractions with no ads</string>
+    <string name="remove_ads_screen_text">Remove all ads for a one-time fee and measure your contractions with no distractions.</string>
+    <string name="remove_ads_screen_button_text">Remove ads</string>
+    <string name="remove_ads_screen_button_subtext">$2.99 (one-time fee)</string>
+    <string name="restore_purchase">Restore purchase</string>
+    <string name="you_agree_to_our">You agree to our</string>
+    <string name="terms_of_service">Terms of Service</string>
+    <string name="and">and</string>
+    <string name="privacy_policy">Privacy Policy.</string>
 
 </resources>

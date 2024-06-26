@@ -103,8 +103,6 @@ fun calculateAverageLengthOfContraction(
 ): Int {
     val size =
         if (includeCurrentContractionLength) listOfContractions.size + 1 else listOfContractions.size
-    Log.d("aaaa-aaaa", "size: " + size.toString())
-    Log.d("aaaa-aaaa", "currentContractionLength: " + currentContractionLength.toString())
     //pokud jedno měření, průměr bude _currentContractionLength
     if (listOfContractions.size == 0) {
         return currentContractionLength
@@ -213,7 +211,7 @@ fun getHtmlContent(listOfContractions: List<Contraction>): String {
         htmlContent2 = htmlContent2+"Length of contraction: " + convertSecondsToTimeString(contraction.lengthOfContraction)+ "<br>"
         htmlContent2 = htmlContent2+"Length between of contractions: " + convertSecondsToTimeString(contraction.timeBetweenContractions)+ "<br><br>"
     }
-    htmlContent2 = htmlContent2+"...it is performed from app Storky...<br>"
+    htmlContent2 = htmlContent2+"...it is performed by app Storky...<br>"
     return htmlContent2
 
 }

@@ -1,8 +1,10 @@
 package com.tappytaps.storky.components
 
 import android.util.Log
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -135,6 +137,7 @@ fun imageTitleContentText(
 @Composable
 fun UniversalButton(
     text: String,
+    subText: String ="",
     onClick: () -> Unit,
     inverseColor: Boolean = false,
     disableInsetNavigationBarPadding: Boolean = false //if it is used in HomeScreen on Scaffold, it is necessary to disable bottom padding of Inset NavigationBar
@@ -163,11 +166,25 @@ fun UniversalButton(
                 .height(56.dp)
                 .width(264.dp)
         ) {
-            Text(
-                text = text,
-                color = if (inverseColor) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onPrimary,
-                style = MaterialTheme.typography.labelLarge
+            Column(
+                modifier = modifier,
+                horizontalAlignment = Alignment.CenterHorizontally // Center content horizontally
             )
+            {
+                Text(
+                    text = text,
+                    color = if (inverseColor) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onPrimary,
+                    style = MaterialTheme.typography.labelLarge
+                )
+                if(subText!="") {
+                    Text(
+                        text = subText,
+                        color = if (inverseColor) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onPrimary,
+                        style = MaterialTheme.typography.labelMedium
+                    )
+                }
+            }
+
         }
 
         Spacer(
@@ -304,18 +321,27 @@ fun CustomDialog(
     )
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ContractionRowByItems(
     modifier: Modifier = Modifier,
     contraction: Contraction,
-    numberOfContraction: Int
+    numberOfContraction: Int,
+    onLongClick: () -> Unit
 ) {
+    Column(
+        modifier = modifier.combinedClickable(
+            onClick = { /* No-op or short click action */ },
+            onLongClick = onLongClick
+        )
+    ) {
     ContractionRow(
         lengthOfContraction = contraction.lengthOfContraction,
         contractionTime = contraction.contractionTime,
         timeBetweenContractions = contraction.timeBetweenContractions,
         numberOfContraction = numberOfContraction
     )
+    }
 
 }
 

@@ -226,7 +226,8 @@ fun MainScreen(
                                 itemsIndexed(contractionsList) { index,contraction ->
                                     reverseIndex = contractionsList.size - index
                                     ContractionRowByItems(contraction = contraction,
-                                        numberOfContraction = reverseIndex)
+                                        numberOfContraction = reverseIndex,
+                                        onLongClick = { viewModel.deleteContraction(contraction) })
                                 }
 
                             }

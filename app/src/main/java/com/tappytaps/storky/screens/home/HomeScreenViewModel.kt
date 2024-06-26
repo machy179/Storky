@@ -27,7 +27,8 @@ class HomeScreenViewModel @Inject constructor(
     private val sharedPreferences: SharedPreferences
 ) : ViewModel() {
 
-    private val _listOfContractions = MutableStateFlow<List<Contraction>>(emptyList()) //it is list of active Contractions
+    private val _listOfContractions =
+        MutableStateFlow<List<Contraction>>(emptyList()) //it is list of active Contractions
     val listOfContractions = _listOfContractions.asStateFlow()
 
     private var _currentContractionLength = mutableStateOf(0)
@@ -39,7 +40,8 @@ class HomeScreenViewModel @Inject constructor(
     private val _currentTimeDateContraction = mutableStateOf(getCurrentCalendar())
     val currentTimeDateContraction = _currentTimeDateContraction
 
-    private var _dialogShownAutomatically = mutableStateOf(false) //if StorkyPopUpDialog was automatically shown
+    private var _dialogShownAutomatically =
+        mutableStateOf(false) //if StorkyPopUpDialog was automatically shown
     val dialogShownAutomatically = _dialogShownAutomatically
 
     var isRunning = false
@@ -147,37 +149,49 @@ class HomeScreenViewModel @Inject constructor(
     }
 
     fun newMonitoring() {
-            viewModelScope.launch {
-                    try {
-                        if (isRunning) {
-                            saveContraction()
-                            delay(100)
-                        }
-                        val contractions = listOfContractions.first() // Collect the latest list
-                        repository.updateContractionsToHistory(contractions).run {
-                            _listOfContractions.value = emptyList()
-                            getAllActiveContractions()
-                            _dialogShownAutomatically.value = false
-                        }
-                        stopStopwatch()
-                    } catch (e: Exception) {
-                        Log.e("Save to database error:", e.toString())
-                    }
+        viewModelScope.launch {
+            try {
+                if (isRunning) {
+                    saveContraction()
+                    delay(100)
+                }
+                val contractions = listOfContractions.first() // Collect the latest list
+                repository.updateContractionsToHistory(contractions).run {
+                    _listOfContractions.value = emptyList()
+                    getAllActiveContractions()
+                    _dialogShownAutomatically.value = false
+                }
+                stopStopwatch()
+            } catch (e: Exception) {
+                Log.e("Save to database error:", e.toString())
             }
+        }
 
 
     }
 
     fun updateAverageTimes(includeCurrentContractionLength: Boolean = true) {
-        _averageContractionLength.value = calculateAverageLengthOfContraction(listOfContractions = _listOfContractions.value,
+        _averageContractionLength.value = calculateAverageLengthOfContraction(
+            listOfContractions = _listOfContractions.value,
             currentContractionLength = currentContractionLength.value,
-            includeCurrentContractionLength = includeCurrentContractionLength)
-        _averageLengthBetweenContractions.value = calculateAverageLengthOfIntervalTime(listOfContractions = _listOfContractions.value)
+            includeCurrentContractionLength = includeCurrentContractionLength
+        )
+        _averageLengthBetweenContractions.value =
+            calculateAverageLengthOfIntervalTime(listOfContractions = _listOfContractions.value)
 
     }
 
     fun setDialogShownAutomaticallyTrue() {
         _dialogShownAutomatically.value = true
+    }
+
+    fun deleteContraction(contraction: Contraction) {
+        viewModelScope.launch {
+            try {
+                repository.deleteContraction(contraction)
+            } catch (e: Exception) {
+            }
+        }
     }
 
 

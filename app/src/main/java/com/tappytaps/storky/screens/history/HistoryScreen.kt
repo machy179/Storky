@@ -142,7 +142,8 @@ fun HistoryScreen(
                     val reversedIndex = SizeListOfContractionsHistory - index
                     ContractionRowByItems(
                         contraction = contraction,
-                        numberOfContraction = reversedIndex//reverseIndex
+                        numberOfContraction = reversedIndex,
+                        onLongClick = { viewModel.deleteContraction(contraction) }
                     )
                 }
 

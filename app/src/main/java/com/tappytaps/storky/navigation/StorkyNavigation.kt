@@ -21,9 +21,9 @@ import com.tappytaps.storky.screens.home.HomeScreenViewModel
 import com.tappytaps.storky.screens.howto.HowToScreen
 import com.tappytaps.storky.screens.indicatorhelp.IndicatorHelpScreen
 import com.tappytaps.storky.screens.presentation.PresentationScreen
+import com.tappytaps.storky.screens.removeads.RemoveAdsScreen
 import com.tappytaps.storky.screens.settings.SettingsScreen
 import com.tappytaps.storky.screens.settings.SettingsScreenViewModel
-import com.tappytaps.storky.screens.shareemailsender.ShareEmailSenderScreen
 import com.tappytaps.storky.screens.trybibino.TryBibinoScreen
 
 @ExperimentalMaterial3Api
@@ -106,8 +106,9 @@ fun StorkyNavigation() {
             BibinoAppScreen(navController = navController)
         }
 
-        composable(StorkyScreens.ShareEmailSenderScreen.name) {
-            ShareEmailSenderScreen(navController = navController)
+
+        composable(StorkyScreens.RemoveAdsScreen.name) {
+            RemoveAdsScreen(navController = navController)
         }
 
     }
