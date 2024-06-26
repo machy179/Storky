@@ -1,0 +1,146 @@
+<resources>
+    <string name="app_name">Storky</string>
+
+
+    <!--  presentation screen -->
+    <string name="back_button">Back</string>
+    <string name="next_button">Next</string>
+    <string name="welcome_to_storky">Welcome to Storky</string>
+    <string name="simple_measuring">Simple measuring</string>
+    <string name="smart_notification">Smart notification</string>
+    <string name="presentation_text_1">Practical and easy to use contraction timer for your happiest day.</string>
+    <string name="presentation_text_2">Measure contractions and intervals with a single tap of button.</string>
+    <string name="presentation_text_3">Storky will let you know when to consider going to the hospital or a birth center.</string>
+
+
+    <!--  trybibiono screen -->
+    <string name="skip_button">Skip</string>
+    <string name="try_bibino_title">Try baby monitor created by experts</string>
+    <string name="try_bibino_text">Get ready for the baby’s arrival with the most reliable baby monitor on the market. Download Bibino now and try it yourself for free.</string>
+    <string name="try_bibino_for_free_button_text">Try Bibino for free</string>
+
+    <!--  email screen -->
+    <string name="email_title">Get guide how to measure contractions</string>
+    <string name="email_text">Would you like to learn how to properly measure the contractions? Enter your email, and we will send a printable how-to guide right into your inbox.</string>
+    <string name="enter_email_address">Enter email address</string>
+    <string name="invalid_email_address">Invalid email address</string>
+    <string name="enter_correct_email_address">Enter a correct email address and try it again.</string>
+    <string name="skip_step_title">Are you sure to skip this step?</string>
+    <string name="skip_step_text">Skip this step only if you\'re 100% sure how to measure the contractions properly.</string>
+    <string name="check_your_inbox_title">Check your inbox</string>
+    <string name="check_your_inbox_text">We’ve sent you a message. Confirm your email address, so Storky can send you the contraction records. If you haven’t received the email, check the SPAM folder.</string>
+
+
+    <!--  all screens -->
+    <string name="skip">Skip</string>
+    <string name="dont_skip">Don\'t skip</string>
+    <string name="ok">OK</string>
+    <string name="no">NO</string>
+    <string name="got_it">Got it</string>
+
+    <!--  home screens -->
+    <string name="practical_knowledge_title">Practical knowledge</string>
+    <string name="practical_knowledge_text">Check out some useful info to better understand all about contractions.</string>
+    <string name="learn_more">Learn more</string>
+    <string name="start_contraction">Start Contraction</string>
+    <string name="stop_contraction">Stop Contraction</string>
+
+    <string name="pause">Pause</string>
+    <string name="restart">New monitoring</string>
+    <string name="remove_ads">Remove ads</string>
+    <string name="after_birth">After birth</string>
+    <string name="share_app">Share app</string>
+    <string name="interval_time">Interval time</string>
+    <string name="paused_tap_start">Paused, tap start to continue.</string>
+    <string name="contraction">Contraction</string>
+    <string name="interval">Interval</string>
+    <string name="today">Today</string>
+    <string name="yesterday">Yesterday</string>
+    <string name="new_monitoring_title">Start new monitoring?</string>
+    <string name="new_monitoring_text">Are you sure you want to start new monitoring? The current one will be stored in History.</string>
+
+    <!--  history screens -->
+    <string name="history">History</string>
+    <string name="history_title">It seems so empty</string>
+    <string name="history_text">Start monitoring your contracitons to see monitoring history here.</string>
+    <string name="delete">Delete</string>
+    <string name="share">Share</string>
+    <string name="clear_this_data_title">Clear this data?</string>
+    <string name="clear_this_data_text">Are you sure you want to reset this data?</string>
+    <string name="cancel">Cancel</string>
+    <string name="clear">Clear</string>
+    <string name="clear_all_data_title">Clear all data?</string>
+    <string name="clear_all_data_text">Are you sure you want to reset all the previous data?</string>
+
+
+
+    <!--  Storky popup -->
+    <string name="conditions_not_met_title">Conditions not met!</string>
+    <string name="conditions_met_title">Conditions met!</string>
+    <string name="conditions_not_met_text">When stork gets pink, you are probably in Active Labour because of conditions below.</string>
+    <string name="conditions_met_text">Stork is pink which means all the conditions have been met. You are in Active phase of Labour. Consider going to the hospital or birth center.</string>
+    <string name="intervals_should_be_shorter_than">Intervals should be shorter than </string>
+    <string name="contractions_should_be_shorter_than">Contractions should be longer </string>
+    <string name="now">Now </string>
+
+    <!--  IndicatorHelpScreen -->
+    <string name="storky_indicator">Storky indicator</string>
+    <string name="how_it_works_title">How it works</string>
+    <string name="how_it_works_text">When indicator lights on it shows you should consider to go to the hospital or birth center. If you are not sure call your healthcare provider.</string>
+
+    <string name="conditions_title">Conditions</string>
+    <string name="conditions_text">Default conditions are when last three contractions come every 5 minutes, each lasting 60 seconds. All the values can be changed below.</string>
+    <string name="change_conditions">Change Conditions</string>
+
+    <string name="when_to_go_title">When to go?</string>
+    <string name="when_to_go_text">Always consult your conditions with healthcare provider. You should go to hospital immediatelly in case of:</string>
+    <string name="when_to_go_row_1">Strong vaginal bleeding</string>
+    <string name="when_to_go_row_2">Green, brown or yellow water when membranes has broken</string>
+    <string name="when_to_go_row_3">No contractions for hours when membranes has broken</string>
+    <string name="when_to_go_row_4">Strong headache, dizziness or blurred vision</string>
+    <string name="when_to_go_row_5">Unbearable pain</string>
+    <string name="when_to_go_row_6">An urge to push</string>
+    <string name="when_to_go_row_7">No movement from the baby</string>
+
+    <!--  HowTosScreen -->
+    <string name="how_to">How to</string>
+    <string name="basic_terms">Basic terms</string>
+    <string name="contraction_description">During labour the uterus contracts and moves your baby down. During contraction your abdomen becomes hard.</string>
+    <string name="interval_description">It\'s a time from the beginning of one contraction to the beginning of the following one. It is the time of duration of the contraction plus rest time after.</string>
+    <string name="true_labour">True Labour</string>
+    <string name="true_labour_description">Contractions last 30 - 90 seconds. Before you can feel very short and irregular contractions with very low intensity. It is called False Labour or Pre-Labour.</string>
+    <string name="labour_phases">Labour Phases</string>
+    <string name="early_labour_phase">Early Labour phase</string>
+    <string name="early_labour_phase_description">Contractions are mild and last 30 - 45 seconds with 5 to 30 minutes interval in between. The cervix is dilating to 3 cm. Try to relax or sleep. Wait untill the contractions become stronger and longer. It can last for hours if it is your first labour.</string>
+    <string name="active_labour_phase">Active Labour phase</string>
+    <string name="active_labour_phase_description">Contractions are becoming stronger and last about 45-60 seconds with 3-5 minutes interval in between. The cervix is dilating from 4 to 7 cm. If the contractions comes every 5 minutes or less, and last for a minute or more over an hour it is time to leave for the hospital or birth center. We will notify you about it by this icon:</string>
+    <string name="transition_phase">Transition phase</string>
+    <string name="transition_phase_description">Contractions are very strong and last 60-90 seconds with interval about 2-3 minutes. The cervix is dilated to 8 - 10 cm. The baby will be probably coming out soon.</string>
+    <string name="pushing_and_delivery">Pushing and delivery</string>
+    <string name="pushing_and_delivery_description">The cervix is fully dilated. Contractions last 60 - 90 seconds and your body is pushing your baby out.</string>
+
+    <!--  settings screens -->
+    <string name="settings">Settings</string>
+    <string name="reset_to_defaults">Reset to defaults</string>
+    <string name="created_by_bibino_baby_monitor">Created by Bibino Baby Monitor</string>
+    <string name="length_of_interval">Length of interval</string>
+    <string name="length_of_contraction">Length of contraction</string>
+    <string name="minutes_4">4 minutes</string>
+    <string name="minutes_430">4 minutes, 30 seconds</string>
+    <string name="minutes_5">5 minutes</string>
+    <string name="minutes_530">5 minutes, 30 seconds</string>
+    <string name="minutes_6">6 minutes</string>
+    <string name="seconds_50">50 seconds</string>
+    <string name="minute_1">1 minute</string>
+    <string name="minute_110">1 minute, 10 seconds</string>
+    <string name="minute_120">1 minute, 20 seconds</string>
+
+    <!--  settings screens -->
+    <string name="bibino_app">Bibino app</string>
+    <string name="bibino_app_text">Storky was created with ❤️ by Bibino team. Bibino is an award-winning app that’s trusted by more than 2 million parents all over the world. Try it now.</string>
+
+    <!--  share e-mail screens -->
+    <string name="share_email">Share by e-mail</string>
+
+
+</resources>
