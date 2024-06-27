@@ -100,6 +100,9 @@ dependencies {
     implementation("com.google.accompanist:accompanist-pager:0.35.1-alpha")
     implementation("com.google.accompanist:accompanist-pager-indicators:0.35.1-alpha")
 
+    implementation("com.itextpdf:itext7-core:7.1.15")
+    implementation("com.itextpdf:html2pdf:4.0.2")
+
 
     
 

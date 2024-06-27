@@ -6,6 +6,7 @@ import androidx.room.Room
 import com.tappytaps.storky.data.StorkyDatabase
 import com.tappytaps.storky.data.StorkyDatabaseDao
 import com.tappytaps.storky.repository.EmailRepository
+import com.tappytaps.storky.repository.PdfRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -34,6 +35,11 @@ object AppModule {
     @Provides
     fun provideEmailRepository(): EmailRepository {
         return EmailRepository()
+    }
+
+    @Provides
+    fun providePdfRepository(): PdfRepository {
+        return PdfRepository()
     }
 
     @Provides
