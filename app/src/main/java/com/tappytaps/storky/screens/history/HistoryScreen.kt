@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -42,7 +41,7 @@ import com.tappytaps.storky.components.ContractionRowByItems
 import com.tappytaps.storky.components.CustomDialog
 import com.tappytaps.storky.components.StorkyAppBar
 import com.tappytaps.storky.components.StorkyDropMenuItem
-import com.tappytaps.storky.components.imageTitleContentText
+import com.tappytaps.storky.components.ImageTitleContentText
 import com.tappytaps.storky.model.Contraction
 import com.tappytaps.storky.navigation.StorkyScreens
 import com.tappytaps.storky.utils.getDateInHistory
@@ -56,7 +55,6 @@ fun HistoryScreen(
 ) {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
 
-    val scrollState = rememberScrollState()
     var dialogClearAllDataVisible by remember { mutableStateOf(false) }
 
 
@@ -92,12 +90,12 @@ fun HistoryScreen(
                     verticalArrangement = Arrangement.Center
                 ) {
 
-                    var imageResId: Int = R.drawable.empty
-                    var titleResId: Int = R.string.history_title
-                    var textResId: Int = R.string.history_text
+                    val imageResId: Int = R.drawable.empty
+                    val titleResId: Int = R.string.history_title
+                    val textResId: Int = R.string.history_text
 
 
-                    imageTitleContentText(
+                    ImageTitleContentText(
                         imageResId = imageResId,
                         titleResId = titleResId,
                         textResId = textResId,
@@ -121,7 +119,7 @@ fun HistoryScreen(
                 }
                 previousSet = contraction.in_set
             }
-            var SizeListOfContractionsHistory = listOfContractionsHistory.size
+            val SizeListOfContractionsHistory = listOfContractionsHistory.size
 
             LazyColumn(
                 modifier = Modifier.padding(paddingValues),//.verticalScroll(scrollState),
@@ -132,8 +130,7 @@ fun HistoryScreen(
                 ) { index, contraction ->
                     if (contraction.id in ids) {
                         Spacer(modifier = Modifier.height(24.dp))
-                        barSetsContractions(
-                            navController = navController,
+                        BarSetsContractions(
                             listOfContractionsHistory = listOfContractionsHistory,
                             contraction = contraction,
                             viewModel = viewModel,
@@ -143,7 +140,7 @@ fun HistoryScreen(
                     ContractionRowByItems(
                         contraction = contraction,
                         numberOfContraction = reversedIndex,
-                        onLongClick = { viewModel.deleteContraction(contraction) }
+                        deleteContraction = {viewModel.deleteContraction(contraction) }
                     )
                 }
 
@@ -171,8 +168,7 @@ fun HistoryScreen(
 }
 
 @Composable
-private fun barSetsContractions(
-    navController: NavController,
+private fun BarSetsContractions(
     listOfContractionsHistory: List<Contraction>,
     contraction: Contraction,
     viewModel: HistoryScreenViewModel,

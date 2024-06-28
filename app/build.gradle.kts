@@ -95,13 +95,12 @@ dependencies {
 
     implementation("androidx.compose.material3:material3:1.2.1")
     implementation("androidx.compose.material3:material3-window-size-class:1.2.1")
-    implementation("androidx.compose.material3:material3-adaptive-navigation-suite:1.3.0-beta03")
+    implementation("androidx.compose.material3:material3-adaptive-navigation-suite:1.3.0-beta04")
 
     implementation("com.google.accompanist:accompanist-pager:0.35.1-alpha")
     implementation("com.google.accompanist:accompanist-pager-indicators:0.35.1-alpha")
 
-    implementation("com.itextpdf:itext7-core:7.1.15")
-    implementation("com.itextpdf:html2pdf:4.0.2")
+    implementation("com.itextpdf:itextpdf:5.5.13")
 
 
     

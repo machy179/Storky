@@ -6,7 +6,7 @@ import androidx.room.Room
 import com.tappytaps.storky.data.StorkyDatabase
 import com.tappytaps.storky.data.StorkyDatabaseDao
 import com.tappytaps.storky.repository.EmailRepository
-import com.tappytaps.storky.repository.PdfRepository
+import com.tappytaps.storky.service.PdfCreatorAndSender
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -19,18 +19,19 @@ import javax.inject.Singleton
 object AppModule {
     @Singleton
     @Provides
-    fun provideNotesDao(storkyDatabase: StorkyDatabase): StorkyDatabaseDao
-            = storkyDatabase.storkyDao()
+    fun provideNotesDao(storkyDatabase: StorkyDatabase): StorkyDatabaseDao =
+        storkyDatabase.storkyDao()
 
     @Singleton
     @Provides
-    fun provideAppDatabase(@ApplicationContext context: Context): StorkyDatabase
-            = Room.databaseBuilder(
-        context,
-        StorkyDatabase::class.java,
-        "or_db")
-        .fallbackToDestructiveMigration()
-        .build()
+    fun provideAppDatabase(@ApplicationContext context: Context): StorkyDatabase =
+        Room.databaseBuilder(
+            context,
+            StorkyDatabase::class.java,
+            "or_db"
+        )
+            .fallbackToDestructiveMigration()
+            .build()
 
     @Provides
     fun provideEmailRepository(): EmailRepository {
@@ -38,9 +39,11 @@ object AppModule {
     }
 
     @Provides
-    fun providePdfRepository(): PdfRepository {
-        return PdfRepository()
+    @Singleton
+    fun providePdfCreatorAndSender(): PdfCreatorAndSender {
+        return PdfCreatorAndSender()
     }
+
 
     @Provides
     @Singleton

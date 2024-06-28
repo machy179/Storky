@@ -18,7 +18,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -40,7 +39,7 @@ import com.tappytaps.storky.components.ContractionRowByItems
 import com.tappytaps.storky.components.CustomDialog
 import com.tappytaps.storky.components.MainScreenAppBar
 import com.tappytaps.storky.components.UniversalButton
-import com.tappytaps.storky.components.imageTitleContentText
+import com.tappytaps.storky.components.ImageTitleContentText
 import com.tappytaps.storky.model.Contraction
 import com.tappytaps.storky.navigation.StorkyScreens
 import com.tappytaps.storky.utils.convertSecondsToTimeString
@@ -159,7 +158,7 @@ fun MainScreen(
                                     .fillMaxSize(),
                                 contentAlignment = Alignment.Center
                             ) {
-                                imageTitleContentText(
+                                ImageTitleContentText(
                                     imageResId = R.drawable.girl_ball,
                                     titleResId = R.string.practical_knowledge_title,
                                     textResId = R.string.practical_knowledge_text,
@@ -227,7 +226,7 @@ fun MainScreen(
                                     reverseIndex = contractionsList.size - index
                                     ContractionRowByItems(contraction = contraction,
                                         numberOfContraction = reverseIndex,
-                                        onLongClick = { viewModel.deleteContraction(contraction) })
+                                        deleteContraction = {viewModel.deleteContraction(contraction)  })
                                 }
 
                             }

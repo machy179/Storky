@@ -72,6 +72,9 @@
     <string name="clear_all_data_title">Clear all data?</string>
     <string name="clear_all_data_text">Are you sure you want to reset all the previous data?</string>
 
+    <string name="clear_contraction_title">Clear this contraction?</string>
+    <string name="clear_contraction_text">Are you sure you want to clear this contraction?</string>
+
 
 
     <!--  Storky popup -->
@@ -141,6 +144,12 @@
 
     <!--  share e-mail screens -->
     <string name="share_email">Share by e-mail</string>
+
+    <!--  share contractions -->
+    <string name="overview_of_contractions_title">An overview of contractions</string>
+    <string name="overview_of_contractions_text_in_pdf">Hello, I used the simple and handy Storky app to measure my contractions. You can see my contractions below.</string>
+    <string name="overview_of_contractions_text">Hello, I used the simple and handy Storky app to measure my contractions. You can see the evolution of my contractions in the attached pdf file.</string>
+    <string name="contraction_report_pdf">contraction_report.pdf</string>
 
     <!--  remove ads screens -->
     <string name="remove_ads_screen_title">Measure contractions with no ads</string>

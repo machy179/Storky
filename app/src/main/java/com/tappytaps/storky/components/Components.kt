@@ -36,6 +36,10 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -64,14 +68,15 @@ import java.util.Calendar
 
 
 @Composable
-fun imageTitleContentText(
+fun ImageTitleContentText(
+    modifier: Modifier = Modifier,
     imageResId: Int,
     titleResId: Int,
     textResId: Int,
     learnMore: Boolean = false,
     navController: NavController = NavController(LocalContext.current),
     widthOfColumn: Dp = 280.dp,
-    modifier: Modifier = Modifier,
+
     bottomSpace: Boolean = false
 ) {
     Column(
@@ -199,7 +204,6 @@ fun EmailInput(
     modifier: Modifier = Modifier,
     emailState: MutableState<String>,
     labelId: String = "Email",
-    enabled: Boolean = true,
     imeAction: ImeAction = ImeAction.Next,
     onAction: KeyboardActions = KeyboardActions.Default
 ) {
@@ -327,12 +331,14 @@ fun ContractionRowByItems(
     modifier: Modifier = Modifier,
     contraction: Contraction,
     numberOfContraction: Int,
-    onLongClick: () -> Unit
+    deleteContraction: () -> Unit
 ) {
+
+    var dialogdeleteContractionVisible by remember { mutableStateOf(false) }
     Column(
         modifier = modifier.combinedClickable(
             onClick = { /* No-op or short click action */ },
-            onLongClick = onLongClick
+            onLongClick =  { dialogdeleteContractionVisible = true }
         )
     ) {
     ContractionRow(
@@ -341,6 +347,22 @@ fun ContractionRowByItems(
         timeBetweenContractions = contraction.timeBetweenContractions,
         numberOfContraction = numberOfContraction
     )
+
+        if (dialogdeleteContractionVisible) {
+            CustomDialog(
+                title = stringResource(R.string.clear_contraction_title),
+                text = stringResource(R.string.clear_contraction_text),
+                firstTextButton = stringResource(R.string.cancel),
+                secondTextButton = stringResource(R.string.clear),
+                enableFirstRequest = true,
+                firstRequest = {
+                    deleteContraction.invoke()
+                    dialogdeleteContractionVisible = false
+                },
+                onDismissRequest = { dialogdeleteContractionVisible = false },
+                changePositionButtons = true
+            )
+        }
     }
 
 }
@@ -447,7 +469,7 @@ fun TableViewCellContraction(
 
             val progress = time / maxLength.toFloat()
             Log.d("Storky progress 1: ", progress.toString())
-            customProgressBar(
+            CustomProgressBar(
                 progress = progress,
                 reverseProgress = visibleTimeBetweenContractions
             )
@@ -536,7 +558,7 @@ fun StorkyPopUpDialog(
                             //       horizontalArrangement = Arrangement.End
                         ) {
                             if (intervalsOk) {
-                                conditionsOkIcon(modifier = Modifier
+                                ConditionsOkIcon(modifier = Modifier
                                     .padding(end = 16.dp)
                                     .align(Alignment.CenterVertically))
                             } else {
@@ -580,7 +602,7 @@ fun StorkyPopUpDialog(
                             //       horizontalArrangement = Arrangement.End
                         ) {
                             if (contractionsOk) {
-                                conditionsOkIcon(modifier = Modifier
+                                ConditionsOkIcon(modifier = Modifier
                                     .padding(end = 16.dp)
                                     .align(Alignment.CenterVertically))
                             } else {
@@ -633,7 +655,7 @@ fun StorkyPopUpDialog(
 }
 
 @Composable
-fun conditionsOkIcon(modifier: Modifier) {
+fun ConditionsOkIcon(modifier: Modifier) {
     Box(
         modifier = modifier
             .size(32.dp)
@@ -654,12 +676,12 @@ fun conditionsOkIcon(modifier: Modifier) {
 @Preview(showBackground = true)
 @Composable
 fun PreviewConditionsOkIcon() {
-    conditionsOkIcon(modifier = Modifier)
+    ConditionsOkIcon(modifier = Modifier)
 }
 
 
 @Composable
-fun customProgressBar(
+fun CustomProgressBar(
     progress: Float = 1f,
     reverseProgress: Boolean = false
 ) {

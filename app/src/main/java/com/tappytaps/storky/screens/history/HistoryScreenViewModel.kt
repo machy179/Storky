@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.tappytaps.storky.model.Contraction
 import com.tappytaps.storky.repository.ContractionsRepository
-import com.tappytaps.storky.repository.PdfRepository
+import com.tappytaps.storky.service.PdfCreatorAndSender
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,8 +19,8 @@ import javax.inject.Inject
 @HiltViewModel
 class HistoryScreenViewModel @Inject constructor(
     private val repository: ContractionsRepository,
-    private val pdfRepository: PdfRepository
-): ViewModel() {
+    private val pdfCreatorAndSender: PdfCreatorAndSender,
+) : ViewModel() {
 
     private val _listOfContractionsHistory = MutableStateFlow<List<Contraction>>(emptyList())
     val listOfContractionsHistory = _listOfContractionsHistory.asStateFlow()
@@ -28,8 +28,6 @@ class HistoryScreenViewModel @Inject constructor(
     init {
         getAllHistoryContractions()
     }
-
-
 
 
     private fun getAllHistoryContractions() {
@@ -62,7 +60,7 @@ class HistoryScreenViewModel @Inject constructor(
         Log.d("Storky delete:", "clicked")
         viewModelScope.launch(Dispatchers.IO) {
             repository.deleteHistoryContractionsBySet(set = set).run {
-            //    _listOfContractionsHistory.value = emptyList<Contraction>()
+                //    _listOfContractionsHistory.value = emptyList<Contraction>()
                 getAllHistoryContractions()
             }
 
@@ -79,12 +77,15 @@ class HistoryScreenViewModel @Inject constructor(
             .toList() // Convert to an immutable List
         var pdfFile: File
         viewModelScope.launch {
-            pdfFile = pdfRepository.generatePdfFromHtml(filteredContractionList = filteredContractionList,
-                context =  context)
-            pdfRepository.sendEmailWithAttachment(file = pdfFile,
-                context = context)
+            pdfFile = pdfCreatorAndSender.convertToPdf(
+                filteredContractionList = filteredContractionList,
+                context = context
+            )
+            pdfCreatorAndSender.sendEmailWithAttachment(
+                file = pdfFile,
+                context = context
+            )
         }
-
 
 
     }

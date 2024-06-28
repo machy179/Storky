@@ -1,11 +1,9 @@
 package com.tappytaps.storky.utils
 
-import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import com.tappytaps.storky.R
 import com.tappytaps.storky.model.Contraction
-import kotlinx.coroutines.flow.Flow
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -96,6 +94,13 @@ fun getDateInHistory(calendarLastDay: Calendar, calendarFirstDay: Calendar): Str
     else return (getFormattedDate(calendarLastDay) + " - " + getFormattedDate(calendarFirstDay))
 }
 
+
+fun getDateInShare(calendarLastDay: Calendar, calendarFirstDay: Calendar): String {
+    val dateFormatter = SimpleDateFormat("dd. MMMM", Locale.getDefault()) // Formatter without year
+    if (isSameDay(calendarLastDay, calendarFirstDay)) return dateFormatter.format(calendarLastDay.time)
+    else return (dateFormatter.format(calendarLastDay.time) + " - " + dateFormatter.format(calendarFirstDay.time))
+}
+
 fun calculateAverageLengthOfContraction(
     listOfContractions: List<Contraction>,
     currentContractionLength: Int,
@@ -125,7 +130,6 @@ fun calculateAverageLengthOfContraction(
         // Vypočítat počet prvků, které se nebudou počítat (20%):
         val excludedCount = (0.2 * sortedLengths.size).toInt()
 
-        var sumOfContractionLength = currentContractionLength
 
 
         // Získat délky kontrakcí, které se budou počítat:
@@ -156,7 +160,7 @@ fun calculateAverageLengthOfIntervalTime(
         return sumOfLengthOfInterval / size
 
     } else {
-        var intervalLengths = listOfContractions.map { it.timeBetweenContractions }
+        val intervalLengths = listOfContractions.map { it.timeBetweenContractions }
 
         // Arrange contraction lengths in descending order:
         val sortedLengths = intervalLengths.sortedDescending()
@@ -179,39 +183,3 @@ fun calculateAverageLengthOfIntervalTime(
 
 }
 
-
-fun getHtmlContent(listOfContractions: List<Contraction>): String {
-    var htmlContent2 = "Measured values of contractions: <br><br> "
-
-    val htmlContent =
-        """
-    <html>
-    <body>
-        <table style="width:100%%; border-collapse: collapse;" border="1">
-            <tr>
-                <td style="padding: 10px; vertical-align: top;">
-                    <b>Contraction</b><br>
-                    0:20
-                </td>
-                <td style="padding: 10px; text-align: center; vertical-align: middle;">
-                    2:04 PM
-                </td>
-                <td style="padding: 10px; vertical-align: top;">
-                    <b>Interval</b><br>
-                    8:21
-                </td>
-            </tr>
-        </table>
-    </body>
-    </html>
-    """.trimIndent()
-
-    for (contraction in listOfContractions) {
-        htmlContent2 = htmlContent2+"Time of cotraction: " + convertCalendarToText(contraction.contractionTime)+ "<br>"
-        htmlContent2 = htmlContent2+"Length of contraction: " + convertSecondsToTimeString(contraction.lengthOfContraction)+ "<br>"
-        htmlContent2 = htmlContent2+"Length between of contractions: " + convertSecondsToTimeString(contraction.timeBetweenContractions)+ "<br><br>"
-    }
-    htmlContent2 = htmlContent2+"...it is performed by app Storky...<br>"
-    return htmlContent2
-
-}
