@@ -4,7 +4,6 @@ package com.tappytaps.storky.screens.email
 
 import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -37,7 +36,7 @@ import com.tappytaps.storky.R
 import com.tappytaps.storky.components.CustomDialog
 import com.tappytaps.storky.components.EmailInput
 import com.tappytaps.storky.components.UniversalButton
-import com.tappytaps.storky.components.imageTitleContentText
+import com.tappytaps.storky.components.ImageTitleContentText
 import com.tappytaps.storky.navigation.StorkyScreens
 import com.tappytaps.storky.utils.Constants.END_PADDING_NEXT
 import com.tappytaps.storky.utils.Constants.TOP_PADDING_NEXT
@@ -101,7 +100,7 @@ fun AskEmailScreen(navController: NavController,
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
-                imageTitleContentText(
+                ImageTitleContentText(
                     imageResId = imageResId,
                     titleResId = titleResId,
                     textResId = textResId
@@ -183,7 +182,7 @@ fun DoneEmailScreen(navController: NavController) {
             var textResId: Int = R.string.check_your_inbox_text
 
 
-            imageTitleContentText(
+            ImageTitleContentText(
                 imageResId = imageResId,
                 titleResId = titleResId,
                 textResId = textResId,

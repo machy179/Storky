@@ -2,7 +2,6 @@ package com.tappytaps.storky.screens.trybibino
 
 import android.content.Intent
 import android.net.Uri
-import android.widget.Toast
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -24,7 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.tappytaps.storky.R
 import com.tappytaps.storky.components.UniversalButton
-import com.tappytaps.storky.components.imageTitleContentText
+import com.tappytaps.storky.components.ImageTitleContentText
 import com.tappytaps.storky.navigation.StorkyScreens
 import com.tappytaps.storky.utils.Constants
 import com.tappytaps.storky.utils.Constants.END_PADDING_NEXT
@@ -69,7 +68,7 @@ fun ContentPageTryBibiono(navController: NavController) {
             var textResId: Int = R.string.try_bibino_text
 
 
-            imageTitleContentText(
+            ImageTitleContentText(
                 imageResId = imageResId,
                 titleResId = titleResId,
                 textResId = textResId

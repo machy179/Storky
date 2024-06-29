@@ -1,7 +1,6 @@
 package com.tappytaps.storky.screens.presentation
 
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,10 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.windowInsetsPadding
-import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -33,7 +29,7 @@ import androidx.navigation.NavController
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPagerIndicator
 import com.tappytaps.storky.R
-import com.tappytaps.storky.components.imageTitleContentText
+import com.tappytaps.storky.components.ImageTitleContentText
 import com.tappytaps.storky.navigation.StorkyScreens
 import kotlinx.coroutines.launch
 import com.google.accompanist.pager.*
@@ -182,7 +178,7 @@ fun ContentPage(page: Int) {
 
             }
 
-            imageTitleContentText(
+            ImageTitleContentText(
                 imageResId = imageResId,
                 titleResId = titleResId,
                 textResId = textResId

@@ -9,14 +9,9 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsPadding
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -27,23 +22,17 @@ import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.tappytaps.storky.R
 import com.tappytaps.storky.components.StorkyAppBar
 import com.tappytaps.storky.components.UniversalButton
-import com.tappytaps.storky.components.imageTitleContentText
+import com.tappytaps.storky.components.ImageTitleContentText
 import com.tappytaps.storky.navigation.StorkyScreens
-import com.tappytaps.storky.screens.email.EmailScreen
 
 @ExperimentalMaterial3Api
 @Composable
@@ -84,7 +73,7 @@ fun RemoveAdsScreen(navController: NavController) {
             var textResId: Int = R.string.remove_ads_screen_text
 
 
-            imageTitleContentText(
+            ImageTitleContentText(
                 imageResId = imageResId,
                 titleResId = titleResId,
                 textResId = textResId,

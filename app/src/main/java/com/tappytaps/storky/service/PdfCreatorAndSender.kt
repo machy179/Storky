@@ -2,27 +2,29 @@ package com.tappytaps.storky.service
 
 import android.content.Context
 import android.content.Intent
+import android.content.res.AssetManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.widget.Toast
 import androidx.core.content.FileProvider
-import com.tappytaps.storky.model.Contraction
-import com.tappytaps.storky.utils.convertCalendarToText
-import com.tappytaps.storky.utils.convertSecondsToTimeString
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
-import java.io.File
-import java.io.FileOutputStream
-
 import com.itextpdf.text.*
 import com.itextpdf.text.pdf.BaseFont
+import com.itextpdf.text.pdf.PdfEncodings
 import com.itextpdf.text.pdf.PdfPCell
 import com.itextpdf.text.pdf.PdfPTable
 import com.itextpdf.text.pdf.PdfWriter
 import com.tappytaps.storky.R
+import com.tappytaps.storky.model.Contraction
+import com.tappytaps.storky.utils.convertCalendarToText
+import com.tappytaps.storky.utils.convertSecondsToTimeString
 import com.tappytaps.storky.utils.getDateInShare
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.io.ByteArrayOutputStream
+import java.io.File
+import java.io.FileOutputStream
+
 
 class PdfCreatorAndSender() {
 
@@ -32,8 +34,9 @@ class PdfCreatorAndSender() {
             Dispatchers.IO
         ) {
 
-            val robotoFontPath = "res/font/roboto_regular.ttf"
-            val baseFont = BaseFont.createFont(robotoFontPath, BaseFont.CP1250, BaseFont.EMBEDDED)
+            val robotoFontPath = "assets/roboto_regular.ttf"
+
+            val baseFont = BaseFont.createFont(robotoFontPath, BaseFont.IDENTITY_H, BaseFont.EMBEDDED)
             val regularFont = Font(baseFont, 13f, Font.NORMAL, BaseColor(0, 0, 0))
             val titleFont = Font(baseFont, 20f, Font.BOLD, BaseColor(0, 0, 0))
             val descriptionFont = Font(baseFont, 13f, Font.NORMAL, BaseColor(138, 138, 143))
@@ -45,7 +48,6 @@ class PdfCreatorAndSender() {
             val pdfFileName = resources.getString(R.string.contraction_report_pdf)
             val pdfFile = File(context.cacheDir, pdfFileName)
 
-            //     val pdfFile = File.createTempFile("contraction_report", ".pdf", context.cacheDir)
             val document = Document()
 
             val titleText = resources.getString(R.string.overview_of_contractions_title)
