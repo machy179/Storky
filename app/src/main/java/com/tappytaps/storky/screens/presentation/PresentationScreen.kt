@@ -26,7 +26,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPagerIndicator
 import com.tappytaps.storky.R
 import com.tappytaps.storky.components.ImageTitleContentText
@@ -40,7 +39,7 @@ fun PresentationScreen(navController: NavController) {
     HorizontalPagerWithButtonsScreen(navController)
 }
 
-@OptIn(ExperimentalPagerApi::class)
+
 @ExperimentalFoundationApi
 @Composable
 fun HorizontalPagerWithButtonsScreen(navController: NavController) {

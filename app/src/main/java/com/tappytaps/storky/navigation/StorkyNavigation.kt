@@ -10,7 +10,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.tappytaps.storky.screens.SplashScreen
+import com.tappytaps.storky.screens.splash.SplashScreen
 import com.tappytaps.storky.screens.bibinoapp.BibinoAppScreen
 import com.tappytaps.storky.screens.email.EmailScreen
 import com.tappytaps.storky.screens.email.EmailScreenViewModel
@@ -24,6 +24,7 @@ import com.tappytaps.storky.screens.presentation.PresentationScreen
 import com.tappytaps.storky.screens.removeads.RemoveAdsScreen
 import com.tappytaps.storky.screens.settings.SettingsScreen
 import com.tappytaps.storky.screens.settings.SettingsScreenViewModel
+import com.tappytaps.storky.screens.splash.SplashScreenViewModel
 import com.tappytaps.storky.screens.trybibino.TryBibinoScreen
 
 @ExperimentalMaterial3Api
@@ -33,6 +34,8 @@ import com.tappytaps.storky.screens.trybibino.TryBibinoScreen
 @Composable
 fun StorkyNavigation() {
     val navController = rememberNavController()
+
+    val splashViewModel = hiltViewModel<SplashScreenViewModel>()
 
     val homeViewModel = hiltViewModel<HomeScreenViewModel>()
     val contractionsList = homeViewModel.listOfContractions.collectAsState().value //list of active Contractions
@@ -50,7 +53,8 @@ fun StorkyNavigation() {
     ) {
 
         composable(StorkyScreens.SplashScreen.name) {
-            SplashScreen(navController = navController)
+            SplashScreen(navController = navController,
+                viewModel = splashViewModel)
         }
 
         composable(StorkyScreens.PresentationScreen.name) {
