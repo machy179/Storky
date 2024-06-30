@@ -1,10 +1,13 @@
 package com.tappytaps.storky.screens.home
 
+import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.tappytaps.storky.StopwatchService
 import com.tappytaps.storky.model.Contraction
 import com.tappytaps.storky.repository.ContractionsRepository
 import com.tappytaps.storky.utils.calculateAverageLengthOfContraction
@@ -192,6 +195,37 @@ class HomeScreenViewModel @Inject constructor(
             } catch (e: Exception) {
             }
         }
+    }
+
+
+    fun startService(context: Context) {
+        val intent = Intent(context, StopwatchService::class.java).apply {
+            putExtra("currentLengthBetweenContractions", _currentLengthBetweenContractions.value)
+            putExtra("pauseStopWatch", _pauseStopWatch.value)
+        }
+        context.startService(intent)
+    }
+
+    fun stopService(context: Context) {
+        val intent = Intent(context, StopwatchService::class.java)
+        context.stopService(intent)
+    }
+
+    fun updateFromService(currentLengthBetweenContractions: Int, pauseStopWatch: Boolean) {
+        Log.d("StorkyService:","updateFromService")
+        _currentLengthBetweenContractions.value = currentLengthBetweenContractions
+        _pauseStopWatch.value = pauseStopWatch
+        if (!isRunning && !_pauseStopWatch.value  && _currentLengthBetweenContractions.value != 0) {
+            isRunning = true
+            timerJob = viewModelScope.launch {
+                while (isRunning) {
+                    delay(1000) // wait for 1 second
+                    _currentLengthBetweenContractions.value += 1
+                }
+            }
+        }
+        Log.d("StorkyService:","updateFromService currentLengthBetweenContractions="+currentLengthBetweenContractions.toString())
+        Log.d("StorkyService:","updateFromService pauseStopWatch="+pauseStopWatch.toString())
     }
 
 

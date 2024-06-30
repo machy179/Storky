@@ -162,4 +162,8 @@
     <string name="and">and</string>
     <string name="privacy_policy">Privacy Policy.</string>
 
+    <!--  foreground service -->
+    <string name="foreground_service_title">Storky</string>
+    <string name="foreground_service_text">Storky contraction timer is running in the background</string>
+
 </resources>
