@@ -21,8 +21,8 @@ fun HomeScreen(
     lengthOfInterval: Int,
     lengthOfContraction: Int
 ) {
-    val showContractionlScreen =
-        remember { mutableStateOf(false) } //is used for changing icons on topbar and button color too
+    val showContractionlScreen = viewModel.showContractionlScreen
+ //       remember { mutableStateOf(false) } //is used for changing icons on topbar and button color too
 
     if (!showContractionlScreen.value) {
         MainScreen(

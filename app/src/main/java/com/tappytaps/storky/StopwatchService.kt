@@ -37,6 +37,8 @@ class StopwatchService : Service() {
     private var currentLengthBetweenContractions = 0
     private var pauseStopWatch = false
 
+    private var showContractionlScreen = false
+
     override fun onCreate() {
         Log.d("StorkyService:","onCreateservice")
         super.onCreate()
@@ -48,8 +50,13 @@ class StopwatchService : Service() {
         currentLengthBetweenContractions = intent?.getIntExtra("currentLengthBetweenContractions", 0) ?: 0
         Log.d("StorkyService:","currentLengthBetweenContractions="+currentLengthBetweenContractions.toString())
         pauseStopWatch = intent?.getBooleanExtra("pauseStopWatch", false) ?: false
+        showContractionlScreen = intent?.getBooleanExtra("showContractionlScreen", false) ?: false
         isRunning = true
-        startStopwatch()
+        Log.d("StorkyService:","onStartCommand pauseStopWatch="+pauseStopWatch.toString())
+  //      if (showContractionlScreen || currentLengthBetweenContractions>0)  { //checking, whether stop watch is running
+            startStopwatch()
+  //      }
+
         return START_STICKY
     }
 
@@ -114,6 +121,7 @@ class StopwatchService : Service() {
         val intent = Intent("STOPWATCH_UPDATE").apply {
             putExtra("currentLengthBetweenContractions", currentLengthBetweenContractions)
             putExtra("pauseStopWatch", pauseStopWatch)
+            putExtra("showContractionlScreen", showContractionlScreen)
         }
         sendBroadcast(intent)
     }

@@ -72,7 +72,8 @@ class MainActivity : ComponentActivity() {
                 val currentLengthBetweenContractions =
                     intent?.getIntExtra("currentLengthBetweenContractions", 0) ?: 0
                 val pauseStopWatch = intent?.getBooleanExtra("pauseStopWatch", false) ?: false
-                homeViewModel.updateFromService(currentLengthBetweenContractions, pauseStopWatch)
+                val showContractionlScreen = intent?.getBooleanExtra("showContractionlScreen", false) ?: false
+                homeViewModel.updateFromService(currentLengthBetweenContractions, pauseStopWatch, showContractionlScreen)
             }
         }
         registerReceiver(stopwatchUpdateReceiver, IntentFilter("STOPWATCH_UPDATE"))
@@ -83,9 +84,16 @@ class MainActivity : ComponentActivity() {
         homeViewModel.stopService(this)
     }
 
-    override fun onPause() {
-        super.onPause()
-        homeViewModel.startService(this)
+
+  //  override fun onPause() {
+  override fun onStop() {
+        Log.d("StorkyService:","onPause_in_Maint_activity")
+ //       super.onPause()
+      super.onStop()
+      if(homeViewModel.isRunning && !homeViewModel.pauseStopWatch.value) {
+          homeViewModel.startService(this)
+      }
+    //    homeViewModel.startService(this)
     }
 
     override fun onDestroy() {

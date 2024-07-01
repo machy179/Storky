@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.util.Log
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.tappytaps.storky.StopwatchService
@@ -58,9 +59,15 @@ class HomeScreenViewModel @Inject constructor(
     private var _averageLengthBetweenContractions = mutableStateOf(0)
     val averageLengthBetweenContractions = _averageLengthBetweenContractions
 
+    private var _showContractionlScreen = mutableStateOf(false)
+    val showContractionlScreen = _showContractionlScreen
 
     init {
         getAllActiveContractions()
+    }
+
+    fun setShowContractionlScreen(value: Boolean) {
+        _showContractionlScreen.value = value
     }
 
     private fun getAllActiveContractions() {
@@ -199,8 +206,10 @@ class HomeScreenViewModel @Inject constructor(
 
 
     fun startService(context: Context) {
+        Log.d("StorkyService:","startService_from_HomeScreenViewModel")
         val intent = Intent(context, StopwatchService::class.java).apply {
             putExtra("currentLengthBetweenContractions", _currentLengthBetweenContractions.value)
+            putExtra("showContractionlScreen", _showContractionlScreen.value)
             putExtra("pauseStopWatch", _pauseStopWatch.value)
         }
         context.startService(intent)
@@ -211,11 +220,15 @@ class HomeScreenViewModel @Inject constructor(
         context.stopService(intent)
     }
 
-    fun updateFromService(currentLengthBetweenContractions: Int, pauseStopWatch: Boolean) {
+    fun updateFromService(currentLengthBetweenContractions: Int, pauseStopWatch: Boolean, showContractionlScreen: Boolean) {
         Log.d("StorkyService:","updateFromService")
         _currentLengthBetweenContractions.value = currentLengthBetweenContractions
         _pauseStopWatch.value = pauseStopWatch
+        _showContractionlScreen.value = showContractionlScreen
+        Log.d("StorkyService:","updateFromService _currentLengthBetweenContractions.value"+_currentLengthBetweenContractions.value.toString())
         if (!isRunning && !_pauseStopWatch.value  && _currentLengthBetweenContractions.value != 0) {
+            Log.d("StorkyService:","updateFromService_startSotopWatch")
+
             isRunning = true
             timerJob = viewModelScope.launch {
                 while (isRunning) {

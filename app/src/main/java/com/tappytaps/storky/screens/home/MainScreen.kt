@@ -248,7 +248,8 @@ fun MainScreen(
                             viewModel.saveContraction()
                             viewModel.updateCurrentTime()
                             viewModel.newStart()
-                            showContractionlScreen.value = true
+                     //       showContractionlScreen.value = true
+                            viewModel.setShowContractionlScreen(value = true)
                         },
                         disableInsetNavigationBarPadding = true
                     )

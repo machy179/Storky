@@ -74,8 +74,8 @@ fun ContractionScreen(
                     UniversalButton(
                         text = stringResource(R.string.stop_contraction),
                         onClick = {
-                            showContractionlScreen.value = false
-
+                      //      showContractionlScreen.value = false
+                            viewModel.setShowContractionlScreen(value = false)
                             viewModel.saveCurrentContractionLength()
                             viewModel.updateAverageTimes()
                         },
