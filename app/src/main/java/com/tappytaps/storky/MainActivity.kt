@@ -76,40 +76,46 @@ class MainActivity : ComponentActivity() {
                 homeViewModel.updateFromService(currentLengthBetweenContractions, pauseStopWatch, showContractionlScreen)
             }
         }
-        registerReceiver(stopwatchUpdateReceiver, IntentFilter("STOPWATCH_UPDATE"))
+ //       registerReceiver(stopwatchUpdateReceiver, IntentFilter("STOPWATCH_UPDATE"))
     }
 
     override fun onResume() {
+        Log.d("StorkyService:","onResume_in_Maint_activity")
         super.onResume()
         homeViewModel.stopService(this)
+        registerReceiver(stopwatchUpdateReceiver, IntentFilter("STOPWATCH_UPDATE"))
+
+    }
+
+    override fun onRestart() {
+        Log.d("StorkyService:","onRestart_in_Maint_activity")
+        super.onRestart()
+
     }
 
 
-  //  override fun onPause() {
   override fun onStop() {
         Log.d("StorkyService:","onPause_in_Maint_activity")
- //       super.onPause()
       super.onStop()
       if(homeViewModel.isRunning && !homeViewModel.pauseStopWatch.value) {
           homeViewModel.startService(this)
+          unregisterReceiver(stopwatchUpdateReceiver)
       }
-    //    homeViewModel.startService(this)
     }
 
     override fun onDestroy() {
+        Log.d("StorkyService:","onDestroy_in_Maint_activity")
         super.onDestroy()
         homeViewModel.stopService(this)
         unregisterReceiver(stopwatchUpdateReceiver)
     }
 
-    private fun askPermissionPostNotification() {
-        // called in a standard activity, use  ContextCompat.checkSelfPermission for AppCompActivity
 
+    private fun askPermissionPostNotification() {
         val permissionCheck = ActivityCompat.checkSelfPermission(
             this@MainActivity,
             Manifest.permission.POST_NOTIFICATIONS
         )
-        Log.i("askpermission", "3")
         if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
             // User may have declined earlier, ask Android if we should show him a reason
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -118,11 +124,9 @@ class MainActivity : ComponentActivity() {
                         Manifest.permission.POST_NOTIFICATIONS
                     )
                 ) {
-                    Log.i("askpermission", "4")
-                    // show an explanation to the user
+                    // show an explanation to the user...maybe TODO
                     // Good practise: don't block thread after the user sees the explanation, try again to request the permission.
                 } else {
-                    Log.i("askpermission", "5")
                     // request the permission.
                     // CALLBACK_NUMBER is a integer constants
                     ActivityCompat.requestPermissions(
@@ -134,7 +138,6 @@ class MainActivity : ComponentActivity() {
                 }
             }
         } else {
-            Log.i("askpermission", "6")
             // got permission use it
         }
     }

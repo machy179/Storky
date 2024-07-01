@@ -40,28 +40,30 @@ class StopwatchService : Service() {
     private var showContractionlScreen = false
 
     override fun onCreate() {
-        Log.d("StorkyService:","onCreateservice")
+        Log.d("StorkyService:", "onCreateservice")
         super.onCreate()
         startForegroundService()
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        Log.d("StorkyService:","startservice")
-        currentLengthBetweenContractions = intent?.getIntExtra("currentLengthBetweenContractions", 0) ?: 0
-        Log.d("StorkyService:","currentLengthBetweenContractions="+currentLengthBetweenContractions.toString())
+        Log.d("StorkyService:", "startservice")
+        currentLengthBetweenContractions =
+            intent?.getIntExtra("currentLengthBetweenContractions", 0) ?: 0
+        Log.d(
+            "StorkyService:",
+            "currentLengthBetweenContractions=" + currentLengthBetweenContractions.toString()
+        )
         pauseStopWatch = intent?.getBooleanExtra("pauseStopWatch", false) ?: false
         showContractionlScreen = intent?.getBooleanExtra("showContractionlScreen", false) ?: false
         isRunning = true
-        Log.d("StorkyService:","onStartCommand pauseStopWatch="+pauseStopWatch.toString())
-  //      if (showContractionlScreen || currentLengthBetweenContractions>0)  { //checking, whether stop watch is running
-            startStopwatch()
-  //      }
+        Log.d("StorkyService:", "onStartCommand pauseStopWatch=" + pauseStopWatch.toString())
+        startStopwatch()
 
         return START_STICKY
     }
 
     override fun onDestroy() {
-        Log.d("StorkyService:","onDestroyservice")
+        Log.d("StorkyService:", "onDestroyservice")
         sendUpdateToViewModel()
         super.onDestroy()
         stopStopwatch()
@@ -71,7 +73,8 @@ class StopwatchService : Service() {
         return null
     }
 
-    @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class,
+    @OptIn(
+        ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class,
         ExperimentalComposeUiApi::class
     )
     private fun startForegroundService() {
@@ -79,23 +82,30 @@ class StopwatchService : Service() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
                 notificationChannelId,
-                "Stopwatch Service Channel",
+                "Storky Service Channel",
                 NotificationManager.IMPORTANCE_LOW
-            )
+            ).apply {
+                setShowBadge(false) // Ensure the notification does not show a badge on the app icon
+            }
             val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             manager.createNotificationChannel(channel)
         }
 
         val notificationIntent = Intent(this, MainActivity::class.java)
         val pendingIntent = PendingIntent.getActivity(
-            this, 0, notificationIntent, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+            this,
+            0,
+            notificationIntent,
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
         )
 
         val notification: Notification = NotificationCompat.Builder(this, notificationChannelId)
-            .setContentTitle("Stopwatch Running")
-            .setContentText("The stopwatch is running in the background")
+            .setContentTitle(resources.getString(R.string.foreground_service_title))
+            .setContentText(resources.getString(R.string.foreground_service_text))
             .setSmallIcon(R.drawable.ic_launcher_foreground) // Ensure this is a valid drawable resource
             .setContentIntent(pendingIntent)
+            .setOngoing(true) // Ensures the notification cannot be swiped away
+            .setSilent(true) // Makes the notification silent
             .build()
 
         startForeground(1109, notification)
@@ -106,7 +116,6 @@ class StopwatchService : Service() {
             while (isRunning) {
                 delay(1000) // wait for 1 second
                 if (!pauseStopWatch) currentLengthBetweenContractions += 1
-   //             sendUpdateToViewModel()
             }
         }
     }
@@ -114,7 +123,6 @@ class StopwatchService : Service() {
     private fun stopStopwatch() {
         isRunning = false
         serviceJob?.cancel() // Cancel the running coroutine
-     //   sendUpdateToViewModel()
     }
 
     private fun sendUpdateToViewModel() {
