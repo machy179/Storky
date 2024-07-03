@@ -153,7 +153,7 @@ class HomeScreenViewModel @Inject constructor(
     }
 
     fun pauseStopWatch() {
-        _pauseStopWatch.value = !_pauseStopWatch.value
+        _pauseStopWatch.value = true // !_pauseStopWatch.value
         _currentLengthBetweenContractions.value =
             -1 //if timer was paused, then timeBetweenContractions is set as -1
     }
@@ -198,7 +198,15 @@ class HomeScreenViewModel @Inject constructor(
     fun deleteContraction(contraction: Contraction) {
         viewModelScope.launch {
             try {
-                repository.deleteContraction(contraction)
+                if (_listOfContractions.value.size ==1) {
+                    repository.deleteAllActiveContractions()
+                    _listOfContractions.value = emptyList()
+                    getAllActiveContractions()
+                } else {
+                    repository.deleteContraction(contraction)
+                }
+
+
             } catch (e: Exception) {
             }
         }

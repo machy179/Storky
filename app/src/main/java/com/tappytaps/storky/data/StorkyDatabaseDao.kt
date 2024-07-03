@@ -30,6 +30,9 @@ interface StorkyDatabaseDao {
     @Query("DELETE from contractions_tbl")
     suspend fun deleteAll()
 
+    @Query("DELETE from contractions_tbl WHERE in_history = false")
+    suspend fun deleteAllActiveContractions()
+
     @Delete
     suspend fun deleteContraction(contraction: Contraction)
 

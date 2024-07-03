@@ -60,7 +60,7 @@ class HistoryScreenViewModel @Inject constructor(
         Log.d("Storky delete:", "clicked")
         viewModelScope.launch(Dispatchers.IO) {
             repository.deleteHistoryContractionsBySet(set = set).run {
-                //    _listOfContractionsHistory.value = emptyList<Contraction>()
+                _listOfContractionsHistory.value = emptyList<Contraction>()
                 getAllHistoryContractions()
             }
 
@@ -93,7 +93,12 @@ class HistoryScreenViewModel @Inject constructor(
     fun deleteContraction(contraction: Contraction) {
         viewModelScope.launch {
             try {
-                repository.deleteContraction(contraction)
+
+                if(_listOfContractionsHistory.value.filter { it.in_set == contraction.in_set }.size == 1)  {
+                    deleteSetOfHistory(set = contraction.in_set )
+                } else {
+                    repository.deleteContraction(contraction)
+                }
             } catch (e: Exception) {
             }
         }

@@ -22,6 +22,8 @@ class ContractionsRepository @Inject constructor(private val storkyDatabaseDao: 
     fun getAllActiveContractions(): Flow<List<Contraction>> = storkyDatabaseDao.getActiveContractions().flowOn(Dispatchers.IO).conflate()
     suspend fun getContraction(id: String): Contraction = storkyDatabaseDao.getContractionById(id=id)
 
+    suspend fun deleteAllActiveContractions() = storkyDatabaseDao.deleteAllActiveContractions()
+
     //history
     fun getAllHistoryContractions(): Flow<List<Contraction>> = storkyDatabaseDao.getHistoryContractions().flowOn(Dispatchers.IO).conflate()
     suspend fun deleteAllHistoryContractions() = storkyDatabaseDao.deleteAllHistory()
