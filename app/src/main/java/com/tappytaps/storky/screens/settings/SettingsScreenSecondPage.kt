@@ -15,7 +15,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -35,7 +34,7 @@ fun SettingsScreenSecondPage(
     pagerState: PagerState,
     coroutineScope: CoroutineScope,
     viewModel: SettingsScreenViewModel,
-    lengthOfInterval: Int
+    lengthOfInterval: Int,
 ) {
 
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
@@ -71,7 +70,6 @@ fun SettingsScreenSecondPage(
                 Row(
                     modifier = Modifier.fillMaxWidth().padding(vertical = verticalPaddingOfRows)
                         .clickable {
-                            //    chooseOfLengthTime = 240
                             viewModel.setLengthOfInterval(240)
                             coroutineScope.launch {
 
@@ -88,7 +86,6 @@ fun SettingsScreenSecondPage(
                     if (lengthOfInterval == 240) {
                         Icon(
                             imageVector = Icons.Filled.Done,
-                            //     painter = painterResource(id = ),
                             contentDescription = "Center Icon",
                             modifier = Modifier,
                             tint = MaterialTheme.colorScheme.primary,
@@ -101,7 +98,6 @@ fun SettingsScreenSecondPage(
                 Row(
                     modifier = Modifier.fillMaxWidth().padding(vertical = verticalPaddingOfRows)
                         .clickable {
-                            //            chooseOfLengthTime = 270
                             viewModel.setLengthOfInterval(270)
                             coroutineScope.launch {
 
@@ -119,7 +115,6 @@ fun SettingsScreenSecondPage(
                     if (lengthOfInterval == 270) {
                         Icon(
                             imageVector = Icons.Filled.Done,
-                            //     painter = painterResource(id = ),
                             contentDescription = "Center Icon",
                             modifier = Modifier,
                             tint = MaterialTheme.colorScheme.primary,
@@ -133,7 +128,6 @@ fun SettingsScreenSecondPage(
                 Row(
                     modifier = Modifier.fillMaxWidth().padding(vertical = verticalPaddingOfRows)
                         .clickable {
-                            //          chooseOfLengthTime = 300
                             viewModel.setLengthOfInterval(300)
                             coroutineScope.launch {
 
@@ -151,7 +145,6 @@ fun SettingsScreenSecondPage(
                     if (lengthOfInterval == 300) {
                         Icon(
                             imageVector = Icons.Filled.Done,
-                            //     painter = painterResource(id = ),
                             contentDescription = "Center Icon",
                             modifier = Modifier,
                             tint = MaterialTheme.colorScheme.primary,

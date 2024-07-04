@@ -13,7 +13,6 @@ import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.ui.ExperimentalComposeUiApi
-import androidx.compose.ui.res.stringResource
 import androidx.core.app.NotificationCompat
 import com.tappytaps.storky.repository.ContractionsRepository
 import dagger.hilt.android.AndroidEntryPoint
@@ -108,7 +107,7 @@ class StopwatchService : Service() {
             .setSilent(true) // Makes the notification silent
             .build()
 
-        startForeground(1109, notification)
+        startForeground(1, notification)
     }
 
     private fun startStopwatch() {

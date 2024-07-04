@@ -47,7 +47,12 @@ fun ContentPageTryBibiono(navController: NavController) {
             },
             modifier = Modifier
                 .align(Alignment.TopEnd)
-                .padding(start = 10.dp, top = TOP_PADDING_NEXT, end = END_PADDING_NEXT, bottom = 12.dp)
+                .padding(
+                    start = 10.dp,
+                    top = TOP_PADDING_NEXT,
+                    end = END_PADDING_NEXT,
+                    bottom = 12.dp
+                )
         ) {
             Text(
                 text = stringResource(id = R.string.next_button),
@@ -98,6 +103,7 @@ fun ContentPageTryBibiono(navController: NavController) {
     }
 
 }
+
 @Preview
 @Composable
 fun ContentPageTryBibionoPreview() {

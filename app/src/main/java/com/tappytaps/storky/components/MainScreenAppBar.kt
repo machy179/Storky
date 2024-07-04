@@ -37,7 +37,8 @@ import com.tappytaps.storky.utils.Constants.SHARE_APP_TEXT
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreenAppBar( //AppBar just for Main screen, other screens in the app is used StorkyAppBar
+fun MainScreenAppBar(
+    //AppBar just for Main screen, other screens in the app is used StorkyAppBar
     navController: NavController,
     backgroundColor: Color,
     onPause: (() -> Unit)? = null,
@@ -93,8 +94,10 @@ fun MainScreenAppBar( //AppBar just for Main screen, other screens in the app is
                         onLearnMore = {
                             navController.navigate(StorkyScreens.IndicatorHelpScreen.name)
                         },
-                        onDismiss = { popUpDialogExpanded = false
-                            onDismisStorkyPopUpDialog?.invoke()}
+                        onDismiss = {
+                            popUpDialogExpanded = false
+                            onDismisStorkyPopUpDialog?.invoke()
+                        }
                     )
 
 
@@ -187,21 +190,26 @@ fun MainScreenAppBar( //AppBar just for Main screen, other screens in the app is
                         icon = R.drawable.noads,
                         text = R.string.remove_ads,
                         primaryColorIcon = true,
-                        onClick = { menuExpanded = false
-                            navController.navigate(StorkyScreens.RemoveAdsScreen.name)})
+                        onClick = {
+                            menuExpanded = false
+                            navController.navigate(StorkyScreens.RemoveAdsScreen.name)
+                        })
 
                     StorkyDropMenuItem(
                         icon = R.drawable.hearh,
                         text = R.string.after_birth,
                         primaryColorIcon = true,
-                        onClick = { menuExpanded = false
-                            navController.navigate(StorkyScreens.BibinoAppScreen.name)})
+                        onClick = {
+                            menuExpanded = false
+                            navController.navigate(StorkyScreens.BibinoAppScreen.name)
+                        })
 
                     StorkyDropMenuItem(
                         icon = R.drawable.share,
                         text = R.string.share_app,
                         primaryColorIcon = true,
-                        onClick = { menuExpanded = false
+                        onClick = {
+                            menuExpanded = false
                             val intent = Intent(Intent.ACTION_SEND).apply {
                                 type = "text/plain"
                                 putExtra(Intent.EXTRA_TEXT, SHARE_APP_TEXT)
@@ -238,7 +246,7 @@ fun StorkyDropMenuItem(
     icon: Int,
     text: Int,
     primaryColorIcon: Boolean = false,
-    onClick: () -> Unit
+    onClick: () -> Unit,
 ) {
     DropdownMenuItem(
         text = {
@@ -252,7 +260,7 @@ fun StorkyDropMenuItem(
                     contentDescription = stringResource(id = text),
                     //       tint = MaterialTheme.colorScheme.onPrimary,
                     modifier = Modifier.padding(top = 0.dp),
-                    tint = if(primaryColorIcon) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface
+                    tint = if (primaryColorIcon) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface
                 )
                 //             Spacer(modifier = Modifier.width(8.dp))
                 Text(

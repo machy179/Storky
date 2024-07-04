@@ -56,11 +56,13 @@ fun HorizontalPagerWithButtonsScreen(navController: NavController) {
         derivedStateOf { pagerState.currentPage < pageCount - 1 }
     }
 
-    Column(modifier = Modifier
-        .windowInsetsPadding(WindowInsets.navigationBars) //for bottom padding shifted under navigation bar
+    Column(
+        modifier = Modifier
+            .windowInsetsPadding(WindowInsets.navigationBars) //for bottom padding shifted under navigation bar
         ,
         verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally) {
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
 
         HorizontalPager(
             count = 3,
@@ -104,7 +106,7 @@ fun HorizontalPagerWithButtonsScreen(navController: NavController) {
 
 
 
-            HorizontalPagerIndicator(
+            HorizontalPagerIndicator( //TODO - update, this is deprecated
                 pagerState = pagerState,
                 modifier = Modifier
                     //        .align(Alignment.CenterHorizontally)
@@ -149,7 +151,7 @@ fun ContentPage(page: Int) {
         Column(
             modifier = Modifier
                 .align(Alignment.Center),
-    //            .padding(start = 40.dp, end = 40.dp),
+            //            .padding(start = 40.dp, end = 40.dp),
             horizontalAlignment = Alignment.CenterHorizontally // Center images horizontally
         ) {
 

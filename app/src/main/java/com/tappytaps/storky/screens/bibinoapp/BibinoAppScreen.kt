@@ -3,11 +3,9 @@ package com.tappytaps.storky.screens.bibinoapp
 import android.content.Intent
 import android.net.Uri
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -18,12 +16,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
@@ -38,21 +33,16 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.tappytaps.storky.R
 import com.tappytaps.storky.components.StorkyAppBar
 import com.tappytaps.storky.navigation.StorkyScreens
-import com.tappytaps.storky.screens.settings.SettingsScreen
-import com.tappytaps.storky.screens.settings.SettingsScreenViewModel
 import com.tappytaps.storky.utils.Constants.APP_PLAY_STORE_URL_BIBINO_BABY_APP
-import com.tappytaps.storky.utils.convertSecondsToStringResource
-import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BibinoAppScreen(
-    navController: NavController
+    navController: NavController,
 ) {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
     val context = LocalContext.current
@@ -76,7 +66,8 @@ fun BibinoAppScreen(
             modifier = Modifier.fillMaxSize()
         ) {
             Column(
-                modifier = Modifier.fillMaxSize().padding(paddingValues = paddingValues).padding(start = 16.dp)
+                modifier = Modifier.fillMaxSize().padding(paddingValues = paddingValues)
+                    .padding(start = 16.dp)
             ) {
 
 
@@ -146,10 +137,8 @@ fun BibinoAppScreen(
         }
 
 
-
     }
 }
-
 
 
 @Preview

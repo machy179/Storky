@@ -33,7 +33,7 @@ fun SplashScreen(navController: NavController, viewModel: SplashScreenViewModel)
 
         }
     } else {
-  //      navController.navigate(StorkyScreens.HomeScreen.name)
+        //      navController.navigate(StorkyScreens.HomeScreen.name)
         LaunchedEffect(key1 = true) {
             delay(200L)
             navController.navigate(StorkyScreens.HomeScreen.name)

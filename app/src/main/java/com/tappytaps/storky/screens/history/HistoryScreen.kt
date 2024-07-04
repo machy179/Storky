@@ -51,7 +51,7 @@ import com.tappytaps.storky.utils.getDateInHistory
 fun HistoryScreen(
     navController: NavController,
     viewModel: HistoryScreenViewModel,
-    listOfContractionsHistory: List<Contraction>
+    listOfContractionsHistory: List<Contraction>,
 ) {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
 
@@ -134,13 +134,14 @@ fun HistoryScreen(
                             listOfContractionsHistory = listOfContractionsHistory,
                             contraction = contraction,
                             viewModel = viewModel,
-                            contractionInSet = contraction.in_set)
+                            contractionInSet = contraction.in_set
+                        )
                     }
                     val reversedIndex = SizeListOfContractionsHistory - index
                     ContractionRowByItems(
                         contraction = contraction,
                         numberOfContraction = reversedIndex,
-                        deleteContraction = {viewModel.deleteContraction(contraction) }
+                        deleteContraction = { viewModel.deleteContraction(contraction) }
                     )
                 }
 
@@ -172,7 +173,7 @@ private fun BarSetsContractions(
     listOfContractionsHistory: List<Contraction>,
     contraction: Contraction,
     viewModel: HistoryScreenViewModel,
-    contractionInSet: Int
+    contractionInSet: Int,
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(), // Ensure the Row takes up the full width
@@ -221,9 +222,12 @@ private fun BarSetsContractions(
                 StorkyDropMenuItem(
                     icon = R.drawable.share,
                     text = R.string.share,
-                    onClick = { menuExpanded = false
-                        viewModel.shareEmailHistory(context = context,
-                            contractionInSet = contractionInSet)
+                    onClick = {
+                        menuExpanded = false
+                        viewModel.shareEmailHistory(
+                            context = context,
+                            contractionInSet = contractionInSet
+                        )
                     })
 
                 StorkyDropMenuItem(

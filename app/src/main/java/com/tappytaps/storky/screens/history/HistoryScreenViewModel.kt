@@ -94,8 +94,10 @@ class HistoryScreenViewModel @Inject constructor(
         viewModelScope.launch {
             try {
 
-                if(_listOfContractionsHistory.value.filter { it.in_set == contraction.in_set }.size == 1)  {
-                    deleteSetOfHistory(set = contraction.in_set )
+                if (_listOfContractionsHistory.value.filter { it.in_set == contraction.in_set }.size == 1) {
+                    //if it is last Contraction in set, it is necessary to delete whole set, becacuse
+                    //if we try delete just one Contraction, there was layout bugs - this Contraction was still seen, although set was empty
+                    deleteSetOfHistory(set = contraction.in_set)
                 } else {
                     repository.deleteContraction(contraction)
                 }

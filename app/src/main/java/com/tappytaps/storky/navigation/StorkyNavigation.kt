@@ -38,7 +38,8 @@ fun StorkyNavigation() {
     val splashViewModel = hiltViewModel<SplashScreenViewModel>()
 
     val homeViewModel = hiltViewModel<HomeScreenViewModel>()
-    val contractionsList = homeViewModel.listOfContractions.collectAsState().value //list of active Contractions
+    val contractionsList =
+        homeViewModel.listOfContractions.collectAsState().value //list of active Contractions
 
     val historyViewModel = hiltViewModel<HistoryScreenViewModel>()
     val contractionsListHistory = historyViewModel.listOfContractionsHistory.collectAsState().value
@@ -53,8 +54,10 @@ fun StorkyNavigation() {
     ) {
 
         composable(StorkyScreens.SplashScreen.name) {
-            SplashScreen(navController = navController,
-                viewModel = splashViewModel)
+            SplashScreen(
+                navController = navController,
+                viewModel = splashViewModel
+            )
         }
 
         composable(StorkyScreens.PresentationScreen.name) {

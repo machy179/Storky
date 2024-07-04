@@ -10,14 +10,12 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -45,15 +43,14 @@ import com.tappytaps.storky.navigation.StorkyScreens
 import com.tappytaps.storky.utils.convertSecondsToTimeString
 import com.tappytaps.storky.utils.convertSecondsToTimeString2
 
-@OptIn(ExperimentalMaterial3Api::class)
+
 @Composable
 fun MainScreen(
     navController: NavController,
-    showContractionlScreen: MutableState<Boolean>,
     contractionsList: List<Contraction>,
     viewModel: HomeScreenViewModel,
     lengthOfInterval: Int,
-    lengthOfContraction: Int
+    lengthOfContraction: Int,
 ) {
 
     val currentContractionLength = viewModel.currentContractionLength.value
@@ -70,7 +67,12 @@ fun MainScreen(
     var showDialogAutomatically by remember { mutableStateOf(false) }
 
     //check if is it possible to show StorkyPopUpDialog automatically:
-    LaunchedEffect(lengthOfInterval, lengthOfContraction, averageContractionLength, averageLengthBetweenContractions) {
+    LaunchedEffect(
+        lengthOfInterval,
+        lengthOfContraction,
+        averageContractionLength,
+        averageLengthBetweenContractions
+    ) {
         if ((averageContractionLength > lengthOfContraction) && (averageLengthBetweenContractions < lengthOfInterval) && (averageLengthBetweenContractions > 0) && !dialogShownAutomatically.value) {
             showDialogAutomatically = true
 
@@ -81,13 +83,17 @@ fun MainScreen(
     Scaffold(
         topBar = {
             MainScreenAppBar(
-                intervalContractionTextSetting =convertSecondsToTimeString2(lengthOfContraction),
+                intervalContractionTextSetting = convertSecondsToTimeString2(lengthOfContraction),
                 intervalBetweenTextSetting = convertSecondsToTimeString2(lengthOfInterval),
                 navController = navController,
                 backgroundColor = MaterialTheme.colorScheme.background,
                 pauseIconVisible = !pauseStopWatch,
-                intervalContractionTextCurrent = if(averageContractionLength != 0) convertSecondsToTimeString2(averageContractionLength) else "-:--",
-                intervalBetweenTextCurrent = if(averageLengthBetweenContractions != 0) convertSecondsToTimeString2(averageLengthBetweenContractions) else "-:--",
+                intervalContractionTextCurrent = if (averageContractionLength != 0) convertSecondsToTimeString2(
+                    averageContractionLength
+                ) else "-:--",
+                intervalBetweenTextCurrent = if (averageLengthBetweenContractions != 0) convertSecondsToTimeString2(
+                    averageLengthBetweenContractions
+                ) else "-:--",
                 onPause = {
                     viewModel.pauseStopWatch()
                 },
@@ -97,8 +103,8 @@ fun MainScreen(
                 onNewMonitoring = {
                     dialogNewMonitoringVisible = true
                 },
-                onIndicatorActive =  {
-               //     viewModel.updateAverageTimes()
+                onIndicatorActive = {
+                    //     viewModel.updateAverageTimes()
                 },
                 contractionsOk = averageContractionLength > lengthOfContraction,
                 intervalsOk = (averageLengthBetweenContractions < lengthOfInterval) && (averageLengthBetweenContractions != 0),
@@ -124,7 +130,7 @@ fun MainScreen(
                 contentAlignment = Alignment.Center
             ) {
                 Column(
-                 //   horizontalAlignment = Alignment.CenterHorizontally,
+                    //   horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.SpaceBetween,
                     modifier = Modifier.fillMaxSize()
                         .graphicsLayer { alpha = 0.99F }
@@ -152,7 +158,7 @@ fun MainScreen(
                             .fillMaxWidth()
                     ) {
 
-                        if(contractionsList.isNullOrEmpty() && !viewModel.isRunning) {
+                        if (contractionsList.isNullOrEmpty() && !viewModel.isRunning) {
                             Box(
                                 modifier = Modifier
                                     .fillMaxSize(),
@@ -168,12 +174,12 @@ fun MainScreen(
                             }
 
                         } else {
-                            if(viewModel.isRunning) { //because if is first open, countdowner still does not work - so nothing to display on top text area
+                            if (viewModel.isRunning) { //because if is first open, countdowner still does not work - so nothing to display on top text area
                                 Column(
                                     horizontalAlignment = Alignment.CenterHorizontally,
                                     modifier = Modifier.fillMaxWidth()
                                 ) {
-                                    if(pauseStopWatch) {
+                                    if (pauseStopWatch) {
                                         Text(
                                             text = stringResource(R.string.paused_tap_start),
                                             style = MaterialTheme.typography.headlineSmall,
@@ -184,7 +190,9 @@ fun MainScreen(
                                         )
                                     } else {
                                         Text(
-                                            text = convertSecondsToTimeString(currentLengthBetweenContractions),
+                                            text = convertSecondsToTimeString(
+                                                currentLengthBetweenContractions
+                                            ),
                                             style = MaterialTheme.typography.displayMedium,
                                             color = MaterialTheme.colorScheme.onSurface,
                                             textAlign = TextAlign.Center
@@ -194,7 +202,7 @@ fun MainScreen(
 
 
                                     Text(
-                                        text = if(!pauseStopWatch) stringResource(R.string.interval_time) else "",
+                                        text = if (!pauseStopWatch) stringResource(R.string.interval_time) else "",
                                         style = MaterialTheme.typography.labelLarge,
                                         color = MaterialTheme.colorScheme.onSurface,
                                         textAlign = TextAlign.Center
@@ -203,10 +211,12 @@ fun MainScreen(
 
 
 
-                                ContractionRow(lengthOfContraction = currentContractionLength,
+                                ContractionRow(
+                                    lengthOfContraction = currentContractionLength,
                                     contractionTime = currentTimeDateContraction,
                                     timeBetweenContractions = currentLengthBetweenContractions,
-                                    numberOfContraction = contractionsList.size+1)
+                                    numberOfContraction = contractionsList.size + 1
+                                )
                             }
 
                             val listState = rememberLazyListState()
@@ -222,11 +232,15 @@ fun MainScreen(
 
                                 ) {
                                 var reverseIndex = contractionsList.size
-                                itemsIndexed(contractionsList) { index,contraction ->
+                                itemsIndexed(contractionsList) { index, contraction ->
                                     reverseIndex = contractionsList.size - index
                                     ContractionRowByItems(contraction = contraction,
                                         numberOfContraction = reverseIndex,
-                                        deleteContraction = {viewModel.deleteContraction(contraction)  })
+                                        deleteContraction = {
+                                            viewModel.deleteContraction(
+                                                contraction
+                                            )
+                                        })
                                 }
 
                             }
@@ -248,22 +262,24 @@ fun MainScreen(
                             viewModel.saveContraction()
                             viewModel.updateCurrentTime()
                             viewModel.newStart()
-                     //       showContractionlScreen.value = true
                             viewModel.setShowContractionlScreen(value = true)
                         },
                         disableInsetNavigationBarPadding = true
                     )
                 }
 
-                if(dialogNewMonitoringVisible) {
-                    CustomDialog(title = stringResource(R.string.new_monitoring_title),
+                if (dialogNewMonitoringVisible) {
+                    CustomDialog(
+                        title = stringResource(R.string.new_monitoring_title),
                         text = stringResource(R.string.new_monitoring_text),
                         firstTextButton = stringResource(R.string.no),
                         secondTextButton = stringResource(R.string.ok),
                         enableFirstRequest = true,
-                        firstRequest = { viewModel.newMonitoring()
-                            dialogNewMonitoringVisible = false },
-                        onDismissRequest = { dialogNewMonitoringVisible = false},
+                        firstRequest = {
+                            viewModel.newMonitoring()
+                            dialogNewMonitoringVisible = false
+                        },
+                        onDismissRequest = { dialogNewMonitoringVisible = false },
                         changePositionButtons = true
                     )
                 }

@@ -26,7 +26,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -39,12 +38,11 @@ import com.tappytaps.storky.R
 import com.tappytaps.storky.components.StorkyAppBar
 import com.tappytaps.storky.navigation.StorkyScreens
 import com.tappytaps.storky.ui.theme.WhiteColor
-import com.tappytaps.storky.utils.Constants
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun IndicatorHelpScreen(
-    navController: NavController
+    navController: NavController,
 ) {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
 
@@ -105,7 +103,7 @@ fun IndicatorHelpScreen(
                                         textAlign = TextAlign.Center
                                     )
                                 }
-                        }
+                            }
                             Spacer(modifier = Modifier.height(24.dp))
                             Box(
                                 modifier = Modifier.width(80.dp)
@@ -122,69 +120,69 @@ fun IndicatorHelpScreen(
                                     )
                                 }
                             }
-                    }
+                        }
 
-                }
-                Spacer(modifier = Modifier.height(31.dp))
-                Column {
-                    Text(
-                        text = stringResource(R.string.conditions_title),
-                        style = MaterialTheme.typography.titleLarge,
-                        textAlign = TextAlign.Start
-                    )
-                    Spacer(modifier = Modifier.height(6.dp))
-                    Text(
-                        text = stringResource(R.string.conditions_text),
-                        style = MaterialTheme.typography.bodyLarge,
-                        textAlign = TextAlign.Start
-                    )
-                    Spacer(modifier = Modifier.height(6.dp))
-                    TextButton(
-                        onClick = {
-                            navController.navigate(StorkyScreens.SettingsScreen.name)
-                        },
-                        modifier = Modifier
-                            .padding(horizontal = 10.dp, vertical = 12.dp)
-                    ) {
-                        Text(
-                            text = stringResource(id = R.string.change_conditions),
-                            color = MaterialTheme.colorScheme.primary,
-                            style = MaterialTheme.typography.labelLarge
-                        )
                     }
-                }
-                Spacer(modifier = Modifier.height(31.dp))
-                Column {
-                    Text(
-                        text = stringResource(R.string.when_to_go_title),
-                        style = MaterialTheme.typography.titleLarge,
-                        textAlign = TextAlign.Start
-                    )
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Text(
-                        text = stringResource(R.string.when_to_go_text),
-                        style = MaterialTheme.typography.bodyLarge,
-                        textAlign = TextAlign.Start
-                    )
-                    Spacer(modifier = Modifier.height(16.dp))
-                    TextWithBullet(stringResource(R.string.when_to_go_row_1))
-                    Spacer(modifier = Modifier.height(8.dp))
-                    TextWithBullet(stringResource(R.string.when_to_go_row_2))
-                    Spacer(modifier = Modifier.height(8.dp))
-                    TextWithBullet(stringResource(R.string.when_to_go_row_3))
-                    Spacer(modifier = Modifier.height(8.dp))
-                    TextWithBullet(stringResource(R.string.when_to_go_row_4))
-                    Spacer(modifier = Modifier.height(8.dp))
-                    TextWithBullet(stringResource(R.string.when_to_go_row_5))
-                    Spacer(modifier = Modifier.height(8.dp))
-                    TextWithBullet(stringResource(R.string.when_to_go_row_6))
-                    Spacer(modifier = Modifier.height(8.dp))
-                    TextWithBullet(stringResource(R.string.when_to_go_row_7))
+                    Spacer(modifier = Modifier.height(31.dp))
+                    Column {
+                        Text(
+                            text = stringResource(R.string.conditions_title),
+                            style = MaterialTheme.typography.titleLarge,
+                            textAlign = TextAlign.Start
+                        )
+                        Spacer(modifier = Modifier.height(6.dp))
+                        Text(
+                            text = stringResource(R.string.conditions_text),
+                            style = MaterialTheme.typography.bodyLarge,
+                            textAlign = TextAlign.Start
+                        )
+                        Spacer(modifier = Modifier.height(6.dp))
+                        TextButton(
+                            onClick = {
+                                navController.navigate(StorkyScreens.SettingsScreen.name)
+                            },
+                            modifier = Modifier
+                                .padding(horizontal = 10.dp, vertical = 12.dp)
+                        ) {
+                            Text(
+                                text = stringResource(id = R.string.change_conditions),
+                                color = MaterialTheme.colorScheme.primary,
+                                style = MaterialTheme.typography.labelLarge
+                            )
+                        }
+                    }
+                    Spacer(modifier = Modifier.height(31.dp))
+                    Column {
+                        Text(
+                            text = stringResource(R.string.when_to_go_title),
+                            style = MaterialTheme.typography.titleLarge,
+                            textAlign = TextAlign.Start
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Text(
+                            text = stringResource(R.string.when_to_go_text),
+                            style = MaterialTheme.typography.bodyLarge,
+                            textAlign = TextAlign.Start
+                        )
+                        Spacer(modifier = Modifier.height(16.dp))
+                        TextWithBullet(stringResource(R.string.when_to_go_row_1))
+                        Spacer(modifier = Modifier.height(8.dp))
+                        TextWithBullet(stringResource(R.string.when_to_go_row_2))
+                        Spacer(modifier = Modifier.height(8.dp))
+                        TextWithBullet(stringResource(R.string.when_to_go_row_3))
+                        Spacer(modifier = Modifier.height(8.dp))
+                        TextWithBullet(stringResource(R.string.when_to_go_row_4))
+                        Spacer(modifier = Modifier.height(8.dp))
+                        TextWithBullet(stringResource(R.string.when_to_go_row_5))
+                        Spacer(modifier = Modifier.height(8.dp))
+                        TextWithBullet(stringResource(R.string.when_to_go_row_6))
+                        Spacer(modifier = Modifier.height(8.dp))
+                        TextWithBullet(stringResource(R.string.when_to_go_row_7))
+                    }
                 }
             }
         }
     }
-}
 }
 
 @Composable
@@ -201,7 +199,9 @@ fun WhiteStorkBullet(conditionsMet: Boolean) {
         contentAlignment = Alignment.Center // Centers the icon within the Box
     ) {
         Icon(
-            painter = if (conditionsMet) painterResource(id = R.drawable.indicator_active) else painterResource(id = R.drawable.indicator_inactive),
+            painter = if (conditionsMet) painterResource(id = R.drawable.indicator_active) else painterResource(
+                id = R.drawable.indicator_inactive
+            ),
             contentDescription = "Center Icon",
             tint = if (conditionsMet) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface
         )

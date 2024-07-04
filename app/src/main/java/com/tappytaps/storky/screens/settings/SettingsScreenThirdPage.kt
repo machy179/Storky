@@ -41,7 +41,7 @@ fun SettingsScreenThirdPage(
     pagerState: PagerState,
     coroutineScope: CoroutineScope,
     viewModel: SettingsScreenViewModel,
-    lengthOfContraction: Int
+    lengthOfContraction: Int,
 ) {
 
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
@@ -69,10 +69,11 @@ fun SettingsScreenThirdPage(
             modifier = Modifier.fillMaxSize()
         ) {
             Column(
-                modifier = Modifier.fillMaxSize().padding(paddingValues = paddingValues).padding(horizontal = 16.dp)
+                modifier = Modifier.fillMaxSize().padding(paddingValues = paddingValues)
+                    .padding(horizontal = 16.dp)
             ) {
 
-                HorizontalDivider(modifier = Modifier.padding(vertical=verticalPaddingOfDivider))
+                HorizontalDivider(modifier = Modifier.padding(vertical = verticalPaddingOfDivider))
                 Row(
                     modifier = Modifier.fillMaxWidth().padding(vertical = verticalPaddingOfRows)
                         .clickable {
@@ -80,7 +81,8 @@ fun SettingsScreenThirdPage(
                             coroutineScope.launch {
 
                                 pagerState.animateScrollToPage(0)
-                            } },
+                            }
+                        },
                     horizontalArrangement = Arrangement.SpaceBetween,
                 ) {
                     Text(
@@ -88,7 +90,7 @@ fun SettingsScreenThirdPage(
                         style = MaterialTheme.typography.bodyLarge,
                         textAlign = TextAlign.Start,
                     )
-                    if(lengthOfContraction == 50) {
+                    if (lengthOfContraction == 50) {
                         Icon(
                             imageVector = Icons.Filled.Done,
                             //     painter = painterResource(id = ),
@@ -100,16 +102,18 @@ fun SettingsScreenThirdPage(
                     }
 
                 }
-                HorizontalDivider(modifier = Modifier.padding(vertical=verticalPaddingOfDivider))
+                HorizontalDivider(modifier = Modifier.padding(vertical = verticalPaddingOfDivider))
                 Row(
-                    modifier = Modifier.fillMaxWidth().padding(vertical = verticalPaddingOfRows).clickable {
-                        //            chooseOfLengthTime = 270
-                        viewModel.setLengthOfContraction(60)
-                        coroutineScope.launch {
+                    modifier = Modifier.fillMaxWidth().padding(vertical = verticalPaddingOfRows)
+                        .clickable {
+                            //            chooseOfLengthTime = 270
+                            viewModel.setLengthOfContraction(60)
+                            coroutineScope.launch {
 
-                            pagerState.animateScrollToPage(0)
+                                pagerState.animateScrollToPage(0)
 
-                        } },
+                            }
+                        },
                     horizontalArrangement = Arrangement.SpaceBetween,
                 ) {
                     Text(
@@ -117,7 +121,7 @@ fun SettingsScreenThirdPage(
                         style = MaterialTheme.typography.bodyLarge,
                         textAlign = TextAlign.Start,
                     )
-                    if(lengthOfContraction  == 60) {
+                    if (lengthOfContraction == 60) {
                         Icon(
                             imageVector = Icons.Filled.Done,
                             //     painter = painterResource(id = ),
@@ -130,16 +134,18 @@ fun SettingsScreenThirdPage(
 
 
                 }
-                HorizontalDivider(modifier = Modifier.padding(vertical=verticalPaddingOfDivider))
+                HorizontalDivider(modifier = Modifier.padding(vertical = verticalPaddingOfDivider))
                 Row(
-                    modifier = Modifier.fillMaxWidth().padding(vertical = verticalPaddingOfRows).clickable {
-                        //          chooseOfLengthTime = 300
-                        viewModel.setLengthOfContraction(70)
-                        coroutineScope.launch {
+                    modifier = Modifier.fillMaxWidth().padding(vertical = verticalPaddingOfRows)
+                        .clickable {
+                            //          chooseOfLengthTime = 300
+                            viewModel.setLengthOfContraction(70)
+                            coroutineScope.launch {
 
-                            pagerState.animateScrollToPage(0)
+                                pagerState.animateScrollToPage(0)
 
-                        } },
+                            }
+                        },
                     horizontalArrangement = Arrangement.SpaceBetween,
                 ) {
                     Text(
@@ -147,7 +153,7 @@ fun SettingsScreenThirdPage(
                         style = MaterialTheme.typography.bodyLarge,
                         textAlign = TextAlign.Start,
                     )
-                    if(lengthOfContraction  == 70) {
+                    if (lengthOfContraction == 70) {
                         Icon(
                             imageVector = Icons.Filled.Done,
                             //     painter = painterResource(id = ),
@@ -159,15 +165,17 @@ fun SettingsScreenThirdPage(
                     }
 
                 }
-                HorizontalDivider(modifier = Modifier.padding(vertical=verticalPaddingOfDivider))
+                HorizontalDivider(modifier = Modifier.padding(vertical = verticalPaddingOfDivider))
                 Row(
-                    modifier = Modifier.fillMaxWidth().padding(vertical = verticalPaddingOfRows).clickable {
-                        //     chooseOfLengthTime = 330
-                        viewModel.setLengthOfContraction(80)
-                        coroutineScope.launch {
+                    modifier = Modifier.fillMaxWidth().padding(vertical = verticalPaddingOfRows)
+                        .clickable {
+                            //     chooseOfLengthTime = 330
+                            viewModel.setLengthOfContraction(80)
+                            coroutineScope.launch {
 
-                            pagerState.animateScrollToPage(0)
-                        } },
+                                pagerState.animateScrollToPage(0)
+                            }
+                        },
                     horizontalArrangement = Arrangement.SpaceBetween,
                 ) {
                     Text(
@@ -175,7 +183,7 @@ fun SettingsScreenThirdPage(
                         style = MaterialTheme.typography.bodyLarge,
                         textAlign = TextAlign.Start,
                     )
-                    if(lengthOfContraction  == 80) {
+                    if (lengthOfContraction == 80) {
                         Icon(
                             imageVector = Icons.Filled.Done,
                             //     painter = painterResource(id = ),
@@ -187,13 +195,12 @@ fun SettingsScreenThirdPage(
                     }
 
                 }
-                HorizontalDivider(modifier = Modifier.padding(vertical=verticalPaddingOfDivider))
+                HorizontalDivider(modifier = Modifier.padding(vertical = verticalPaddingOfDivider))
 
             }
 
 
         }
-
 
 
     }

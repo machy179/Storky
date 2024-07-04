@@ -1,5 +1,6 @@
 package com.tappytaps.storky.screens.removeads
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -34,6 +35,7 @@ import com.tappytaps.storky.components.UniversalButton
 import com.tappytaps.storky.components.ImageTitleContentText
 import com.tappytaps.storky.navigation.StorkyScreens
 
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @ExperimentalMaterial3Api
 @Composable
 fun RemoveAdsScreen(navController: NavController) {
@@ -54,106 +56,106 @@ fun RemoveAdsScreen(navController: NavController) {
             )
 
         },
-    ) { paddingValues ->
-
-    Box(
-        modifier = Modifier.fillMaxSize()
-            .windowInsetsPadding(WindowInsets.navigationBars)
     ) {
 
-
-        Column(
-            modifier = Modifier
-                .align(Alignment.Center),
-            horizontalAlignment = Alignment.CenterHorizontally // Center images horizontally
+        Box(
+            modifier = Modifier.fillMaxSize()
+                .windowInsetsPadding(WindowInsets.navigationBars)
         ) {
 
-            var imageResId: Int = R.drawable.ads
-            var titleResId: Int = R.string.remove_ads_screen_title
-            var textResId: Int = R.string.remove_ads_screen_text
 
-
-            ImageTitleContentText(
-                imageResId = imageResId,
-                titleResId = titleResId,
-                textResId = textResId,
-                widthOfColumn = 302.dp
-            )
-
-        }
-        val context = LocalContext.current
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .align(Alignment.BottomCenter)
-        ) {
-            Row(
+            Column(
                 modifier = Modifier
-                    .fillMaxWidth(),
-                horizontalArrangement = Arrangement.Center
+                    .align(Alignment.Center),
+                horizontalAlignment = Alignment.CenterHorizontally // Center images horizontally
             ) {
 
-                UniversalButton(
-                    text = stringResource(id = R.string.remove_ads_screen_button_text),
-                    subText = stringResource(id = R.string.remove_ads_screen_button_subtext),
-                    onClick = {
-                        navController.navigate(StorkyScreens.HomeScreen.name)
-                    },
-                    disableInsetNavigationBarPadding = true
-                )
-            }
+                var imageResId: Int = R.drawable.ads
+                var titleResId: Int = R.string.remove_ads_screen_title
+                var textResId: Int = R.string.remove_ads_screen_text
 
-            TextButton(
+
+                ImageTitleContentText(
+                    imageResId = imageResId,
+                    titleResId = titleResId,
+                    textResId = textResId,
+                    widthOfColumn = 302.dp
+                )
+
+            }
+            val context = LocalContext.current
+            Column(
                 modifier = Modifier
-                    .fillMaxWidth(),
-                onClick = {
-                    //TODO
+                    .fillMaxWidth()
+                    .align(Alignment.BottomCenter)
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Center
+                ) {
+
+                    UniversalButton(
+                        text = stringResource(id = R.string.remove_ads_screen_button_text),
+                        subText = stringResource(id = R.string.remove_ads_screen_button_subtext),
+                        onClick = {
+                            navController.navigate(StorkyScreens.HomeScreen.name)
+                        },
+                        disableInsetNavigationBarPadding = true
+                    )
                 }
-            ) {
-                Text(
-                    text = stringResource(id = R.string.restore_purchase),
-                    style = MaterialTheme.typography.labelLarge
-                )
-            }
-            Spacer(
-                modifier = Modifier.padding(bottom = 12.dp)
-            )
-            Row(
-                modifier = Modifier.align(alignment = Alignment.CenterHorizontally)
-                    .padding(bottom = 16.dp),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Text(
-                    text = stringResource(id = R.string.you_agree_to_our) + " ",
-                    style = MaterialTheme.typography.labelLarge
-                )
-                Text(
-                    text = stringResource(id = R.string.terms_of_service) + " ",
-                    style = MaterialTheme.typography.labelLarge,
-                    color = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.clickable {
+
+                TextButton(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    onClick = {
                         //TODO
                     }
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.restore_purchase),
+                        style = MaterialTheme.typography.labelLarge
+                    )
+                }
+                Spacer(
+                    modifier = Modifier.padding(bottom = 12.dp)
                 )
-                Text(
-                    text = stringResource(id = R.string.and) + " ",
-                    style = MaterialTheme.typography.labelLarge
-                )
-                Text(
-                    text = stringResource(id = R.string.privacy_policy),
-                    style = MaterialTheme.typography.labelLarge,
-                    color = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.clickable {
-                        //TODO
-                    }
-                )
+                Row(
+                    modifier = Modifier.align(alignment = Alignment.CenterHorizontally)
+                        .padding(bottom = 16.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.you_agree_to_our) + " ",
+                        style = MaterialTheme.typography.labelLarge
+                    )
+                    Text(
+                        text = stringResource(id = R.string.terms_of_service) + " ",
+                        style = MaterialTheme.typography.labelLarge,
+                        color = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.clickable {
+                            //TODO
+                        }
+                    )
+                    Text(
+                        text = stringResource(id = R.string.and) + " ",
+                        style = MaterialTheme.typography.labelLarge
+                    )
+                    Text(
+                        text = stringResource(id = R.string.privacy_policy),
+                        style = MaterialTheme.typography.labelLarge,
+                        color = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.clickable {
+                            //TODO
+                        }
+                    )
+                }
+
+
             }
 
 
         }
-
-
-    }
     }
 }
 

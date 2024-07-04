@@ -45,8 +45,9 @@ import com.tappytaps.storky.utils.isValidEmail
 @ExperimentalMaterial3Api
 @ExperimentalFoundationApi
 @Composable
-fun EmailScreen(navController: NavController,
-                viewModel: EmailScreenViewModel = hiltViewModel()
+fun EmailScreen(
+    navController: NavController,
+    viewModel: EmailScreenViewModel = hiltViewModel(),
 ) {
     var showDoneEmailScreen = remember { mutableStateOf(false) }
     if (!showDoneEmailScreen.value) {
@@ -59,12 +60,16 @@ fun EmailScreen(navController: NavController,
 }
 
 @Composable
-fun AskEmailScreen(navController: NavController,
-                   showDoneEmailScreen: MutableState<Boolean>,
-                   viewModel: EmailScreenViewModel) {
-    Box(modifier = Modifier
-        .imePadding()
-                    .fillMaxSize()) {
+fun AskEmailScreen(
+    navController: NavController,
+    showDoneEmailScreen: MutableState<Boolean>,
+    viewModel: EmailScreenViewModel,
+) {
+    Box(
+        modifier = Modifier
+            .imePadding()
+            .fillMaxSize()
+    ) {
         var showDialogInvalidEmail = remember { mutableStateOf(false) }
         var showDialogSkipStep = remember { mutableStateOf(false) }
         TextButton(
@@ -74,7 +79,12 @@ fun AskEmailScreen(navController: NavController,
             },
             modifier = Modifier
                 .align(Alignment.TopEnd)
-                .padding(start = 10.dp, top = TOP_PADDING_NEXT, end = END_PADDING_NEXT, bottom = 12.dp)
+                .padding(
+                    start = 10.dp,
+                    top = TOP_PADDING_NEXT,
+                    end = END_PADDING_NEXT,
+                    bottom = 12.dp
+                )
         ) {
             Text(
                 text = stringResource(id = R.string.next_button),

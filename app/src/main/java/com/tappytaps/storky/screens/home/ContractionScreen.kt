@@ -12,12 +12,9 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.navigation.NavController
 import com.tappytaps.storky.R
 import com.tappytaps.storky.components.StorkyAppBar
 import com.tappytaps.storky.components.UniversalButton
@@ -26,9 +23,7 @@ import com.tappytaps.storky.utils.convertSecondsToTimeString
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ContractionScreen(
-    navController: NavController,
-    showContractionlScreen: MutableState<Boolean>,
-    viewModel: HomeScreenViewModel
+    viewModel: HomeScreenViewModel,
 ) {
     val currentLengthBetweenContractions = viewModel.currentLengthBetweenContractions.value
 
@@ -36,7 +31,12 @@ fun ContractionScreen(
     Scaffold(
         topBar = {
             StorkyAppBar(
-                backgroundColor = MaterialTheme.colorScheme.primary
+                backgroundColor = MaterialTheme.colorScheme.primary,
+                onDelete = {
+                    viewModel.deleteCurrentContraction()
+                    viewModel.setShowContractionlScreen(value = false)
+                    viewModel.updateAverageTimes()
+                }
 
             )
         },
@@ -74,10 +74,10 @@ fun ContractionScreen(
                     UniversalButton(
                         text = stringResource(R.string.stop_contraction),
                         onClick = {
-                      //      showContractionlScreen.value = false
                             viewModel.setShowContractionlScreen(value = false)
                             viewModel.saveCurrentContractionLength()
                             viewModel.updateAverageTimes()
+                            viewModel.setButtonStopContractionAlreadyPresed(value = true)
                         },
                         inverseColor = true,
                         disableInsetNavigationBarPadding = true

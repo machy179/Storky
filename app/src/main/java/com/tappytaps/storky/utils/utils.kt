@@ -97,18 +97,24 @@ fun getDateInHistory(calendarLastDay: Calendar, calendarFirstDay: Calendar): Str
 
 fun getDateInShare(calendarLastDay: Calendar, calendarFirstDay: Calendar): String {
     val dateFormatter = SimpleDateFormat("dd. MMMM", Locale.getDefault()) // Formatter without year
-    if (isSameDay(calendarLastDay, calendarFirstDay)) return dateFormatter.format(calendarLastDay.time)
-    else return (dateFormatter.format(calendarLastDay.time) + " - " + dateFormatter.format(calendarFirstDay.time))
+    if (isSameDay(
+            calendarLastDay,
+            calendarFirstDay
+        )
+    ) return dateFormatter.format(calendarLastDay.time)
+    else return (dateFormatter.format(calendarLastDay.time) + " - " + dateFormatter.format(
+        calendarFirstDay.time
+    ))
 }
 
 fun calculateAverageLengthOfContraction(
     listOfContractions: List<Contraction>,
     currentContractionLength: Int,
-    includeCurrentContractionLength: Boolean = true
+    includeCurrentContractionLength: Boolean = true,
 ): Int {
     val size =
         if (includeCurrentContractionLength) listOfContractions.size + 1 else listOfContractions.size
-    //pokud jedno měření, průměr bude _currentContractionLength
+    //if one measurement, the average will be _currentContractionLength
     if (listOfContractions.size == 0) {
         return currentContractionLength
 
@@ -124,21 +130,19 @@ fun calculateAverageLengthOfContraction(
         contractionLengths =
             if (includeCurrentContractionLength) contractionLengths + currentContractionLength else contractionLengths
 
-        // Seřadit délky kontrakcí v sestupném pořadí:
+        // Sort contraction lengths in descending order:
         val sortedLengths = contractionLengths.sortedDescending()
 
-        // Vypočítat počet prvků, které se nebudou počítat (20%):
+        // Calculate the number of elements that will not be counted (20%):
         val excludedCount = (0.2 * sortedLengths.size).toInt()
 
 
-
-        // Získat délky kontrakcí, které se budou počítat:
+        // To get the contraction lengths that will be counted:
         val includedLengths = sortedLengths.subList(0, sortedLengths.size - excludedCount)
 
-        // Vypočítat průměr zahrnutých délek kontrakcí:
+        // Calculate the average of the included contraction lengths:
         val averageLength = includedLengths.sum() / includedLengths.size
 
-        // Vrátit průměr:
         return averageLength
 
     }
@@ -146,7 +150,7 @@ fun calculateAverageLengthOfContraction(
 }
 
 fun calculateAverageLengthOfIntervalTime(
-    listOfContractions: List<Contraction>
+    listOfContractions: List<Contraction>,
 ): Int {
     val size = listOfContractions.size
     if (listOfContractions.size == 0) {

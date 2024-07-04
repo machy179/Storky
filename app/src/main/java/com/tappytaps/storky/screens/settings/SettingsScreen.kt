@@ -15,7 +15,7 @@ fun SettingsScreen(
     navController: NavController,
     viewModel: SettingsScreenViewModel,
     lengthOfInterval: Int,
-    lengthOfContraction: Int
+    lengthOfContraction: Int,
 ) {
     val pagerState = rememberPagerState(pageCount = {
         3
@@ -36,18 +36,22 @@ fun SettingsScreen(
                 coroutineScope = coroutineScope,
                 viewModel = viewModel,
                 lengthOfInterval = lengthOfInterval,
-                lengthOfContraction =lengthOfContraction
+                lengthOfContraction = lengthOfContraction
             )
+
             1 -> SettingsScreenSecondPage(
                 pagerState = pagerState,
                 coroutineScope = coroutineScope,
                 viewModel = viewModel,
-                lengthOfInterval =lengthOfInterval)
+                lengthOfInterval = lengthOfInterval
+            )
+
             2 -> SettingsScreenThirdPage(
                 pagerState = pagerState,
                 coroutineScope = coroutineScope,
                 viewModel = viewModel,
-                lengthOfContraction = lengthOfContraction)
+                lengthOfContraction = lengthOfContraction
+            )
         }
     }
 }

@@ -18,7 +18,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
@@ -42,7 +41,7 @@ import com.tappytaps.storky.ui.theme.WhiteColor
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HowToScreen(
-    navController: NavController
+    navController: NavController,
 ) {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
 
@@ -87,8 +86,10 @@ fun HowToScreen(
                         )
 
                         Spacer(modifier = Modifier.height(16.dp))
-                        TextWithBullet(text = stringResource(R.string.interval),
-                            primaryColor = false)
+                        TextWithBullet(
+                            text = stringResource(R.string.interval),
+                            primaryColor = false
+                        )
                         Spacer(modifier = Modifier.height(6.dp))
                         Text(
                             text = stringResource(R.string.interval_description),
@@ -98,8 +99,10 @@ fun HowToScreen(
 
 
                         Spacer(modifier = Modifier.height(16.dp))
-                        Text(text = stringResource(R.string.true_labour),
-                            style = MaterialTheme.typography.titleMedium)
+                        Text(
+                            text = stringResource(R.string.true_labour),
+                            style = MaterialTheme.typography.titleMedium
+                        )
                         Spacer(modifier = Modifier.height(6.dp))
                         Text(
                             text = stringResource(R.string.true_labour_description),
@@ -115,8 +118,10 @@ fun HowToScreen(
                         )
                         Spacer(modifier = Modifier.height(16.dp))
 
-                        Text(text = stringResource(R.string.early_labour_phase),
-                            style = MaterialTheme.typography.titleMedium)
+                        Text(
+                            text = stringResource(R.string.early_labour_phase),
+                            style = MaterialTheme.typography.titleMedium
+                        )
                         Spacer(modifier = Modifier.height(6.dp))
                         Text(
                             text = stringResource(R.string.early_labour_phase_description),
@@ -125,8 +130,10 @@ fun HowToScreen(
                         )
                         Spacer(modifier = Modifier.height(24.dp))
 
-                        Text(text = stringResource(R.string.active_labour_phase),
-                            style = MaterialTheme.typography.titleMedium)
+                        Text(
+                            text = stringResource(R.string.active_labour_phase),
+                            style = MaterialTheme.typography.titleMedium
+                        )
                         Spacer(modifier = Modifier.height(6.dp))
                         Text(
                             text = stringResource(R.string.active_labour_phase_description),
@@ -134,8 +141,10 @@ fun HowToScreen(
                             textAlign = TextAlign.Start
                         )
                         Spacer(modifier = Modifier.height(24.dp))
-                        Text(text = stringResource(R.string.transition_phase),
-                            style = MaterialTheme.typography.titleMedium)
+                        Text(
+                            text = stringResource(R.string.transition_phase),
+                            style = MaterialTheme.typography.titleMedium
+                        )
                         Spacer(modifier = Modifier.height(6.dp))
                         Text(
                             text = stringResource(R.string.transition_phase_description),
@@ -143,20 +152,16 @@ fun HowToScreen(
                             textAlign = TextAlign.Start
                         )
                         Spacer(modifier = Modifier.height(24.dp))
-                        Text(text = stringResource(R.string.pushing_and_delivery),
-                            style = MaterialTheme.typography.titleMedium)
+                        Text(
+                            text = stringResource(R.string.pushing_and_delivery),
+                            style = MaterialTheme.typography.titleMedium
+                        )
                         Spacer(modifier = Modifier.height(6.dp))
                         Text(
                             text = stringResource(R.string.pushing_and_delivery_description),
                             style = MaterialTheme.typography.bodyLarge,
                             textAlign = TextAlign.Start
                         )
-
-
-
-
-
-
 
 
                     }
@@ -180,7 +185,9 @@ fun WhiteStorkBullet(conditionsMet: Boolean) {
         contentAlignment = Alignment.Center // Centers the icon within the Box
     ) {
         Icon(
-            painter = if (conditionsMet) painterResource(id = R.drawable.indicator_active) else painterResource(id = R.drawable.indicator_inactive),
+            painter = if (conditionsMet) painterResource(id = R.drawable.indicator_active) else painterResource(
+                id = R.drawable.indicator_inactive
+            ),
             contentDescription = "Center Icon",
             tint = if (conditionsMet) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface
         )
@@ -193,7 +200,7 @@ private fun PinkBullet(primaryColor: Boolean) {
         modifier = Modifier
             .size(16.dp)
             .background(
-                color = if(primaryColor) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.secondary,
+                color = if (primaryColor) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.secondary,
                 shape = CircleShape
             )
     )

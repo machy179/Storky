@@ -77,7 +77,7 @@ fun ImageTitleContentText(
     navController: NavController = NavController(LocalContext.current),
     widthOfColumn: Dp = 280.dp,
 
-    bottomSpace: Boolean = false
+    bottomSpace: Boolean = false,
 ) {
     Column(
         modifier = modifier
@@ -142,10 +142,10 @@ fun ImageTitleContentText(
 @Composable
 fun UniversalButton(
     text: String,
-    subText: String ="",
+    subText: String = "",
     onClick: () -> Unit,
     inverseColor: Boolean = false,
-    disableInsetNavigationBarPadding: Boolean = false //if it is used in HomeScreen on Scaffold, it is necessary to disable bottom padding of Inset NavigationBar
+    disableInsetNavigationBarPadding: Boolean = false, //if it is used in HomeScreen on Scaffold, it is necessary to disable bottom padding of Inset NavigationBar
 ) {
 
     val modifier = if (disableInsetNavigationBarPadding) {
@@ -181,7 +181,7 @@ fun UniversalButton(
                     color = if (inverseColor) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onPrimary,
                     style = MaterialTheme.typography.labelLarge
                 )
-                if(subText!="") {
+                if (subText != "") {
                     Text(
                         text = subText,
                         color = if (inverseColor) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onPrimary,
@@ -205,7 +205,7 @@ fun EmailInput(
     emailState: MutableState<String>,
     labelId: String = "Email",
     imeAction: ImeAction = ImeAction.Next,
-    onAction: KeyboardActions = KeyboardActions.Default
+    onAction: KeyboardActions = KeyboardActions.Default,
 ) {
     Column(
         modifier = Modifier.background(color = MaterialTheme.colorScheme.background)
@@ -240,7 +240,7 @@ fun InputField(
     isSingleLine: Boolean = true,
     keyboardType: KeyboardType = KeyboardType.Text,
     imeAction: ImeAction = ImeAction.Next,
-    onAction: KeyboardActions = KeyboardActions.Default
+    onAction: KeyboardActions = KeyboardActions.Default,
 ) {
 
     OutlinedTextField(
@@ -270,7 +270,7 @@ fun CustomDialog(
     enableFirstRequest: Boolean = false,
     firstRequest: () -> Unit,
     onDismissRequest: () -> Unit,
-    changePositionButtons: Boolean = false //because in historyscreen, delete dialog there is change position of buttons
+    changePositionButtons: Boolean = false, //because in historyscreen, delete dialog there is change position of buttons
 ) {
 
     AlertDialog(
@@ -331,22 +331,22 @@ fun ContractionRowByItems(
     modifier: Modifier = Modifier,
     contraction: Contraction,
     numberOfContraction: Int,
-    deleteContraction: () -> Unit
+    deleteContraction: () -> Unit,
 ) {
 
     var dialogdeleteContractionVisible by remember { mutableStateOf(false) }
     Column(
         modifier = modifier.combinedClickable(
             onClick = { /* No-op or short click action */ },
-            onLongClick =  { dialogdeleteContractionVisible = true }
+            onLongClick = { dialogdeleteContractionVisible = true }
         )
     ) {
-    ContractionRow(
-        lengthOfContraction = contraction.lengthOfContraction,
-        contractionTime = contraction.contractionTime,
-        timeBetweenContractions = contraction.timeBetweenContractions,
-        numberOfContraction = numberOfContraction
-    )
+        ContractionRow(
+            lengthOfContraction = contraction.lengthOfContraction,
+            contractionTime = contraction.contractionTime,
+            timeBetweenContractions = contraction.timeBetweenContractions,
+            numberOfContraction = numberOfContraction
+        )
 
         if (dialogdeleteContractionVisible) {
             CustomDialog(
@@ -373,7 +373,7 @@ fun ContractionRow(
     lengthOfContraction: Int,
     contractionTime: Calendar,
     timeBetweenContractions: Int,
-    numberOfContraction: Int
+    numberOfContraction: Int,
 ) {
     Surface(
         modifier
@@ -438,7 +438,7 @@ fun TableViewCellContraction(
     numberOfContraction: Int = 0,
     time: Int, //lengthOfContraction or timeBetweenContractions
     visibleTimeBetweenContractions: Boolean = false, //if is used for timeBetweenContractions, is true
-    maxLength: Int = 60
+    maxLength: Int = 60,
 ) {
     val maxLength = maxLength
 
@@ -462,7 +462,7 @@ fun TableViewCellContraction(
 
             Text(
                 text = if (time == -1) "-:--"
-                else if(time>1200) "> 20:00" else convertSecondsToTimeString(time),
+                else if (time > 1200) "> 20:00" else convertSecondsToTimeString(time),
                 style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.onSurface
             )
@@ -488,7 +488,7 @@ fun StorkyPopUpDialog(
     intervalsOk: Boolean = false,
     contractionsOk: Boolean = false,
     onLearnMore: () -> Unit,
-    onDismiss: () -> Unit
+    onDismiss: () -> Unit,
 ) {
     Popup(
         alignment = Alignment.Center,
@@ -524,7 +524,8 @@ fun StorkyPopUpDialog(
                             R.string.conditions_not_met_title
                         ),
                         style = MaterialTheme.typography.titleMedium,
-                        modifier = Modifier.align(Alignment.CenterHorizontally).padding(start = 24.dp, end = 24.dp, top = 24.dp),
+                        modifier = Modifier.align(Alignment.CenterHorizontally)
+                            .padding(start = 24.dp, end = 24.dp, top = 24.dp),
                         textAlign = TextAlign.Center // Center the text horizontally
                     )
                     //  Spacer(modifier = Modifier.height(16.dp))
@@ -533,7 +534,8 @@ fun StorkyPopUpDialog(
                             R.string.conditions_not_met_text
                         ),
                         style = MaterialTheme.typography.bodyLarge,
-                        modifier = Modifier.align(Alignment.CenterHorizontally).padding(start = 24.dp, end = 24.dp),
+                        modifier = Modifier.align(Alignment.CenterHorizontally)
+                            .padding(start = 24.dp, end = 24.dp),
                         textAlign = TextAlign.Center // Center the text horizontally
                     )
                     //   Spacer(modifier = Modifier.height(16.dp))
@@ -558,12 +560,14 @@ fun StorkyPopUpDialog(
                             //       horizontalArrangement = Arrangement.End
                         ) {
                             if (intervalsOk) {
-                                ConditionsOkIcon(modifier = Modifier
-                                    .padding(end = 16.dp)
-                                    .align(Alignment.CenterVertically))
+                                ConditionsOkIcon(
+                                    modifier = Modifier
+                                        .padding(end = 16.dp)
+                                        .align(Alignment.CenterVertically)
+                                )
                             } else {
                                 Icon(
-                                    painter =painterResource(id = R.drawable.conditions_no),
+                                    painter = painterResource(id = R.drawable.conditions_no),
                                     contentDescription = "Center Icon",
                                     modifier = Modifier.padding(end = 16.dp)
                                         .align(Alignment.CenterVertically),
@@ -578,13 +582,13 @@ fun StorkyPopUpDialog(
                                 modifier = Modifier
                             ) {
                                 Text(
-                                    text = stringResource(R.string.intervals_should_be_shorter_than)+" " +intervalBetweenTextSetting,
+                                    text = stringResource(R.string.intervals_should_be_shorter_than) + " " + intervalBetweenTextSetting,
                                     style = MaterialTheme.typography.titleMedium,
                                     color = MaterialTheme.colorScheme.onSurface
                                 )
                                 Spacer(modifier = Modifier.height(4.dp))
                                 Text(
-                                    text = stringResource(R.string.now) +" "+intervalBetweenTextCurrent,
+                                    text = stringResource(R.string.now) + " " + intervalBetweenTextCurrent,
                                     style = MaterialTheme.typography.bodyLarge,
                                     color = MaterialTheme.colorScheme.onSurfaceVariant
                                 )
@@ -602,29 +606,31 @@ fun StorkyPopUpDialog(
                             //       horizontalArrangement = Arrangement.End
                         ) {
                             if (contractionsOk) {
-                                ConditionsOkIcon(modifier = Modifier
-                                    .padding(end = 16.dp)
-                                    .align(Alignment.CenterVertically))
+                                ConditionsOkIcon(
+                                    modifier = Modifier
+                                        .padding(end = 16.dp)
+                                        .align(Alignment.CenterVertically)
+                                )
                             } else {
-                            Icon(
-                                painter =painterResource(id = R.drawable.conditions_no),
-                                contentDescription = "Center Icon",
-                                modifier = Modifier.padding(end = 16.dp)
-                                    .align(Alignment.CenterVertically),
-                              //     tint = if (contractionsOk) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface
-                            )
+                                Icon(
+                                    painter = painterResource(id = R.drawable.conditions_no),
+                                    contentDescription = "Center Icon",
+                                    modifier = Modifier.padding(end = 16.dp)
+                                        .align(Alignment.CenterVertically),
+                                    //     tint = if (contractionsOk) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface
+                                )
                             }
                             Column(
                                 modifier = Modifier
                             ) {
                                 Text(
-                                    text = stringResource(R.string.contractions_should_be_shorter_than)+" " +intervalContractionTextSetting,
+                                    text = stringResource(R.string.contractions_should_be_shorter_than) + " " + intervalContractionTextSetting,
                                     style = MaterialTheme.typography.titleMedium,
                                     color = MaterialTheme.colorScheme.onSurface
                                 )
                                 Spacer(modifier = Modifier.height(4.dp))
                                 Text(
-                                    text = stringResource(R.string.now) +" "+intervalContractionTextCurrent,
+                                    text = stringResource(R.string.now) + " " + intervalContractionTextCurrent,
                                     style = MaterialTheme.typography.bodyLarge,
                                     color = MaterialTheme.colorScheme.onSurfaceVariant
                                 )
@@ -638,10 +644,11 @@ fun StorkyPopUpDialog(
                     modifier = Modifier.padding(horizontal = 10.dp, vertical = 12.dp),
                     onClick = {
                         onDismiss()
-                          onLearnMore()
+                        onLearnMore()
                     }
                 ) {
-                    Text(text = stringResource(R.string.learn_more),
+                    Text(
+                        text = stringResource(R.string.learn_more),
                         style = MaterialTheme.typography.labelLarge,
                         color = MaterialTheme.colorScheme.primary
                     )
@@ -659,8 +666,10 @@ fun ConditionsOkIcon(modifier: Modifier) {
     Box(
         modifier = modifier
             .size(32.dp)
-            .background(color = MaterialTheme.colorScheme.primary,
-                shape = CircleShape)
+            .background(
+                color = MaterialTheme.colorScheme.primary,
+                shape = CircleShape
+            )
     ) {
         Icon(
             imageVector = Icons.Rounded.Done,
@@ -683,7 +692,7 @@ fun PreviewConditionsOkIcon() {
 @Composable
 fun CustomProgressBar(
     progress: Float = 1f,
-    reverseProgress: Boolean = false
+    reverseProgress: Boolean = false,
 ) {
     Column(
         modifier = Modifier
@@ -719,7 +728,6 @@ fun CustomProgressBar(
 }
 
 
-
 @Preview
 @Composable
 private fun CustomDialogPreview() {
@@ -749,12 +757,15 @@ fun ContractionRowPreview() {
 @Preview
 @Composable
 fun StorkyPopUpDialogPreview() {
-    Box(modifier = Modifier.padding(195.dp)
+    Box(
+        modifier = Modifier.padding(195.dp)
     ) {
-        StorkyPopUpDialog(onLearnMore = { },
+        StorkyPopUpDialog(
+            onLearnMore = { },
             onDismiss = { },
             contractionsOk = true,
-            intervalsOk = false)
+            intervalsOk = false
+        )
     }
 
 }

@@ -2,25 +2,20 @@ package com.tappytaps.storky.screens.settings
 
 import android.content.SharedPreferences
 import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.tappytaps.storky.repository.ContractionsRepository
 import com.tappytaps.storky.utils.Constants
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class SettingsScreenViewModel  @Inject constructor(
-    private val sharedPreferences: SharedPreferences
+class SettingsScreenViewModel @Inject constructor(
+    private val sharedPreferences: SharedPreferences,
 ) : ViewModel() {
 
     private val _lengthOfContraction = mutableStateOf(0)
-    val lengthOfContraction= _lengthOfContraction
+    val lengthOfContraction = _lengthOfContraction
 
     private val _lengthOfInterval = mutableStateOf(0)
     val lengthOfInterval = _lengthOfInterval
@@ -30,10 +25,12 @@ class SettingsScreenViewModel  @Inject constructor(
     }
 
     private fun loadPreferences() {
-        _lengthOfContraction.value = sharedPreferences.getInt("lengthOfContraction",
+        _lengthOfContraction.value = sharedPreferences.getInt(
+            "lengthOfContraction",
             Constants.DEFAULT_CONTRACTION_LENGTH
         )
-        _lengthOfInterval.value = sharedPreferences.getInt("lengthOfInterval",
+        _lengthOfInterval.value = sharedPreferences.getInt(
+            "lengthOfInterval",
             Constants.DEFAULT_INTERVAL_LENGTH
         )
     }
