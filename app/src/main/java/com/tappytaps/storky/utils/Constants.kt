@@ -1,10 +1,7 @@
 package com.tappytaps.storky.utils
 
-import androidx.compose.ui.unit.dp
 
 object Constants {
-    val TOP_PADDING_NEXT = 46.dp
-    val END_PADDING_NEXT = 18.dp
 
     const val DEFAULT_CONTRACTION_LENGTH = 60 // default 1 minute
     const val DEFAULT_INTERVAL_LENGTH = 300 // default 5 minutes

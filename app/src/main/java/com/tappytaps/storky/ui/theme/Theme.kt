@@ -1,17 +1,12 @@
 package com.tappytaps.storky.ui.theme
 
-import android.app.Activity
-import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.dynamicDarkColorScheme
-import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 
 private val DarkColorScheme = darkColorScheme(
@@ -28,7 +23,7 @@ private val DarkColorScheme = darkColorScheme(
     onTertiary = Color(0xFF522300),
     onSurface = Color(0xFFF1DEE2),
     onSurfaceVariant = Color(0xFFDAC0C7),
-    surfaceContainerHigh = Color(0xFF32272A) // Add surfaceContainerHigh color for dark theme
+    surfaceContainerHigh = Color(0xFF32272A)
 )
 
 private val LightColorScheme = lightColorScheme(
@@ -44,8 +39,8 @@ private val LightColorScheme = lightColorScheme(
     onSecondary = Color(0xFFFFFFFF),
     onTertiary = Color(0xFFFFFFFF),
     onSurface = Color(0xFF23191C),
-    onSurfaceVariant = Color(0xFF554248),   //Color(0xFF554248),
-    surfaceContainerHigh = Color(0xFFF6E4E8) // Add surfaceContainerHigh color for light theme
+    onSurfaceVariant = Color(0xFF554248),
+    surfaceContainerHigh = Color(0xFFF6E4E8)
 )
 
 
@@ -63,7 +58,6 @@ fun StorkyTheme(
 
     MaterialTheme(
         colorScheme = colors,
- //       typography = Typography,
         content = content,
         shapes = MaterialTheme.shapes.copy(extraSmall = RoundedCornerShape(16.dp))  //With material3 the default shape used by the DropdownMenu is defined by the extraSmall attribute in the shapes, so I have to change it this way
     )
