@@ -32,31 +32,31 @@ class HomeScreenViewModel @Inject constructor(
         MutableStateFlow<List<Contraction>>(emptyList()) //it is list of active Contractions
     val listOfContractions = _listOfContractions.asStateFlow()
 
-    private val _currentContractionLength = mutableStateOf(0)
+    private var _currentContractionLength = mutableStateOf(0)
     val currentContractionLength = _currentContractionLength
 
-    private val _currentLengthBetweenContractions = mutableStateOf(0)
+    private var _currentLengthBetweenContractions = mutableStateOf(0)
     val currentLengthBetweenContractions = _currentLengthBetweenContractions
 
-    private val _currentTimeDateContraction = mutableStateOf(getCurrentCalendar())
+    private var _currentTimeDateContraction = mutableStateOf(getCurrentCalendar())
     val currentTimeDateContraction = _currentTimeDateContraction
 
-    private val _dialogShownAutomatically =
+    private var _dialogShownAutomatically =
         mutableStateOf(false) //if StorkyPopUpDialog was automatically shown
     val dialogShownAutomatically = _dialogShownAutomatically
 
-    var isRunning = false //because if is first open, countdowner still does not work - so nothing to save
+    var isRunning = false //because if is first open, stop watch still does not work - so nothing to save
     private var timerJob: Job? = null
     private val _pauseStopWatch = mutableStateOf(false)
     val pauseStopWatch = _pauseStopWatch
 
-    private val _averageContractionLength = mutableStateOf(0)
+    private var _averageContractionLength = mutableStateOf(0)
     val averageContractionLength = _averageContractionLength
 
-    private val _averageLengthBetweenContractions = mutableStateOf(0)
+    private var _averageLengthBetweenContractions = mutableStateOf(0)
     val averageLengthBetweenContractions = _averageLengthBetweenContractions
 
-    private val _showContractionlScreen = mutableStateOf(false)
+    private var _showContractionlScreen = mutableStateOf(false)
     val showContractionlScreen = _showContractionlScreen
 
     private var buttonStopContractionAlreadyPresed =
@@ -88,8 +88,8 @@ class HomeScreenViewModel @Inject constructor(
     }
 
     private fun onListOfContractionsLoaded() {
-        _currentContractionLength.value = 0
-        _currentLengthBetweenContractions.value = 0
+    //    _currentContractionLength.value = 0
+     //   _currentLengthBetweenContractions.value = 0
         updateAverageTimes(includeCurrentContractionLength = false)
     }
 
@@ -120,6 +120,7 @@ class HomeScreenViewModel @Inject constructor(
     }
 
     fun updateCurrentTime() {
+        Log.d("delete long press","6")
         _currentTimeDateContraction.value = getCurrentCalendar()
     }
 
@@ -128,6 +129,7 @@ class HomeScreenViewModel @Inject constructor(
     }
 
     fun startStopwatch() {
+        Log.d("delete long press","5")
         updateCurrentTime()
         _currentLengthBetweenContractions.value = 0
 
@@ -136,25 +138,30 @@ class HomeScreenViewModel @Inject constructor(
             timerJob = viewModelScope.launch {
                 while (isRunning) {
                     delay(1000) // wait for 1 second
+                    Log.d("delete long press","_currentLengthBetweenContractions.value: "+_currentLengthBetweenContractions.value.toString())
                     if (!_pauseStopWatch.value) _currentLengthBetweenContractions.value += 1
+                    Log.d("delete long press","_currentLengthBetweenContractions.value2: "+_currentLengthBetweenContractions.value.toString())
                 }
             }
         }
     }
 
     fun stopStopwatch() {
+        Log.d("delete long press","4")
         isRunning = false
         timerJob?.cancel() // Cancel the running coroutine in startStopwatch
 
     }
 
     fun newStart() {
+        Log.d("delete long press","3")
         _pauseStopWatch.value = false
         stopStopwatch()
         startStopwatch()
     }
 
     fun pauseStopWatch() {
+        Log.d("delete long press","2")
         _pauseStopWatch.value = true // !_pauseStopWatch.value
         _currentLengthBetweenContractions.value =
             -1 //if timer was paused, then timeBetweenContractions is set as -1
@@ -208,7 +215,8 @@ class HomeScreenViewModel @Inject constructor(
                     _listOfContractions.value = emptyList()
                     getAllActiveContractions()
                 } else {
-                    repository.deleteContraction(contraction)
+                    repository.deleteContractionById(contractionId = contraction.id.toString())
+                    Log.d("delete long press","1")
                 }
 
 

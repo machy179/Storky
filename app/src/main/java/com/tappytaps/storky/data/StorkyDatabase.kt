@@ -6,7 +6,7 @@ import androidx.room.TypeConverters
 import com.tappytaps.storky.model.Contraction
 import com.tappytaps.storky.model.ContractionTypeConverter
 
-@Database(entities = [Contraction::class], version = 4, exportSchema = false)
+@Database(entities = [Contraction::class], version = 5, exportSchema = false)
 @TypeConverters(ContractionTypeConverter::class)
 abstract class StorkyDatabase : RoomDatabase() {
     abstract fun storkyDao(): StorkyDatabaseDao
