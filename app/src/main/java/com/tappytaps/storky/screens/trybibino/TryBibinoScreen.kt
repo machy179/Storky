@@ -1,5 +1,6 @@
 package com.tappytaps.storky.screens.trybibino
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -9,39 +10,63 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.tappytaps.storky.R
 import com.tappytaps.storky.components.UniversalButton
 import com.tappytaps.storky.components.ImageTitleContentText
+import com.tappytaps.storky.components.StorkyAppBar
 import com.tappytaps.storky.navigation.StorkyScreens
 import com.tappytaps.storky.utils.Constants
-import com.tappytaps.storky.utils.Constants.END_PADDING_NEXT
-import com.tappytaps.storky.utils.Constants.TOP_PADDING_NEXT
 
 
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+@OptIn(ExperimentalMaterial3Api::class)
 @ExperimentalFoundationApi
 @Composable
 fun TryBibinoScreen(navController: NavController) {
-    ContentPageTryBibiono(navController)
+
+    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
+
+    Scaffold(
+        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+
+        topBar = {
+            StorkyAppBar(
+                backgroundColor = MaterialTheme.colorScheme.background,
+                deleteIconVisible = false,
+                nextIconVisible = true,
+                onNext = {
+                    navController.navigate(StorkyScreens.EmailScreen.name)
+                },
+
+                scrollBehavior = scrollBehavior
+            )
+
+        },
+    ) {
+
+    ContentPageTryBibiono()
+    }
 }
 
 @Composable
-fun ContentPageTryBibiono(navController: NavController) {
-    val context = LocalContext.current
+fun ContentPageTryBibiono() {
+
     Box(modifier = Modifier.fillMaxSize()) {
 
-        TextButton(
+/*        TextButton(
             onClick = {
                 navController.navigate(StorkyScreens.EmailScreen.name)
             },
@@ -59,7 +84,7 @@ fun ContentPageTryBibiono(navController: NavController) {
                 color = MaterialTheme.colorScheme.primary,
                 style = MaterialTheme.typography.labelLarge
             )
-        }
+        }*/
 
 
         Column(
@@ -68,9 +93,9 @@ fun ContentPageTryBibiono(navController: NavController) {
             horizontalAlignment = Alignment.CenterHorizontally // Center images horizontally
         ) {
 
-            var imageResId: Int = R.drawable.bibino
-            var titleResId: Int = R.string.try_bibino_title
-            var textResId: Int = R.string.try_bibino_text
+            val imageResId: Int = R.drawable.bibino
+            val titleResId: Int = R.string.try_bibino_title
+            val textResId: Int = R.string.try_bibino_text
 
 
             ImageTitleContentText(
@@ -104,8 +129,9 @@ fun ContentPageTryBibiono(navController: NavController) {
 
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Preview
 @Composable
-fun ContentPageTryBibionoPreview() {
-    ContentPageTryBibiono(NavController(LocalContext.current))
+fun TryBibinoScreenPreview() {
+    TryBibinoScreen(NavController(LocalContext.current))
 }

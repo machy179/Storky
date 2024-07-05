@@ -32,16 +32,16 @@ class HomeScreenViewModel @Inject constructor(
         MutableStateFlow<List<Contraction>>(emptyList()) //it is list of active Contractions
     val listOfContractions = _listOfContractions.asStateFlow()
 
-    private var _currentContractionLength = mutableStateOf(0)
+    private val _currentContractionLength = mutableStateOf(0)
     val currentContractionLength = _currentContractionLength
 
-    private var _currentLengthBetweenContractions = mutableStateOf(0)
+    private val _currentLengthBetweenContractions = mutableStateOf(0)
     val currentLengthBetweenContractions = _currentLengthBetweenContractions
 
-    private var _currentTimeDateContraction = mutableStateOf(getCurrentCalendar())
+    private val _currentTimeDateContraction = mutableStateOf(getCurrentCalendar())
     val currentTimeDateContraction = _currentTimeDateContraction
 
-    private var _dialogShownAutomatically =
+    private val _dialogShownAutomatically =
         mutableStateOf(false) //if StorkyPopUpDialog was automatically shown
     val dialogShownAutomatically = _dialogShownAutomatically
 
@@ -50,13 +50,13 @@ class HomeScreenViewModel @Inject constructor(
     private val _pauseStopWatch = mutableStateOf(false)
     val pauseStopWatch = _pauseStopWatch
 
-    private var _averageContractionLength = mutableStateOf(0)
+    private val _averageContractionLength = mutableStateOf(0)
     val averageContractionLength = _averageContractionLength
 
-    private var _averageLengthBetweenContractions = mutableStateOf(0)
+    private val _averageLengthBetweenContractions = mutableStateOf(0)
     val averageLengthBetweenContractions = _averageLengthBetweenContractions
 
-    private var _showContractionlScreen = mutableStateOf(false)
+    private val _showContractionlScreen = mutableStateOf(false)
     val showContractionlScreen = _showContractionlScreen
 
     private var buttonStopContractionAlreadyPresed =
@@ -76,7 +76,7 @@ class HomeScreenViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             repository.getAllActiveContractions().distinctUntilChanged()
                 .collect { listOfContractions ->
-                    if (listOfContractions.isNullOrEmpty()) {
+                    if (listOfContractions.isEmpty()) {
                         Log.d("Empty", ": Empty list")
                     } else {
                         _listOfContractions.value = listOfContractions
@@ -215,7 +215,7 @@ class HomeScreenViewModel @Inject constructor(
                     _listOfContractions.value = emptyList()
                     getAllActiveContractions()
                 } else {
-                    repository.deleteContractionById(contractionId = contraction.id.toString())
+                    repository.deleteContraction(contraction)
                     Log.d("delete long press","1")
                 }
 
@@ -248,7 +248,14 @@ class HomeScreenViewModel @Inject constructor(
                     _currentContractionLength.value = copiedLengthOfContraction
                     _currentTimeDateContraction.value = copiedContractionTime
 
-                    repository.deleteContractionById(copiedLastContractionId)
+
+                    if (_listOfContractions.value.size == 1) {
+                        repository.deleteContractionById(copiedLastContractionId)
+                        _listOfContractions.value = emptyList()
+                        getAllActiveContractions()
+                    } else {
+                        repository.deleteContractionById(copiedLastContractionId)
+                    }
 
                 } else {
                     stopStopwatch()

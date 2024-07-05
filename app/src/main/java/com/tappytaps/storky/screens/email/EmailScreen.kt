@@ -2,6 +2,7 @@
 
 package com.tappytaps.storky.screens.email
 
+import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
@@ -16,8 +17,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
@@ -25,9 +27,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -37,9 +39,8 @@ import com.tappytaps.storky.components.CustomDialog
 import com.tappytaps.storky.components.EmailInput
 import com.tappytaps.storky.components.UniversalButton
 import com.tappytaps.storky.components.ImageTitleContentText
+import com.tappytaps.storky.components.StorkyAppBar
 import com.tappytaps.storky.navigation.StorkyScreens
-import com.tappytaps.storky.utils.Constants.END_PADDING_NEXT
-import com.tappytaps.storky.utils.Constants.TOP_PADDING_NEXT
 import com.tappytaps.storky.utils.isValidEmail
 
 @ExperimentalMaterial3Api
@@ -49,7 +50,7 @@ fun EmailScreen(
     navController: NavController,
     viewModel: EmailScreenViewModel = hiltViewModel(),
 ) {
-    var showDoneEmailScreen = remember { mutableStateOf(false) }
+    val showDoneEmailScreen = remember { mutableStateOf(false) }
     if (!showDoneEmailScreen.value) {
         AskEmailScreen(navController, showDoneEmailScreen, viewModel)
     } else {
@@ -59,49 +60,43 @@ fun EmailScreen(
 
 }
 
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun AskEmailScreen(
     navController: NavController,
     showDoneEmailScreen: MutableState<Boolean>,
     viewModel: EmailScreenViewModel,
 ) {
-    Box(
-        modifier = Modifier
-            .imePadding()
-            .fillMaxSize()
-    ) {
-        var showDialogInvalidEmail = remember { mutableStateOf(false) }
-        var showDialogSkipStep = remember { mutableStateOf(false) }
-        TextButton(
-            onClick = {
-                showDialogSkipStep.value = true
-                // navController.navigate(StorkyScreens.EmailScreen.name)
-            },
-            modifier = Modifier
-                .align(Alignment.TopEnd)
-                .padding(
-                    start = 10.dp,
-                    top = TOP_PADDING_NEXT,
-                    end = END_PADDING_NEXT,
-                    bottom = 12.dp
-                )
-        ) {
-            Text(
-                text = stringResource(id = R.string.next_button),
-                color = MaterialTheme.colorScheme.primary,
-                style = MaterialTheme.typography.labelLarge
-            )
-        }
+    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
+    val showDialogInvalidEmail = remember { mutableStateOf(false) }
+    val showDialogSkipStep = remember { mutableStateOf(false) }
 
+    Scaffold(
+        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+
+        topBar = {
+            StorkyAppBar(
+                backgroundColor = MaterialTheme.colorScheme.background,
+                deleteIconVisible = false,
+                nextIconVisible = true,
+                onNext = {
+                    showDialogSkipStep.value = true
+                },
+
+                scrollBehavior = scrollBehavior
+            )
+
+        },
+    ) {
 
         Box(
             modifier = Modifier
                 .fillMaxSize()
                 .imePadding()
         ) {
-            var imageResId: Int = R.drawable.guide
-            var titleResId: Int = R.string.email_title
-            var textResId: Int = R.string.email_text
+            val imageResId: Int = R.drawable.guide
+            val titleResId: Int = R.string.email_title
+            val textResId: Int = R.string.email_text
 
             Column(
                 modifier = Modifier
@@ -133,13 +128,12 @@ fun AskEmailScreen(
                         .padding(16.dp),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    val textState = remember { mutableStateOf(TextFieldValue()) }
                     val email = rememberSaveable { mutableStateOf("") }
 
                     EmailInput(
                         emailState = email,
                         onAction = KeyboardActions {
-                            if (isValidEmail(email.value.toString())) {
+                            if (isValidEmail(email.value)) {
                                 showDoneEmailScreen.value = true
                                 viewModel.sendEmail(email.value).run {
                                     Log.d("try to send e-mail: ", "email ${email.value} was sent")
@@ -173,7 +167,7 @@ fun AskEmailScreen(
                 onDismissRequest = { showDialogSkipStep.value = false })
         }
 
-    }
+}
 }
 
 @Composable
@@ -187,9 +181,9 @@ fun DoneEmailScreen(navController: NavController) {
             horizontalAlignment = Alignment.CenterHorizontally // Center images horizontally
         ) {
 
-            var imageResId: Int = R.drawable.inbox
-            var titleResId: Int = R.string.check_your_inbox_title
-            var textResId: Int = R.string.check_your_inbox_text
+            val imageResId: Int = R.drawable.inbox
+            val titleResId: Int = R.string.check_your_inbox_title
+            val textResId: Int = R.string.check_your_inbox_text
 
 
             ImageTitleContentText(
@@ -200,7 +194,6 @@ fun DoneEmailScreen(navController: NavController) {
             )
 
         }
-        val context = LocalContext.current
         Row(
             modifier = Modifier
                 .fillMaxWidth()

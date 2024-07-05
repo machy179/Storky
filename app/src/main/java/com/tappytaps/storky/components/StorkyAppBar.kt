@@ -13,6 +13,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import com.tappytaps.storky.R
 import androidx.compose.material3.*
+import androidx.compose.ui.res.stringResource
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -25,6 +26,8 @@ fun StorkyAppBar(
     onDelete: (() -> Unit)? = null,
     closeIconVisible: Boolean = false,
     onClose: (() -> Unit)? = null,
+    nextIconVisible: Boolean = false,
+    onNext: (() -> Unit)? = null,
     scrollBehavior: TopAppBarScrollBehavior? = null,
 ) {
 
@@ -67,6 +70,24 @@ fun StorkyAppBar(
                         painter = painterResource(id = R.drawable.delete),
                         contentDescription = "Delete Icon",
                         tint = if (backgroundColor == MaterialTheme.colorScheme.primary) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurface
+                    )
+                }
+            }
+
+            // Next icon
+            if (nextIconVisible) {
+                TextButton(
+                    onClick = {
+                        if (onNext != null) {
+                            onNext.invoke()
+                        }
+                    },
+                    modifier = Modifier
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.next_button),
+                        color = MaterialTheme.colorScheme.primary,
+                        style = MaterialTheme.typography.labelLarge
                     )
                 }
             }
