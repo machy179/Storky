@@ -223,10 +223,10 @@ fun EmailInput(
             onAction = onAction
         )
 
-        Spacer(
+/*        Spacer(
             modifier = Modifier
                 .padding(bottom = 12.dp)
-        )
+        )*/
     }
 
 

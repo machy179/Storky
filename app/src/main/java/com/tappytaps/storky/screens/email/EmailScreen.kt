@@ -60,7 +60,7 @@ fun EmailScreen(
 
 }
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+
 @Composable
 fun AskEmailScreen(
     navController: NavController,
@@ -87,10 +87,11 @@ fun AskEmailScreen(
             )
 
         },
-    ) {
+    ) {paddingValues ->
 
         Box(
             modifier = Modifier
+                .padding(paddingValues)
                 .fillMaxSize()
                 .imePadding()
         ) {
@@ -101,7 +102,7 @@ fun AskEmailScreen(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .align(Alignment.Center),
+                    .align(Alignment.TopCenter),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
@@ -124,8 +125,8 @@ fun AskEmailScreen(
 
                 Row(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp),
+                        .fillMaxWidth(),
+                       // .padding(16.dp),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     val email = rememberSaveable { mutableStateOf("") }

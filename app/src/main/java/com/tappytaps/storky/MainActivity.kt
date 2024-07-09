@@ -1,6 +1,8 @@
 package com.tappytaps.storky
 
 import android.Manifest
+import android.app.AlarmManager
+import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -27,10 +29,15 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.app.ActivityCompat
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.tappytaps.storky.navigation.StorkyNavigation
+import com.tappytaps.storky.navigation.StorkyScreens
+import com.tappytaps.storky.notification.StorkyNotificationReceiver
 import com.tappytaps.storky.screens.home.HomeScreenViewModel
 import com.tappytaps.storky.ui.theme.StorkyTheme
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.Calendar
 
 @ExperimentalMaterial3Api
 @ExperimentalFoundationApi
@@ -65,6 +72,16 @@ class MainActivity : ComponentActivity() {
 
         askPermissionPostNotification()
 
+        sheduleNotificationAfter5Days()
+
+        // Handle intent extras
+        intent?.getStringExtra("screen")?.let { screen ->
+            if (screen == "TryBibinoScreen") {
+             //   goToTryBibinoScreen()
+
+            }
+        }
+
 
         stopwatchUpdateReceiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context?, intent: Intent?) {
@@ -76,6 +93,25 @@ class MainActivity : ComponentActivity() {
             }
         }
  //       registerReceiver(stopwatchUpdateReceiver, IntentFilter("STOPWATCH_UPDATE"))
+    }
+
+    @Composable
+    private fun goToTryBibinoScreen() {
+        val navController = rememberNavController()
+        navController.navigate(StorkyScreens.TryBibinoScreen.name)
+    }
+
+    private fun sheduleNotificationAfter5Days() {
+        // Schedule the notification to appear after 5 days
+        val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val intent = Intent(this, StorkyNotificationReceiver::class.java)
+        val pendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+
+        val triggerTime = Calendar.getInstance().apply {
+            add(Calendar.DAY_OF_YEAR, 5)
+        }.timeInMillis
+
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP, triggerTime, pendingIntent)
     }
 
     override fun onResume() {

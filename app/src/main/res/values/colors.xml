@@ -11,4 +11,11 @@
     <color name="primary_color">#FF81B3</color>
     <color name="on_surface_variant">#554248</color>
 
+    <color name="service_on_primary">#FFFFFF</color>
+    <color name="service_primary">#FF81B3</color>
+    <color name="service_primary_dark">#FFBAD1</color>
+
+
+
+
 </resources>

@@ -2,6 +2,7 @@ package com.tappytaps.storky.screens.home
 
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -275,11 +276,17 @@ class HomeScreenViewModel @Inject constructor(
             putExtra("showContractionlScreen", _showContractionlScreen.value)
             putExtra("pauseStopWatch", _pauseStopWatch.value)
         }
-        context.startService(intent)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            context.startForegroundService(intent)
+        } else {
+            context.startService(intent)
+        }
+        //    context.startService(intent)
     }
 
     fun stopService(context: Context) {
         val intent = Intent(context, StopwatchService::class.java)
+
         context.stopService(intent)
     }
 
