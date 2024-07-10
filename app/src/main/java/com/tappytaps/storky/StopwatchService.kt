@@ -12,12 +12,10 @@ import android.content.Intent
 import android.content.res.Configuration
 import android.os.Build
 import android.os.IBinder
-import android.util.Log
+import android.os.PowerManager
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.ExperimentalComposeUiApi
-import androidx.compose.ui.graphics.toArgb
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import com.tappytaps.storky.repository.ContractionsRepository
@@ -32,12 +30,17 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class StopwatchService : Service() {
+    private var wakeLock: PowerManager.WakeLock? =
+        null //so that the service does not fall into Doze Mode, it is necessary to prevent this here,
+    // plus give this to manifestu  <uses-permission android:name="android.permission.WAKE_LOCK" />
+    //and put the wakeLock attribute in the code as I put it...viz https://robertohuertas.com/2019/06/29/android_foreground_services/
+
 
     @Inject
     lateinit var repository: ContractionsRepository
 
     private var serviceJob: Job? = null
-    private val serviceScope = CoroutineScope(Dispatchers.IO)
+    private val serviceScope = CoroutineScope(Dispatchers.Default) //bylo IO
 
     private var isRunning = false
     private var currentLengthBetweenContractions = 0
@@ -46,33 +49,55 @@ class StopwatchService : Service() {
     private var showContractionlScreen = false
 
     override fun onCreate() {
-        Log.d("StorkyService:", "onCreateservice")
+      //  Log.d("StorkyService:", "onCreateservice")
         super.onCreate()
         startForegroundService()
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        Log.d("StorkyService:", "startservice")
+   //     Log.d("StorkyService:", "startservice")
         currentLengthBetweenContractions =
             intent?.getIntExtra("currentLengthBetweenContractions", 0) ?: 0
-        Log.d(
+/*        Log.d(
             "StorkyService:",
             "currentLengthBetweenContractions=" + currentLengthBetweenContractions.toString()
-        )
+        )*/
         pauseStopWatch = intent?.getBooleanExtra("pauseStopWatch", false) ?: false
         showContractionlScreen = intent?.getBooleanExtra("showContractionlScreen", false) ?: false
         isRunning = true
-        Log.d("StorkyService:", "onStartCommand pauseStopWatch=" + pauseStopWatch.toString())
+//        Log.d("StorkyService:", "onStartCommand pauseStopWatch=" + pauseStopWatch.toString())
         startStopwatch()
+
+        //because of not to Doze Modu
+        // we need this lock so our service gets not affected by Doze Mode
+        wakeLock =
+            (getSystemService(Context.POWER_SERVICE) as PowerManager).run {
+                newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "EndlessService::lock").apply {
+                    acquire()
+                }
+            }
+        //it's here so that this service doesn't kill itself after about 1 minute after turning the phone on - but I still had to add the above, because it didn't kill itself, but gradually went into Doze Mode
 
         return START_STICKY
     }
 
     override fun onDestroy() {
-        Log.d("StorkyService:", "onDestroyservice")
+    //    Log.d("StorkyService:", "onDestroyservice")
         sendUpdateToViewModel()
         super.onDestroy()
         stopStopwatch()
+
+        // we need this release because of Doze Mode
+        try {
+            wakeLock?.let {
+                if (it.isHeld) {
+                    it.release()
+                }
+            }
+     //       stopForeground(true)
+       //     stopSelf()
+        } catch (e: Exception) {
+        }
     }
 
     override fun onBind(intent: Intent?): IBinder? {
@@ -89,7 +114,7 @@ class StopwatchService : Service() {
             val channel = NotificationChannel(
                 notificationChannelId,
                 "Storky Service Channel",
-                NotificationManager.IMPORTANCE_LOW
+                NotificationManager.IMPORTANCE_HIGH
             ).apply {
                 setShowBadge(false) // Ensure the notification does not show a badge on the app icon
             }
@@ -131,7 +156,7 @@ class StopwatchService : Service() {
 
 
         if (showContractionlScreen) {
-            val uiModeManager = getSystemService(Context.UI_MODE_SERVICE) as UiModeManager
+       //     val uiModeManager = getSystemService(Context.UI_MODE_SERVICE) as UiModeManager
             val currentModeType = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
             val notificationColor = when (currentModeType) {
                 Configuration.UI_MODE_NIGHT_YES -> ContextCompat.getColor(this, R.color.service_primary_dark)
