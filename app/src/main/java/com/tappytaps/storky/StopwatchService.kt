@@ -49,23 +49,16 @@ class StopwatchService : Service() {
     private var showContractionlScreen = false
 
     override fun onCreate() {
-      //  Log.d("StorkyService:", "onCreateservice")
         super.onCreate()
         startForegroundService()
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-   //     Log.d("StorkyService:", "startservice")
         currentLengthBetweenContractions =
             intent?.getIntExtra("currentLengthBetweenContractions", 0) ?: 0
-/*        Log.d(
-            "StorkyService:",
-            "currentLengthBetweenContractions=" + currentLengthBetweenContractions.toString()
-        )*/
         pauseStopWatch = intent?.getBooleanExtra("pauseStopWatch", false) ?: false
         showContractionlScreen = intent?.getBooleanExtra("showContractionlScreen", false) ?: false
         isRunning = true
-//        Log.d("StorkyService:", "onStartCommand pauseStopWatch=" + pauseStopWatch.toString())
         startStopwatch()
 
         //because of not to Doze Modu
@@ -82,7 +75,6 @@ class StopwatchService : Service() {
     }
 
     override fun onDestroy() {
-    //    Log.d("StorkyService:", "onDestroyservice")
         sendUpdateToViewModel()
         super.onDestroy()
         stopStopwatch()
@@ -94,8 +86,6 @@ class StopwatchService : Service() {
                     it.release()
                 }
             }
-     //       stopForeground(true)
-       //     stopSelf()
         } catch (e: Exception) {
         }
     }
@@ -104,10 +94,6 @@ class StopwatchService : Service() {
         return null
     }
 
-    @OptIn(
-        ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class,
-        ExperimentalComposeUiApi::class
-    )
     private fun startForegroundService() {
         val notificationChannelId = "STORKY_SERVICE_CHANNEL"
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -156,7 +142,6 @@ class StopwatchService : Service() {
 
 
         if (showContractionlScreen) {
-       //     val uiModeManager = getSystemService(Context.UI_MODE_SERVICE) as UiModeManager
             val currentModeType = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
             val notificationColor = when (currentModeType) {
                 Configuration.UI_MODE_NIGHT_YES -> ContextCompat.getColor(this, R.color.service_primary_dark)

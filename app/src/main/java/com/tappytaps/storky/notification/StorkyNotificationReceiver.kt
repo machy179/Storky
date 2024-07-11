@@ -11,17 +11,17 @@ import android.os.Build
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.ui.ExperimentalComposeUiApi
+import androidx.compose.ui.res.stringResource
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import com.itextpdf.text.factories.GreekAlphabetFactory.getString
 import com.tappytaps.storky.MainActivity
 import com.tappytaps.storky.R
 
-// Constants for notification
-const val notificationID = 121
-const val channelID = "channel_storky"
-const val titleExtra = "titleExtra"
-const val messageExtra = "messageExtra"
-class StorkyNotificationReceiver : BroadcastReceiver() {
+
+const val notificationID = 2
+const val channelID = "STORKY_POPUP_AFTER_5DAYS_CHANNEL"
+class StorkyNotificationReceiver : BroadcastReceiver() { //receiver for notification after 5 days
 
     @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class,
         ExperimentalComposeUiApi::class
@@ -34,11 +34,10 @@ class StorkyNotificationReceiver : BroadcastReceiver() {
         }
         val pendingIntent: PendingIntent = PendingIntent.getActivity(context, 0, mainIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
 
-        val channelId = "notify_channel_id"
-        val notificationBuilder = NotificationCompat.Builder(context, channelId)
+        val notificationBuilder = NotificationCompat.Builder(context, channelID)
             .setSmallIcon(R.drawable.ic_launcher_foreground)
-            .setContentTitle("Reminder")
-            .setContentText("TryBibinoScreen")
+            .setContentTitle(context.getString(R.string.notification_after_5days_title))
+            .setContentText(context.getString(R.string.notification_after_5days_text))
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setContentIntent(pendingIntent)
             .setAutoCancel(true)
@@ -47,12 +46,12 @@ class StorkyNotificationReceiver : BroadcastReceiver() {
 
         // Create Notification channel if necessary
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(channelId, "Notification Channel", NotificationManager.IMPORTANCE_HIGH).apply {
-                description = "Channel description"
+            val channel = NotificationChannel(channelID, "Storky Notification Channel", NotificationManager.IMPORTANCE_HIGH).apply {
+                setShowBadge(false) // Ensure the notification does not show a badge on the app icon
             }
             notificationManager.createNotificationChannel(channel)
         }
 
-        notificationManager.notify(1, notificationBuilder.build())
+        notificationManager.notify(notificationID, notificationBuilder.build())
     }
 }

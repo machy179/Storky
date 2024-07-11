@@ -1,5 +1,8 @@
 package com.tappytaps.storky.screens.home
 
+import android.app.AlarmManager
+import android.app.Application
+import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Build
@@ -9,9 +12,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.tappytaps.storky.StopwatchService
 import com.tappytaps.storky.model.Contraction
+import com.tappytaps.storky.notification.StorkyNotificationReceiver
 import com.tappytaps.storky.repository.ContractionsRepository
 import com.tappytaps.storky.utils.calculateAverageLengthOfContraction
 import com.tappytaps.storky.utils.calculateAverageLengthOfIntervalTime
+import dagger.hilt.android.internal.Contexts.getApplication
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -27,6 +32,7 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeScreenViewModel @Inject constructor(
     private val repository: ContractionsRepository,
+    private val application: Application
 ) : ViewModel() {
 
     private val _listOfContractions =
@@ -319,6 +325,22 @@ class HomeScreenViewModel @Inject constructor(
             "updateFromService currentLengthBetweenContractions=" + currentLengthBetweenContractions.toString()
         )
         Log.d("StorkyService:", "updateFromService pauseStopWatch=" + pauseStopWatch.toString())
+    }
+
+
+    fun setAlarmAfter5Days() { //TODO - make algoritmus for call this metod - after 3 contractions lenght of 20 sec
+     // Schedule the notification to appear after 5 days
+        val alarmManager = application.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val intent = Intent(application, StorkyNotificationReceiver::class.java)
+        val pendingIntent = PendingIntent.getBroadcast(application, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+
+        /*        val triggerTime = Calendar.getInstance().apply {
+                    add(Calendar.DAY_OF_YEAR, 5) //po pěti dnech TODO
+                }.timeInMillis*/
+
+        val timeInMillis = System.currentTimeMillis() + 1 * 60 * 1000 // 1 minuty v milisekundách
+
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP, timeInMillis, pendingIntent)
     }
 
 

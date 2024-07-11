@@ -24,6 +24,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -47,6 +48,7 @@ class MainActivity : ComponentActivity() {
 
     private val homeViewModel: HomeScreenViewModel by viewModels()
     private lateinit var stopwatchUpdateReceiver: BroadcastReceiver
+    private var isReceiverRegistered = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,85 +66,71 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             StorkyTheme {
-                StorkyApp()
+                StorkyApp(intent)
             }
 
 
         }
-
         askPermissionPostNotification()
 
-        sheduleNotificationAfter5Days()
 
-        // Handle intent extras
-        intent?.getStringExtra("screen")?.let { screen ->
-            if (screen == "TryBibinoScreen") {
-             //   goToTryBibinoScreen()
 
+        stopwatchUpdateReceiver =
+            object : BroadcastReceiver() { //receiver for communication between Service and Activity
+                override fun onReceive(context: Context?, intent: Intent?) {
+                    val currentLengthBetweenContractions =
+                        intent?.getIntExtra("currentLengthBetweenContractions", 0) ?: 0
+                    val pauseStopWatch = intent?.getBooleanExtra("pauseStopWatch", false) ?: false
+                    val showContractionlScreen =
+                        intent?.getBooleanExtra("showContractionlScreen", false) ?: false
+                    homeViewModel.updateFromService(
+                        currentLengthBetweenContractions,
+                        pauseStopWatch,
+                        showContractionlScreen
+                    )
+                }
             }
-        }
-
-
-        stopwatchUpdateReceiver = object : BroadcastReceiver() {
-            override fun onReceive(context: Context?, intent: Intent?) {
-                val currentLengthBetweenContractions =
-                    intent?.getIntExtra("currentLengthBetweenContractions", 0) ?: 0
-                val pauseStopWatch = intent?.getBooleanExtra("pauseStopWatch", false) ?: false
-                val showContractionlScreen = intent?.getBooleanExtra("showContractionlScreen", false) ?: false
-                homeViewModel.updateFromService(currentLengthBetweenContractions, pauseStopWatch, showContractionlScreen)
-            }
-        }
- //       registerReceiver(stopwatchUpdateReceiver, IntentFilter("STOPWATCH_UPDATE"))
     }
 
-    @Composable
-    private fun goToTryBibinoScreen() {
-        val navController = rememberNavController()
-        navController.navigate(StorkyScreens.TryBibinoScreen.name)
-    }
-
-    private fun sheduleNotificationAfter5Days() {
-        // Schedule the notification to appear after 5 days
-        val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val intent = Intent(this, StorkyNotificationReceiver::class.java)
-        val pendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
-
-        val triggerTime = Calendar.getInstance().apply {
-            add(Calendar.DAY_OF_YEAR, 5)
-        }.timeInMillis
-
-        alarmManager.setExact(AlarmManager.RTC_WAKEUP, triggerTime, pendingIntent)
-    }
 
     override fun onResume() {
-        Log.d("StorkyService:","onResume_in_Maint_activity")
+        Log.d("StorkyService:", "onResume_in_Maint_activity")
         super.onResume()
         homeViewModel.stopService(this)
-        registerReceiver(stopwatchUpdateReceiver, IntentFilter("STOPWATCH_UPDATE"))
+        if (!isReceiverRegistered) {
+            registerReceiver(stopwatchUpdateReceiver, IntentFilter("STOPWATCH_UPDATE"))
+            isReceiverRegistered = true
+        }
 
     }
 
     override fun onRestart() {
-        Log.d("StorkyService:","onRestart_in_Maint_activity")
+        Log.d("StorkyService:", "onRestart_in_Maint_activity")
         super.onRestart()
 
     }
 
 
-  override fun onStop() {
-        Log.d("StorkyService:","onPause_in_Maint_activity")
-      super.onStop()
-      if(homeViewModel.isRunning && !homeViewModel.pauseStopWatch.value) {
-          homeViewModel.startService(this)
-          unregisterReceiver(stopwatchUpdateReceiver)
-      }
+    override fun onStop() {
+        Log.d("StorkyService:", "onPause_in_Maint_activity")
+        super.onStop()
+        if (homeViewModel.isRunning && !homeViewModel.pauseStopWatch.value) {
+            homeViewModel.startService(this)
+            if (isReceiverRegistered) {
+                unregisterReceiver(stopwatchUpdateReceiver)
+                isReceiverRegistered = false
+            }
+        }
     }
 
     override fun onDestroy() {
-        Log.d("StorkyService:","onDestroy_in_Maint_activity")
+        Log.d("StorkyService:", "onDestroy_in_Maint_activity")
         super.onDestroy()
         homeViewModel.stopService(this)
-        unregisterReceiver(stopwatchUpdateReceiver)
+        if (isReceiverRegistered) {
+            unregisterReceiver(stopwatchUpdateReceiver)
+            isReceiverRegistered = false
+        }
     }
 
 
@@ -184,7 +172,7 @@ class MainActivity : ComponentActivity() {
 @ExperimentalFoundationApi
 @ExperimentalComposeUiApi
 @Composable
-fun StorkyApp() {
+fun StorkyApp(intent: Intent?) {
 
     Surface(color = MaterialTheme.colorScheme.background,
         modifier = Modifier.fillMaxSize(), content = {
@@ -192,7 +180,7 @@ fun StorkyApp() {
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                StorkyNavigation()
+                StorkyNavigation(intent)
 
             }
         })

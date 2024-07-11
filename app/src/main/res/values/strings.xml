@@ -166,4 +166,8 @@
     <string name="foreground_service_title">Storky</string>
     <string name="foreground_service_text">Storky contraction timer is running in the background</string>
 
+    <!--  notification after 5 days -->
+    <string name="notification_after_5days_title">Reminder</string>
+    <string name="notification_after_5days_text">From Storky creators: Monitor your baby with Bibino Baby Monitor!</string>
+
 </resources>

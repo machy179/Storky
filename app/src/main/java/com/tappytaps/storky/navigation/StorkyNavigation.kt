@@ -1,8 +1,10 @@
 package com.tappytaps.storky.navigation
 
+import android.content.Intent
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.tooling.preview.Preview
@@ -30,9 +32,8 @@ import com.tappytaps.storky.screens.trybibino.TryBibinoScreen
 @ExperimentalMaterial3Api
 @ExperimentalFoundationApi
 @ExperimentalComposeUiApi
-@Preview(showBackground = true)
 @Composable
-fun StorkyNavigation() {
+fun StorkyNavigation(intent: Intent?) {
     val navController = rememberNavController()
 
     val splashViewModel = hiltViewModel<SplashScreenViewModel>()
@@ -47,6 +48,14 @@ fun StorkyNavigation() {
     val settingsViewModel = hiltViewModel<SettingsScreenViewModel>()
     val lengthOfInterval = settingsViewModel.lengthOfInterval.value
     val lengthOfContraction = settingsViewModel.lengthOfContraction.value
+
+    LaunchedEffect(intent) { // because of clickink on notification after 5 days, the app is running and skip to TryBibinoScreen
+        intent?.getStringExtra("screen")?.let { screen ->
+            if (screen == "TryBibinoScreen") {
+                navController.navigate(StorkyScreens.TryBibinoScreen.name)
+            }
+        }
+    }
 
     NavHost(
         navController = navController,
@@ -117,6 +126,8 @@ fun StorkyNavigation() {
         composable(StorkyScreens.RemoveAdsScreen.name) {
             RemoveAdsScreen(navController = navController)
         }
+
+
 
     }
 
