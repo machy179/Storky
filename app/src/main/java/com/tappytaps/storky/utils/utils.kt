@@ -1,5 +1,6 @@
 package com.tappytaps.storky.utils
 
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import com.tappytaps.storky.R
@@ -153,6 +154,7 @@ fun calculateAverageLengthOfIntervalTime(
     listOfContractions: List<Contraction>,
 ): Int {
     val size = listOfContractions.size
+
     if (listOfContractions.size == 0) {
         return 0
 
@@ -186,4 +188,39 @@ fun calculateAverageLengthOfIntervalTime(
 
 
 }
+
+fun checkStortkyNotificationAfter5Days(
+    //checking, whether it si possible to set Storky notification "after 5 days"
+    listOfContractions: List<Contraction>,
+    currentContractionLength: Int,
+): Boolean {
+
+    Log.d("Checking Notification 5days", "1")
+    if (currentContractionLength > 20) { //because current currentContractionLength is not in list
+        val lastTwoContractions = listOfContractions
+            .sortedByDescending { it.contractionTime }
+            .take(2)
+        Log.d(
+            "Checking Notification 5days",
+            "2 size lastThreeContractions= " + lastTwoContractions.size.toString()
+        )
+
+        val oneHourAgo = Calendar.getInstance().apply {
+            add(Calendar.HOUR, -1)
+        }
+
+        if (lastTwoContractions.filter {
+                it.contractionTime.after(oneHourAgo) //Contractions younger than 1 hour
+                        && it.lengthOfContraction > 20
+            } //and length of contraction more than 20
+                .size > 1) {
+            Log.d("Checking Notification 5days", "3 OK")
+            return true
+        } else return false
+    } else return false
+
+
+}
+
+
 

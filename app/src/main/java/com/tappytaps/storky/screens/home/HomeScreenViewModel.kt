@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -16,7 +17,7 @@ import com.tappytaps.storky.notification.StorkyNotificationReceiver
 import com.tappytaps.storky.repository.ContractionsRepository
 import com.tappytaps.storky.utils.calculateAverageLengthOfContraction
 import com.tappytaps.storky.utils.calculateAverageLengthOfIntervalTime
-import dagger.hilt.android.internal.Contexts.getApplication
+import com.tappytaps.storky.utils.checkStortkyNotificationAfter5Days
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -32,7 +33,7 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeScreenViewModel @Inject constructor(
     private val repository: ContractionsRepository,
-    private val application: Application
+    private val application: Application,
 ) : ViewModel() {
 
     private val _listOfContractions =
@@ -52,7 +53,8 @@ class HomeScreenViewModel @Inject constructor(
         mutableStateOf(false) //if StorkyPopUpDialog was automatically shown
     val dialogShownAutomatically = _dialogShownAutomatically
 
-    var isRunning = false //because if is first open, stop watch still does not work - so nothing to save
+    var isRunning =
+        false //because if is first open, stop watch still does not work - so nothing to save
     private var timerJob: Job? = null
     private val _pauseStopWatch = mutableStateOf(false)
     val pauseStopWatch = _pauseStopWatch
@@ -95,8 +97,8 @@ class HomeScreenViewModel @Inject constructor(
     }
 
     private fun onListOfContractionsLoaded() {
-    //    _currentContractionLength.value = 0
-     //   _currentLengthBetweenContractions.value = 0
+        //    _currentContractionLength.value = 0
+        //   _currentLengthBetweenContractions.value = 0
         updateAverageTimes(includeCurrentContractionLength = false)
     }
 
@@ -127,7 +129,7 @@ class HomeScreenViewModel @Inject constructor(
     }
 
     fun updateCurrentTime() {
-        Log.d("delete long press","6")
+        Log.d("delete long press", "6")
         _currentTimeDateContraction.value = getCurrentCalendar()
     }
 
@@ -136,7 +138,7 @@ class HomeScreenViewModel @Inject constructor(
     }
 
     fun startStopwatch() {
-        Log.d("delete long press","5")
+        Log.d("delete long press", "5")
         updateCurrentTime()
         _currentLengthBetweenContractions.value = 0
 
@@ -145,30 +147,36 @@ class HomeScreenViewModel @Inject constructor(
             timerJob = viewModelScope.launch {
                 while (isRunning) {
                     delay(1000) // wait for 1 second
-                    Log.d("delete long press","_currentLengthBetweenContractions.value: "+_currentLengthBetweenContractions.value.toString())
+                    Log.d(
+                        "delete long press",
+                        "_currentLengthBetweenContractions.value: " + _currentLengthBetweenContractions.value.toString()
+                    )
                     if (!_pauseStopWatch.value) _currentLengthBetweenContractions.value += 1
-                    Log.d("delete long press","_currentLengthBetweenContractions.value2: "+_currentLengthBetweenContractions.value.toString())
+                    Log.d(
+                        "delete long press",
+                        "_currentLengthBetweenContractions.value2: " + _currentLengthBetweenContractions.value.toString()
+                    )
                 }
             }
         }
     }
 
     fun stopStopwatch() {
-        Log.d("delete long press","4")
+        Log.d("delete long press", "4")
         isRunning = false
         timerJob?.cancel() // Cancel the running coroutine in startStopwatch
 
     }
 
     fun newStart() {
-        Log.d("delete long press","3")
+        Log.d("delete long press", "3")
         _pauseStopWatch.value = false
         stopStopwatch()
         startStopwatch()
     }
 
     fun pauseStopWatch() {
-        Log.d("delete long press","2")
+        Log.d("delete long press", "2")
         _pauseStopWatch.value = true // !_pauseStopWatch.value
         _currentLengthBetweenContractions.value =
             -1 //if timer was paused, then timeBetweenContractions is set as -1
@@ -199,13 +207,18 @@ class HomeScreenViewModel @Inject constructor(
     }
 
     fun updateAverageTimes(includeCurrentContractionLength: Boolean = true) {
+        val oneHourAgo = Calendar.getInstance().apply {
+            add(Calendar.HOUR, -1)
+        }
+        val listOfContractionsLastHour = _listOfContractions.value.filter { it.contractionTime.after(oneHourAgo) }
+
         _averageContractionLength.value = calculateAverageLengthOfContraction(
-            listOfContractions = _listOfContractions.value,
+            listOfContractions = listOfContractionsLastHour,
             currentContractionLength = currentContractionLength.value,
             includeCurrentContractionLength = includeCurrentContractionLength
         )
         _averageLengthBetweenContractions.value =
-            calculateAverageLengthOfIntervalTime(listOfContractions = _listOfContractions.value)
+            calculateAverageLengthOfIntervalTime(listOfContractions = listOfContractionsLastHour)
 
     }
 
@@ -223,7 +236,7 @@ class HomeScreenViewModel @Inject constructor(
                     getAllActiveContractions()
                 } else {
                     repository.deleteContraction(contraction)
-                    Log.d("delete long press","1")
+                    Log.d("delete long press", "1")
                 }
 
 
@@ -328,19 +341,31 @@ class HomeScreenViewModel @Inject constructor(
     }
 
 
-    fun setAlarmAfter5Days() { //TODO - make algoritmus for call this metod - after 3 contractions lenght of 20 sec
-     // Schedule the notification to appear after 5 days
-        val alarmManager = application.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val intent = Intent(application, StorkyNotificationReceiver::class.java)
-        val pendingIntent = PendingIntent.getBroadcast(application, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+    fun setAlarmAfter5Days() {
+        // Schedule the notification to appear after 5 days
+        if (checkStortkyNotificationAfter5Days(listOfContractions = _listOfContractions.value,
+                    currentContractionLength = _currentContractionLength.value)) {
+            val alarmManager = application.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+            val intent = Intent(application, StorkyNotificationReceiver::class.java)
+            val pendingIntent = PendingIntent.getBroadcast(
+                application,
+                0,
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            )
 
-        /*        val triggerTime = Calendar.getInstance().apply {
-                    add(Calendar.DAY_OF_YEAR, 5) //po pěti dnech TODO
-                }.timeInMillis*/
+                    val triggerTime = Calendar.getInstance().apply {
+                        add(Calendar.DAY_OF_YEAR, 2) //after 5 days - TODO change to 5
+                    }.timeInMillis
 
-        val timeInMillis = System.currentTimeMillis() + 1 * 60 * 1000 // 1 minuty v milisekundách
+/*            val timeInMillis =
+                System.currentTimeMillis() + 1 * 60 * 1000 // 1 minuty v milisekundách*/
 
-        alarmManager.setExact(AlarmManager.RTC_WAKEUP, timeInMillis, pendingIntent)
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP, triggerTime, pendingIntent)
+
+            Toast.makeText(application, "Alarm set for 5 days from now", Toast.LENGTH_LONG).show()
+        }
+
     }
 
 

@@ -78,6 +78,7 @@ fun ContractionScreen(
                             viewModel.saveCurrentContractionLength()
                             viewModel.updateAverageTimes()
                             viewModel.setButtonStopContractionAlreadyPresed(value = true)
+                            viewModel.setAlarmAfter5Days()
                         },
                         inverseColor = true,
                         disableInsetNavigationBarPadding = true

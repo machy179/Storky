@@ -263,7 +263,7 @@ fun MainScreen(
                             viewModel.updateCurrentTime()
                             viewModel.newStart()
                             viewModel.setShowContractionlScreen(value = true)
-                            viewModel.setAlarmAfter5Days() //TODO now it is just for testing
+
                         },
                         disableInsetNavigationBarPadding = true
                     )
