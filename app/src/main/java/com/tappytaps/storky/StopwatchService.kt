@@ -44,6 +44,7 @@ class StopwatchService : Service() {
 
     private var isRunning = false
     private var currentLengthBetweenContractions = 0
+    private var currentContractionLength = 0
     private var pauseStopWatch = false
 
     private var showContractionlScreen = false
@@ -58,6 +59,8 @@ class StopwatchService : Service() {
             intent?.getIntExtra("currentLengthBetweenContractions", 0) ?: 0
         pauseStopWatch = intent?.getBooleanExtra("pauseStopWatch", false) ?: false
         showContractionlScreen = intent?.getBooleanExtra("showContractionlScreen", false) ?: false
+        currentContractionLength = intent?.getIntExtra("currentContractionLength", 0) ?: 0
+
         isRunning = true
         startStopwatch()
 
@@ -142,11 +145,23 @@ class StopwatchService : Service() {
 
 
         if (showContractionlScreen) {
-            val currentModeType = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+            val currentModeType =
+                resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
             val notificationColor = when (currentModeType) {
-                Configuration.UI_MODE_NIGHT_YES -> ContextCompat.getColor(this, R.color.service_primary_dark)
-                Configuration.UI_MODE_NIGHT_NO -> ContextCompat.getColor(this, R.color.service_primary)
-                else -> ContextCompat.getColor(this, R.color.service_primary) // Default to light theme color
+                Configuration.UI_MODE_NIGHT_YES -> ContextCompat.getColor(
+                    this,
+                    R.color.service_primary_dark
+                )
+
+                Configuration.UI_MODE_NIGHT_NO -> ContextCompat.getColor(
+                    this,
+                    R.color.service_primary
+                )
+
+                else -> ContextCompat.getColor(
+                    this,
+                    R.color.service_primary
+                ) // Default to light theme color
             }
             builder.setColorized(true)
                 .setColor(notificationColor)
@@ -184,6 +199,8 @@ class StopwatchService : Service() {
             putExtra("currentLengthBetweenContractions", currentLengthBetweenContractions)
             putExtra("pauseStopWatch", pauseStopWatch)
             putExtra("showContractionlScreen", showContractionlScreen)
+            putExtra("currentContractionLength", currentContractionLength)
+
         }
         sendBroadcast(intent)
     }

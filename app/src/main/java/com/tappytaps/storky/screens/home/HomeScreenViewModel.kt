@@ -294,6 +294,7 @@ class HomeScreenViewModel @Inject constructor(
             putExtra("currentLengthBetweenContractions", _currentLengthBetweenContractions.value)
             putExtra("showContractionlScreen", _showContractionlScreen.value)
             putExtra("pauseStopWatch", _pauseStopWatch.value)
+            putExtra("currentContractionLength", _currentContractionLength.value)
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             context.startForegroundService(intent)
@@ -313,11 +314,13 @@ class HomeScreenViewModel @Inject constructor(
         currentLengthBetweenContractions: Int,
         pauseStopWatch: Boolean,
         showContractionlScreen: Boolean,
+        currentContractionLength: Int
     ) {
         Log.d("StorkyService:", "updateFromService")
         _currentLengthBetweenContractions.value = currentLengthBetweenContractions
         _pauseStopWatch.value = pauseStopWatch
         _showContractionlScreen.value = showContractionlScreen
+        _currentContractionLength.value = currentContractionLength
         Log.d(
             "StorkyService:",
             "updateFromService _currentLengthBetweenContractions.value" + _currentLengthBetweenContractions.value.toString()
@@ -355,7 +358,7 @@ class HomeScreenViewModel @Inject constructor(
             )
 
                     val triggerTime = Calendar.getInstance().apply {
-                        add(Calendar.DAY_OF_YEAR, 2) //after 5 days - TODO change to 5
+                        add(Calendar.DAY_OF_YEAR, 5) //after 5 days
                     }.timeInMillis
 
 /*            val timeInMillis =

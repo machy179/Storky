@@ -32,6 +32,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.app.ActivityCompat
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.google.android.gms.ads.MobileAds
 import com.tappytaps.storky.navigation.StorkyNavigation
 import com.tappytaps.storky.navigation.StorkyScreens
 import com.tappytaps.storky.notification.StorkyNotificationReceiver
@@ -52,6 +53,8 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        MobileAds.initialize(this) {}
 
         enableEdgeToEdge(
             /*            statusBarStyle = SystemBarStyle.dark(
@@ -83,10 +86,13 @@ class MainActivity : ComponentActivity() {
                     val pauseStopWatch = intent?.getBooleanExtra("pauseStopWatch", false) ?: false
                     val showContractionlScreen =
                         intent?.getBooleanExtra("showContractionlScreen", false) ?: false
+                    val currentContractionLength =
+                        intent?.getIntExtra("currentContractionLength", 0) ?: 0
                     homeViewModel.updateFromService(
                         currentLengthBetweenContractions,
                         pauseStopWatch,
-                        showContractionlScreen
+                        showContractionlScreen,
+                        currentContractionLength
                     )
                 }
             }
