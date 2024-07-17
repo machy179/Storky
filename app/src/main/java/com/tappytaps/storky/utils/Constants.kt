@@ -11,4 +11,5 @@ object Constants {
     const val SHARE_APP_TEXT = "This is a good app: $APP_PLAY_STORE_URL_THIS_APP"
 
     const val AD_UNIT_ID = "ca-app-pub-3940256099942544/9214589741" // Replace with TappyTaps Ad Unit ID - this is just demo units ID
+    const val AD__NATIVE_UNIT_ID = "ca-app-pub-3940256099942544/2247696110" // Replace with TappyTaps Ad Unit ID - this is just demo units ID
 }

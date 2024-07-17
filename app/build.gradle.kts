@@ -103,6 +103,7 @@ dependencies {
     implementation("com.itextpdf:itextpdf:5.5.13.4")
 
     implementation("com.google.android.gms:play-services-ads:23.2.0")
+    implementation("com.android.billingclient:billing:7.0.0")
 
 
     

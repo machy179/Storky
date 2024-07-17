@@ -1,6 +1,8 @@
 package com.tappytaps.storky.screens.removeads
 
 import android.annotation.SuppressLint
+import android.app.Activity
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -28,6 +30,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.tappytaps.storky.R
 import com.tappytaps.storky.components.StorkyAppBar
@@ -38,7 +41,14 @@ import com.tappytaps.storky.navigation.StorkyScreens
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @ExperimentalMaterial3Api
 @Composable
-fun RemoveAdsScreen(navController: NavController) {
+fun RemoveAdsScreen(
+    navController: NavController,
+    viewModel: RemoveAdsScreenViewModel,
+) {
+
+    val context = LocalContext.current
+    val activity = context as? Activity
+
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
@@ -99,6 +109,10 @@ fun RemoveAdsScreen(navController: NavController) {
                         text = stringResource(id = R.string.remove_ads_screen_button_text),
                         subText = stringResource(id = R.string.remove_ads_screen_button_subtext),
                         onClick = {
+                            activity?.let {
+                                Log.d("remove ads Storky","1")
+                                viewModel.launchPurchaseFlow(it)
+                            }
                             navController.navigate(StorkyScreens.HomeScreen.name)
                         },
                         disableInsetNavigationBarPadding = true
@@ -163,5 +177,7 @@ fun RemoveAdsScreen(navController: NavController) {
 @Preview
 @Composable
 fun RemoveAdsPreview() {
-    RemoveAdsScreen(NavController(LocalContext.current))
+    RemoveAdsScreen(NavController(LocalContext.current),
+        viewModel = hiltViewModel<RemoveAdsScreenViewModel>()
+    )
 }

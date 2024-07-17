@@ -6,8 +6,8 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.ExperimentalComposeUiApi
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -24,6 +24,7 @@ import com.tappytaps.storky.screens.howto.HowToScreen
 import com.tappytaps.storky.screens.indicatorhelp.IndicatorHelpScreen
 import com.tappytaps.storky.screens.presentation.PresentationScreen
 import com.tappytaps.storky.screens.removeads.RemoveAdsScreen
+import com.tappytaps.storky.screens.removeads.RemoveAdsScreenViewModel
 import com.tappytaps.storky.screens.settings.SettingsScreen
 import com.tappytaps.storky.screens.settings.SettingsScreenViewModel
 import com.tappytaps.storky.screens.splash.SplashScreenViewModel
@@ -48,6 +49,9 @@ fun StorkyNavigation(intent: Intent?) {
     val settingsViewModel = hiltViewModel<SettingsScreenViewModel>()
     val lengthOfInterval = settingsViewModel.lengthOfInterval.value
     val lengthOfContraction = settingsViewModel.lengthOfContraction.value
+
+    val removeAdsViewModel = hiltViewModel<RemoveAdsScreenViewModel>()
+    val adsDisabled by removeAdsViewModel.adsDisabled.collectAsState()
 
     LaunchedEffect(intent) { // because of clickink on notification after 5 days, the app is running and skip to TryBibinoScreen
         intent?.getStringExtra("screen")?.let { screen ->
@@ -96,7 +100,8 @@ fun StorkyNavigation(intent: Intent?) {
             HistoryScreen(
                 navController = navController,
                 viewModel = historyViewModel,
-                listOfContractionsHistory = contractionsListHistory
+                listOfContractionsHistory = contractionsListHistory,
+                adsDisabled = adsDisabled
             )
         }
 
@@ -124,7 +129,8 @@ fun StorkyNavigation(intent: Intent?) {
 
 
         composable(StorkyScreens.RemoveAdsScreen.name) {
-            RemoveAdsScreen(navController = navController)
+            RemoveAdsScreen(navController = navController,
+                viewModel = removeAdsViewModel)
         }
 
 

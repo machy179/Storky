@@ -42,6 +42,7 @@ import com.tappytaps.storky.components.CustomDialog
 import com.tappytaps.storky.components.StorkyAppBar
 import com.tappytaps.storky.components.StorkyDropMenuItem
 import com.tappytaps.storky.components.ImageTitleContentText
+import com.tappytaps.storky.components.StorkyNativeAdView
 import com.tappytaps.storky.model.Contraction
 import com.tappytaps.storky.navigation.StorkyScreens
 import com.tappytaps.storky.utils.getDateInHistory
@@ -52,6 +53,7 @@ fun HistoryScreen(
     navController: NavController,
     viewModel: HistoryScreenViewModel,
     listOfContractionsHistory: List<Contraction>,
+    adsDisabled: Boolean,
 ) {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
 
@@ -143,6 +145,12 @@ fun HistoryScreen(
                         numberOfContraction = reversedIndex,
                         deleteContraction = { viewModel.deleteContraction(contraction) }
                     )
+                    if (index==1) {
+                        if(!adsDisabled) {
+                            StorkyNativeAdView()
+                        }
+
+                    }
                 }
 
 
@@ -260,3 +268,6 @@ private fun BarSetsContractions(
 
     }
 }
+
+
+
