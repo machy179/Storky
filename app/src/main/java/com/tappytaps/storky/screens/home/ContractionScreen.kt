@@ -71,21 +71,31 @@ fun ContractionScreen(
                             color = MaterialTheme.colorScheme.onPrimary
                         )
                     }
-                    UniversalButton(
-                        text = stringResource(R.string.stop_contraction),
-                        onClick = {
-                            viewModel.setShowContractionlScreen(value = false)
-                            viewModel.saveCurrentContractionLength()
-                            viewModel.updateAverageTimes()
-                            viewModel.setButtonStopContractionAlreadyPresed(value = true)
-                            viewModel.setAlarmAfter5Days()
-                        },
-                        inverseColor = true,
-                        disableInsetNavigationBarPadding = true
-                    )
+
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                    ) {
+                        Column() {
+                            UniversalButton(
+                                text = stringResource(R.string.stop_contraction),
+                                onClick = {
+                                    viewModel.setShowContractionlScreen(value = false)
+                                    viewModel.saveCurrentContractionLength()
+                                    viewModel.updateAverageTimes()
+                                    viewModel.setButtonStopContractionAlreadyPresed(value = true)
+                                    viewModel.setAlarmAfter5Days()
+                                },
+                                inverseColor = true,
+                                disableInsetNavigationBarPadding = true
+                            )
+                            AdaptiveBannerAd()
+                        }
+
+                    }
                 }
             }
-        }
 
+        }
     }
 }

@@ -7,6 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.tappytaps.storky.model.Contraction
+import com.tappytaps.storky.ui.theme.ChangeStatusBarTextColor
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "SuspiciousIndentation")
 @ExperimentalMaterial3Api
@@ -22,6 +23,7 @@ fun HomeScreen(
     val showContractionlScreen = viewModel.showContractionlScreen
 
     if (!showContractionlScreen.value) {
+        ChangeStatusBarTextColor(false)
         MainScreen(
             navController = navController,
             contractionsList = contractionsList,
@@ -30,10 +32,12 @@ fun HomeScreen(
             lengthOfContraction = lengthOfContraction
         )
     } else {
+        ChangeStatusBarTextColor(true)
         ContractionScreen(
             viewModel = viewModel
         )
     }
+
 
 
 }

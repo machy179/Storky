@@ -1,13 +1,18 @@
 package com.tappytaps.storky.ui.theme
 
+import android.app.Activity
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.unit.dp
+import androidx.core.view.WindowCompat
 
 private val DarkColorScheme = darkColorScheme(
     primary = Color(0xFFFFBAD1),
@@ -62,4 +67,20 @@ fun StorkyTheme(
         shapes = MaterialTheme.shapes.copy(extraSmall = RoundedCornerShape(16.dp))  //With material3 the default shape used by the DropdownMenu is defined by the extraSmall attribute in the shapes, so I have to change it this way
     )
 }
+@Composable
+fun ChangeStatusBarTextColor(darkTheme: Boolean) { //function to change status bar color of text and icon, in light theme
+    //because of if app is in ContractionScreen, it is neccessary to be white color of text and icons
+    val view = LocalView.current
+    val activity = LocalContext.current as Activity
+
+    if (!view.isInEditMode && !isSystemInDarkTheme()) {
+        SideEffect {
+            val window = activity.window
+            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = !darkTheme
+        }
+    }
+}
+
+
+
 

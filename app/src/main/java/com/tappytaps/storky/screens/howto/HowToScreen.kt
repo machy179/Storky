@@ -35,7 +35,6 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.tappytaps.storky.R
 import com.tappytaps.storky.components.StorkyAppBar
-import com.tappytaps.storky.navigation.StorkyScreens
 import com.tappytaps.storky.ui.theme.WhiteColor
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -54,7 +53,7 @@ fun HowToScreen(
                 closeIconVisible = true,
                 deleteIconVisible = false,
                 onClose = {
-                    navController.navigate(StorkyScreens.HomeScreen.name)
+                    navController.popBackStack() //navigate to back creen
                 },
                 scrollBehavior = scrollBehavior
             )
@@ -171,28 +170,7 @@ fun HowToScreen(
     }
 }
 
-@Composable
-fun WhiteStorkBullet(conditionsMet: Boolean) {
-    Box(
-        modifier = Modifier
-            .size(56.dp)
-            .shadow(8.dp, CircleShape) // Apply shadow with a specified elevation and shape
-            .clip(CircleShape) // Clip the content to the CircleShape to match the background shape
-            .background(
-                color = WhiteColor,
-                shape = CircleShape
-            ),
-        contentAlignment = Alignment.Center // Centers the icon within the Box
-    ) {
-        Icon(
-            painter = if (conditionsMet) painterResource(id = R.drawable.indicator_active) else painterResource(
-                id = R.drawable.indicator_inactive
-            ),
-            contentDescription = "Center Icon",
-            tint = if (conditionsMet) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface
-        )
-    }
-}
+
 
 @Composable
 private fun PinkBullet(primaryColor: Boolean) {

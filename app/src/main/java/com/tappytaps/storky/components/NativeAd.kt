@@ -1,13 +1,12 @@
 package com.tappytaps.storky.components
 
-import android.content.Context
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -18,16 +17,16 @@ import coil.compose.rememberAsyncImagePainter
 import com.google.android.gms.ads.*
 import com.google.android.gms.ads.nativead.NativeAd
 import com.google.android.gms.ads.nativead.NativeAdOptions
-import com.tappytaps.storky.ui.theme.NativeAdsBackgroundColor
+import com.tappytaps.storky.BuildConfig
 import com.tappytaps.storky.utils.Constants
 
 @Composable
 fun StorkyNativeAdView() {
     val context = LocalContext.current
     var nativeAd by remember { mutableStateOf<NativeAd?>(null) }
-
+    val adUnitIdNative = if (BuildConfig.DEBUG) Constants.AD_UNIT_ID_NATIVE_TEST else Constants.AD_UNIT_ID_NATIVE_TAPPYTAPS
     LaunchedEffect(Unit) {
-        val adLoader = AdLoader.Builder(context, Constants.AD__NATIVE_UNIT_ID)
+        val adLoader = AdLoader.Builder(context, adUnitIdNative)
             .forNativeAd { ad: NativeAd ->
                 nativeAd = ad
             }
@@ -48,7 +47,7 @@ fun StorkyNativeAdView() {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(30.dp)
-                .background(NativeAdsBackgroundColor, shape = RoundedCornerShape(16.dp))
+                .background(MaterialTheme.colorScheme.surfaceContainerLow, shape = RoundedCornerShape(16.dp))
         ) {
             Row(
                 modifier = Modifier
@@ -90,8 +89,8 @@ fun StorkyNativeAdView() {
                         }
                         Text(
                             text = ad.headline ?: "",
-                            style = MaterialTheme.typography.subtitle2,
-                            color = MaterialTheme.colors.onSurface,
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurface,
                             modifier = Modifier
                         )
                     }
@@ -99,8 +98,8 @@ fun StorkyNativeAdView() {
                     ad.body?.let {
                         Text(
                             text = it,
-                            style = MaterialTheme.typography.h6,
-                            color = MaterialTheme.colors.onSurface,
+                            style = MaterialTheme.typography.titleLarge,
+                            color = MaterialTheme.colorScheme.onSurface,
                             modifier = Modifier.padding(bottom = 8.dp)
                         )
                     }

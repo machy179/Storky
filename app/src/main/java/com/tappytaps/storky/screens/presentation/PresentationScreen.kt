@@ -83,11 +83,11 @@ fun HorizontalPagerWithButtonsScreen(navController: NavController) {
 
             TextButton(
                 onClick = {
-                    if (shouldShowPrevButton) {
+/*                    if (shouldShowPrevButton) {
                         coroutineScope.launch {
                             pagerState.animateScrollToPage(pagerState.currentPage - 1)
                         }
-                    }
+                    }*/
                 },
                 enabled = shouldShowPrevButton,
                 modifier = Modifier
@@ -95,11 +95,12 @@ fun HorizontalPagerWithButtonsScreen(navController: NavController) {
             ) {
                 Text(
                     text = stringResource(id = R.string.back_button),
-                    color = if (shouldShowPrevButton) {
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+/*                    color = if (shouldShowPrevButton) {
                         MaterialTheme.colorScheme.primary
                     } else {
                         MaterialTheme.colorScheme.onSurfaceVariant
-                    },
+                    },*/
                     style = MaterialTheme.typography.labelLarge
                 )
             }

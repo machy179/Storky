@@ -53,7 +53,7 @@ class RemoveAdsScreenViewModel @Inject constructor(
         val productList = listOf(
             QueryProductDetailsParams.Product.newBuilder()
                 .setProductId("your_product_id")
-                .setProductType(BillingClient.ProductType.INAPP)
+                .setProductType(BillingClient.ProductType.SUBS)
                 .build()
         )
         val params = QueryProductDetailsParams.newBuilder()

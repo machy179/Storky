@@ -2,11 +2,6 @@ package com.tappytaps.storky.screens.home
 
 import android.app.Activity
 import android.content.Context
-import android.graphics.Rect
-import android.os.Build
-import android.util.DisplayMetrics
-import android.util.Log
-import android.view.WindowMetrics
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -45,6 +40,7 @@ import androidx.window.layout.WindowMetricsCalculator
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
+import com.tappytaps.storky.BuildConfig
 import com.tappytaps.storky.R
 import com.tappytaps.storky.components.ContractionRow
 import com.tappytaps.storky.components.ContractionRowByItems
@@ -54,7 +50,8 @@ import com.tappytaps.storky.components.MainScreenAppBar
 import com.tappytaps.storky.components.UniversalButton
 import com.tappytaps.storky.model.Contraction
 import com.tappytaps.storky.navigation.StorkyScreens
-import com.tappytaps.storky.utils.Constants.AD_UNIT_ID
+import com.tappytaps.storky.utils.Constants.AD_UNIT_ID_BANNER_TAPPYTAPS
+import com.tappytaps.storky.utils.Constants.AD_UNIT_ID_BANNER_TEST
 import com.tappytaps.storky.utils.convertSecondsToTimeString
 import com.tappytaps.storky.utils.convertSecondsToTimeString2
 
@@ -325,8 +322,11 @@ fun AdaptiveBannerAd() {
         calculateAdSize(context)
     }
 
+    // Determine the ad unit ID based on whether the build is debug or release
+    val adUnitIdBanner = if (BuildConfig.DEBUG) AD_UNIT_ID_BANNER_TEST else AD_UNIT_ID_BANNER_TAPPYTAPS
+
     adView.apply {
-        adUnitId = AD_UNIT_ID
+        adUnitId = adUnitIdBanner
         setAdSize(adSize)
     }
 
