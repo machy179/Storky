@@ -52,6 +52,9 @@ interface StorkyDatabaseDao {
     @Query("DELETE from contractions_tbl WHERE in_history = true AND in_set = :setValue")
     suspend fun deleteHistoryBySet(setValue: Int)
 
+    @Query("DELETE from contractions_tbl WHERE in_set = :setValue")
+    suspend fun deleteContractionsBySet(setValue: Int)
+
     //updating list of Contractions
     @Update(onConflict = OnConflictStrategy.REPLACE)
     suspend fun updateContractions(contractions: List<Contraction>)

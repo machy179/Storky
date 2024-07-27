@@ -22,12 +22,16 @@ import kotlinx.coroutines.withContext
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
+import java.util.Calendar
 
 
 class PdfCreatorAndSender() {
 
 
-    suspend fun convertToPdf(filteredContractionList: List<Contraction>, context: Context): File =
+    suspend fun convertToPdf(
+        filteredContractionList: List<Contraction>,
+        context: Context
+    ): File =
         withContext(
             Dispatchers.IO
         ) {
@@ -89,6 +93,7 @@ class PdfCreatorAndSender() {
 
             document.add(Paragraph("\n"))
 
+
             // Add date
             val dateText = getDateInShare(
                 filteredContractionList.last().contractionTime,
@@ -106,7 +111,7 @@ class PdfCreatorAndSender() {
 
             table.horizontalAlignment = Element.ALIGN_CENTER
 
-            filteredContractionList.reversed().forEachIndexed { index, contraction ->
+            filteredContractionList.forEachIndexed { index, contraction ->
                 val contractionNumber = filteredContractionList.size - index
 
                 val contractionCell = PdfPCell().apply {

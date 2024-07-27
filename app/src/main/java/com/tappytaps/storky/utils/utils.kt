@@ -1,10 +1,17 @@
 package com.tappytaps.storky.utils
 
+import android.content.Context
 import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.tappytaps.storky.R
 import com.tappytaps.storky.model.Contraction
+import com.tappytaps.storky.service.PdfCreatorAndSender
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.launch
+import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -218,6 +225,45 @@ fun checkStortkyNotificationAfter5Days(
             return true
         } else return false
     } else return false
+
+
+}
+
+fun shareSetOfContractionsByEmail( //function for create pdf of list of contractions and send it by e-mail
+    context: Context,
+    contractionInSet: Int,
+    listOfContractions: MutableStateFlow<List<Contraction>>,
+    viewModel: ViewModel,
+    pdfCreatorAndSender: PdfCreatorAndSender,
+    currentContractionLength: Int? = null,
+    currentTimeDateContraction: Calendar? = null
+) {
+
+    val filteredContractionList: MutableList<Contraction>  = listOfContractions
+        .value
+        .filter { it.in_set == contractionInSet }
+        .toMutableList()
+
+    // if there is stop watch running and it is saving of actual contractions, it is necessary to save current contraction
+    if(currentTimeDateContraction != null && currentContractionLength != null && currentContractionLength != 0) {
+        val newContraction = Contraction(contractionTime = currentTimeDateContraction,
+            lengthOfContraction = currentContractionLength,
+            timeBetweenContractions = 0)
+
+        filteredContractionList.add(0, newContraction)
+    }
+
+
+    viewModel.viewModelScope.launch {
+        val pdfFile = pdfCreatorAndSender.convertToPdf(
+            filteredContractionList = filteredContractionList,
+            context = context
+        )
+        pdfCreatorAndSender.sendEmailWithAttachment(
+            file = pdfFile,
+            context = context
+        )
+    }
 
 
 }

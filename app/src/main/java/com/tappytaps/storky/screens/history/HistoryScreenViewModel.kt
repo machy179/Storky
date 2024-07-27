@@ -7,13 +7,13 @@ import androidx.lifecycle.viewModelScope
 import com.tappytaps.storky.model.Contraction
 import com.tappytaps.storky.repository.ContractionsRepository
 import com.tappytaps.storky.service.PdfCreatorAndSender
+import com.tappytaps.storky.utils.shareSetOfContractionsByEmail
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
-import java.io.File
 import javax.inject.Inject
 
 @HiltViewModel
@@ -58,36 +58,31 @@ class HistoryScreenViewModel @Inject constructor(
 
     fun deleteSetOfHistory(set: Int) {
         Log.d("Storky delete:", "clicked")
+        Log.d("Actual contraction deleteSetOfHistory: ", "deleteSetOfHistory")
         viewModelScope.launch(Dispatchers.IO) {
-            repository.deleteHistoryContractionsBySet(set = set).run {
+/*            repository.deleteHistoryContractionsBySet(set = set).run {
+                _listOfContractionsHistory.value = emptyList<Contraction>()
+                getAllHistoryContractions()
+            }*/
+            repository.deleteContractionsBySet(set = set).run {
                 _listOfContractionsHistory.value = emptyList<Contraction>()
                 getAllHistoryContractions()
             }
+
 
         }
 
     }
 
 
-    fun shareEmailHistory(context: Context, contractionInSet: Int) {
-
-        val filteredContractionList: List<Contraction> = _listOfContractionsHistory
-            .value // Get the current value of the MutableStateFlow
-            .filter { it.in_set == contractionInSet } // Filter the list
-            .toList() // Convert to an immutable List
-        var pdfFile: File
-        viewModelScope.launch {
-            pdfFile = pdfCreatorAndSender.convertToPdf(
-                filteredContractionList = filteredContractionList,
-                context = context
-            )
-            pdfCreatorAndSender.sendEmailWithAttachment(
-                file = pdfFile,
-                context = context
-            )
-        }
-
-
+    fun shareSetsOfHistoryContractionsByEmail(context: Context, contractionInSet: Int) {
+        shareSetOfContractionsByEmail(
+            context = context,
+            contractionInSet = contractionInSet,
+            listOfContractions = _listOfContractionsHistory,
+            viewModel = this,
+            pdfCreatorAndSender = pdfCreatorAndSender
+        )
     }
 
     fun deleteContraction(contraction: Contraction) {
@@ -105,7 +100,6 @@ class HistoryScreenViewModel @Inject constructor(
             }
         }
     }
-
 
 
 }

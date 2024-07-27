@@ -25,6 +25,8 @@ class ContractionsRepository @Inject constructor(private val storkyDatabaseDao: 
     suspend fun deleteAllHistoryContractions() = storkyDatabaseDao.deleteAllHistory()
     suspend fun deleteHistoryContractionsBySet(set: Int) = storkyDatabaseDao.deleteHistoryBySet(setValue = set)
 
+    suspend fun deleteContractionsBySet(set: Int) = storkyDatabaseDao.deleteContractionsBySet(setValue = set)
+
 
    // Update a list of contractions to history*/
     suspend fun updateContractionsToHistory(contractions: List<Contraction>) {

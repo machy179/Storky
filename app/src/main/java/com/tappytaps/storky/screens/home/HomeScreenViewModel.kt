@@ -9,15 +9,18 @@ import android.os.Build
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.runtime.mutableStateOf
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.tappytaps.storky.StopwatchService
 import com.tappytaps.storky.model.Contraction
 import com.tappytaps.storky.notification.StorkyNotificationReceiver
 import com.tappytaps.storky.repository.ContractionsRepository
+import com.tappytaps.storky.service.PdfCreatorAndSender
 import com.tappytaps.storky.utils.calculateAverageLengthOfContraction
 import com.tappytaps.storky.utils.calculateAverageLengthOfIntervalTime
 import com.tappytaps.storky.utils.checkStortkyNotificationAfter5Days
+import com.tappytaps.storky.utils.shareSetOfContractionsByEmail
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -34,6 +37,7 @@ import javax.inject.Inject
 class HomeScreenViewModel @Inject constructor(
     private val repository: ContractionsRepository,
     private val application: Application,
+    private val pdfCreatorAndSender: PdfCreatorAndSender
 ) : ViewModel() {
 
     private val _listOfContractions =
@@ -188,13 +192,15 @@ class HomeScreenViewModel @Inject constructor(
             try {
                 if (isRunning) {
                     saveContraction()
-                    delay(100)
+                    delay(200)
                 }
                 val contractions = listOfContractions.first() // Collect the latest list
                 repository.updateContractionsToHistory(contractions).run {
                     _listOfContractions.value = emptyList()
                     getAllActiveContractions()
                     _dialogShownAutomatically.value = false
+                    _currentContractionLength.value = 0
+                    _currentLengthBetweenContractions.value = 0
                 }
                 stopStopwatch()
             } catch (e: Exception) {
@@ -210,7 +216,8 @@ class HomeScreenViewModel @Inject constructor(
         val oneHourAgo = Calendar.getInstance().apply {
             add(Calendar.HOUR, -1)
         }
-        val listOfContractionsLastHour = _listOfContractions.value.filter { it.contractionTime.after(oneHourAgo) }
+        val listOfContractionsLastHour =
+            _listOfContractions.value.filter { it.contractionTime.after(oneHourAgo) }
 
         _averageContractionLength.value = calculateAverageLengthOfContraction(
             listOfContractions = listOfContractionsLastHour,
@@ -297,7 +304,8 @@ class HomeScreenViewModel @Inject constructor(
             putExtra("currentContractionLength", _currentContractionLength.value)
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            context.startForegroundService(intent)
+            // context.startForegroundService(intent)
+            ContextCompat.startForegroundService(context, intent)
         } else {
             context.startService(intent)
         }
@@ -314,7 +322,7 @@ class HomeScreenViewModel @Inject constructor(
         currentLengthBetweenContractions: Int,
         pauseStopWatch: Boolean,
         showContractionlScreen: Boolean,
-        currentContractionLength: Int
+        currentContractionLength: Int,
     ) {
         Log.d("StorkyService:", "updateFromService")
         _currentLengthBetweenContractions.value = currentLengthBetweenContractions
@@ -346,8 +354,11 @@ class HomeScreenViewModel @Inject constructor(
 
     fun setAlarmAfter5Days() {
         // Schedule the notification to appear after 5 days
-        if (checkStortkyNotificationAfter5Days(listOfContractions = _listOfContractions.value,
-                    currentContractionLength = _currentContractionLength.value)) {
+        if (checkStortkyNotificationAfter5Days(
+                listOfContractions = _listOfContractions.value,
+                currentContractionLength = _currentContractionLength.value
+            )
+        ) {
             val alarmManager = application.getSystemService(Context.ALARM_SERVICE) as AlarmManager
             val intent = Intent(application, StorkyNotificationReceiver::class.java)
             val pendingIntent = PendingIntent.getBroadcast(
@@ -357,17 +368,54 @@ class HomeScreenViewModel @Inject constructor(
                 PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
             )
 
-                    val triggerTime = Calendar.getInstance().apply {
-                        add(Calendar.DAY_OF_YEAR, 5) //after 5 days
-                    }.timeInMillis
+            val triggerTime = Calendar.getInstance().apply {
+                add(Calendar.DAY_OF_YEAR, 5) //after 5 days
+            }.timeInMillis
 
-/*            val timeInMillis =
-                System.currentTimeMillis() + 1 * 60 * 1000 // 1 minuty v milisekundách*/
+            /*            val timeInMillis =
+                            System.currentTimeMillis() + 1 * 60 * 1000 // 1 minuty v milisekundách*/
 
             alarmManager.setExact(AlarmManager.RTC_WAKEUP, triggerTime, pendingIntent)
 
             Toast.makeText(application, "Alarm set for 5 days from now", Toast.LENGTH_LONG).show()
         }
+
+    }
+
+    fun deleteActualSet(set: Int) {
+        Log.d("Storky delete:", "clicked")
+        Log.d("Actual contraction deleteSetOfHistory: ", "deleteSetOfHistory")
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.deleteContractionsBySet(set = set).run {
+                delay(200)
+                _listOfContractions.value = emptyList<Contraction>()
+                getAllActiveContractions()
+                _dialogShownAutomatically.value = false
+                stopStopwatch()
+                buttonStopContractionAlreadyPresed = false
+            }
+
+
+        }
+
+    }
+
+    fun shareSetsOfActualContractionsByEmail(
+        context: Context,
+        contractionInSet: Int,
+        currentContractionLength: Int,
+        currentTimeDateContraction: Calendar
+    ) {
+        shareSetOfContractionsByEmail(context = context,
+            contractionInSet = contractionInSet,
+            listOfContractions = _listOfContractions,
+            pdfCreatorAndSender = pdfCreatorAndSender,
+            viewModel = this,
+            currentContractionLength = currentContractionLength,
+            currentTimeDateContraction = currentTimeDateContraction
+            )
+
+
 
     }
 

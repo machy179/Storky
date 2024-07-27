@@ -99,8 +99,10 @@ fun StorkyNavigation(intent: Intent?) {
         composable(StorkyScreens.HistoryScreen.name) {
             HistoryScreen(
                 navController = navController,
-                viewModel = historyViewModel,
+                historyViewModel = historyViewModel,
                 listOfContractionsHistory = contractionsListHistory,
+                homeViewModel = homeViewModel,
+                listOfActiveContractions = contractionsList,
                 adsDisabled = adsDisabled
             )
         }

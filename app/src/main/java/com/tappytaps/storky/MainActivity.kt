@@ -50,6 +50,7 @@ class MainActivity : ComponentActivity() {
     private val homeViewModel: HomeScreenViewModel by viewModels()
     private lateinit var stopwatchUpdateReceiver: BroadcastReceiver
     private var isReceiverRegistered = false
+    private var isUserLeaving = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -116,9 +117,19 @@ class MainActivity : ComponentActivity() {
 
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        Log.d("StorkyService:", "onSaveInstanceState")
+        super.onSaveInstanceState(outState)
+        // Aktivita je ukládána, což může indikovat, že bude zničena systémem
+        Log.d("StorkyService:", "onSaveInstanceState")
+    }
 
-    override fun onStop() {
+    override fun onPause() {
         Log.d("StorkyService:", "onPause_in_Maint_activity")
+        super.onPause()
+    }
+    override fun onStop() {
+        Log.d("StorkyService:", "onStop_in_Maint_activity")
         super.onStop()
         if (homeViewModel.isRunning && !homeViewModel.pauseStopWatch.value) {
             homeViewModel.startService(this)
@@ -129,6 +140,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+
     override fun onDestroy() {
         Log.d("StorkyService:", "onDestroy_in_Maint_activity")
         super.onDestroy()
@@ -138,6 +150,8 @@ class MainActivity : ComponentActivity() {
             isReceiverRegistered = false
         }
     }
+
+
 
 
     private fun askPermissionPostNotification() {

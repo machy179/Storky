@@ -1,5 +1,6 @@
 package com.tappytaps.storky.screens.history
 
+import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -37,6 +38,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.tappytaps.storky.R
+import com.tappytaps.storky.components.ContractionRow
 import com.tappytaps.storky.components.ContractionRowByItems
 import com.tappytaps.storky.components.CustomDialog
 import com.tappytaps.storky.components.StorkyAppBar
@@ -45,19 +47,23 @@ import com.tappytaps.storky.components.ImageTitleContentText
 import com.tappytaps.storky.components.StorkyNativeAdView
 import com.tappytaps.storky.model.Contraction
 import com.tappytaps.storky.navigation.StorkyScreens
+import com.tappytaps.storky.screens.home.HomeScreenViewModel
 import com.tappytaps.storky.utils.getDateInHistory
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HistoryScreen(
     navController: NavController,
-    viewModel: HistoryScreenViewModel,
+    historyViewModel: HistoryScreenViewModel,
     listOfContractionsHistory: List<Contraction>,
     adsDisabled: Boolean,
+    listOfActiveContractions: List<Contraction>,
+    homeViewModel: HomeScreenViewModel,
 ) {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
 
     var dialogClearAllDataVisible by remember { mutableStateOf(false) }
+    val context = LocalContext.current
 
 
     Scaffold(
@@ -83,7 +89,7 @@ fun HistoryScreen(
     ) { paddingValues ->
 
 
-        if (listOfContractionsHistory.isNullOrEmpty()) {
+        if (listOfContractionsHistory.isNullOrEmpty() && listOfActiveContractions.isNullOrEmpty() && (homeViewModel.currentLengthBetweenContractions.value == 0)) {
             Box(modifier = Modifier.fillMaxSize().padding(paddingValues)) {
                 Column(
                     modifier = Modifier
@@ -112,47 +118,80 @@ fun HistoryScreen(
                 listState.animateScrollToItem(index = 0) //it is for roll lazycolumn to top
             }
 
-            val ids = mutableListOf<Long>() //to find, which Contractions are first in sets
-            var previousSet: Int? = null
+            val listOfSetsOfContractions: List<Int> =
+                listOfContractionsHistory //to create list of all sets
+                    .map { it.in_set }
+                    .distinct()
 
-            for (contraction in listOfContractionsHistory) {
-                if (previousSet == null || contraction.in_set != previousSet) {
-                    ids.add(contraction.id)
-                }
-                previousSet = contraction.in_set
-            }
-            val SizeListOfContractionsHistory = listOfContractionsHistory.size
 
+            val sizeListOfActiveContractions = listOfActiveContractions.size
             LazyColumn(
-                modifier = Modifier.padding(paddingValues),//.verticalScroll(scrollState),
+                modifier = Modifier.padding(paddingValues),
                 verticalArrangement = Arrangement.Top // Start items from the top
             ) {
-                itemsIndexed(listOfContractionsHistory,
-                    key = { index, contraction -> contraction.id }
-                ) { index, contraction ->
-                    if (contraction.id in ids) {
-                        Spacer(modifier = Modifier.height(24.dp))
-                        BarSetsContractions(
-                            listOfContractionsHistory = listOfContractionsHistory,
-                            contraction = contraction,
-                            viewModel = viewModel,
-                            contractionInSet = contraction.in_set
-                        )
+
+                //actual contractions
+                if(sizeListOfActiveContractions ==0 && (homeViewModel.currentContractionLength.value > 0 || homeViewModel.currentLengthBetweenContractions.value > 0)) {
+                    item {
+                        firstRowOfSetsOfActiveContractions(listOfActiveContractions, homeViewModel, context)
                     }
-                    val reversedIndex = SizeListOfContractionsHistory - index
+                }
+
+
+                itemsIndexed(listOfActiveContractions,
+                    key = { index, activeContraction -> activeContraction.id }
+                ) { index, contraction ->
+                    val reversedIndex = sizeListOfActiveContractions - index
+                    if (index == 0
+                    ) {
+                        firstRowOfSetsOfActiveContractions(listOfActiveContractions, homeViewModel, context)
+                    }
+
+
                     ContractionRowByItems(
                         contraction = contraction,
                         numberOfContraction = reversedIndex,
-                        deleteContraction = { viewModel.deleteContraction(contraction) }
+                        deleteContraction = { historyViewModel.deleteContraction(contraction) }
                     )
-                    if (index==1) {
-                        if(!adsDisabled) {
+
+                    if (index == 1 || (index == 0 && homeViewModel.currentLengthBetweenContractions.value > 0)) {
+                        if (!adsDisabled) {
                             StorkyNativeAdView()
                         }
+
 
                     }
                 }
 
+                //history contractions
+                itemsIndexed(listOfSetsOfContractions) { index, inSetOfContractions ->
+                    Spacer(modifier = Modifier.height(24.dp))
+
+                    BarSetsContractions(
+                        listOfContractions = listOfContractionsHistory.filter { it.in_set == inSetOfContractions },
+                        id = inSetOfContractions,
+                        deleteSetOfContractions = {
+                            historyViewModel.deleteSetOfHistory(inSetOfContractions)
+                        },
+                        shareSetOfContractions = {
+                            historyViewModel.shareSetsOfHistoryContractionsByEmail(
+                                context = context,
+                                contractionInSet = inSetOfContractions.toInt()
+                            )
+                        }
+                    )
+
+                    val filteredContractions =
+                        listOfContractionsHistory.filter { it.in_set == inSetOfContractions }
+                    for ((idx, contraction) in filteredContractions.withIndex().reversed()) {
+                        ContractionRowByItems(
+                            contraction = contraction,
+                            numberOfContraction = idx + 1,
+                            deleteContraction = { historyViewModel.deleteContraction(contraction) }
+                        )
+
+                    }
+                }
 
             }
             if (dialogClearAllDataVisible) {
@@ -163,7 +202,7 @@ fun HistoryScreen(
                     secondTextButton = stringResource(R.string.clear),
                     enableFirstRequest = true,
                     firstRequest = {
-                        viewModel.deleteAllHistory()
+                        historyViewModel.deleteAllHistory()
                         dialogClearAllDataVisible = false
                     },
                     onDismissRequest = { dialogClearAllDataVisible = false },
@@ -177,11 +216,45 @@ fun HistoryScreen(
 }
 
 @Composable
+private fun firstRowOfSetsOfActiveContractions(
+    listOfActiveContractions: List<Contraction>,
+    homeViewModel: HomeScreenViewModel,
+    context: Context,
+) {
+    BarSetsContractions(
+        listOfContractions = listOfActiveContractions,
+        id = 0,
+        deleteSetOfContractions = { homeViewModel.deleteActualSet(0) },
+        shareSetOfContractions = {
+            homeViewModel.shareSetsOfActualContractionsByEmail(
+                context = context,
+                contractionInSet = 0,
+                currentContractionLength = homeViewModel.currentContractionLength.value,
+                currentTimeDateContraction = homeViewModel.currentTimeDateContraction.value
+            )
+        }
+
+    )
+
+    if (homeViewModel.currentContractionLength.value > 0 || homeViewModel.currentLengthBetweenContractions.value > 0) {
+        ContractionRow(
+            lengthOfContraction = homeViewModel.currentContractionLength.value,
+            contractionTime = homeViewModel.currentTimeDateContraction.value,
+            timeBetweenContractions = homeViewModel.currentLengthBetweenContractions.value,
+            numberOfContraction = listOfActiveContractions.size + 1
+        )
+
+    }
+}
+
+
+
+@Composable
 private fun BarSetsContractions(
-    listOfContractionsHistory: List<Contraction>,
-    contraction: Contraction,
-    viewModel: HistoryScreenViewModel,
-    contractionInSet: Int,
+    listOfContractions: List<Contraction>? = null,
+    id: Int,
+    deleteSetOfContractions: () -> Unit,
+    shareSetOfContractions: () -> Unit,
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(), // Ensure the Row takes up the full width
@@ -189,14 +262,18 @@ private fun BarSetsContractions(
     ) {
         var menuExpanded by remember { mutableStateOf(false) }
         var dialogClearThisSetVisible by remember { mutableStateOf(false) }
-        val context = LocalContext.current
         Text(
-            text = getDateInHistory(
-                listOfContractionsHistory.filter { it.in_set == contraction.in_set }
-                    .last().contractionTime,
-                listOfContractionsHistory.filter { it.in_set == contraction.in_set }
-                    .first().contractionTime
-            ),
+            text = if(listOfContractions.isNullOrEmpty()) {
+                stringResource(R.string.today)
+            } else {
+
+                getDateInHistory(
+                    listOfContractions.filter { it.in_set == id }
+                        .last().contractionTime,
+                    listOfContractions.filter { it.in_set == id }
+                        .first().contractionTime
+                )
+            },
             style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.onSurface,
             modifier = Modifier.padding(
@@ -232,10 +309,7 @@ private fun BarSetsContractions(
                     text = R.string.share,
                     onClick = {
                         menuExpanded = false
-                        viewModel.shareEmailHistory(
-                            context = context,
-                            contractionInSet = contractionInSet
-                        )
+                        shareSetOfContractions.invoke()
                     })
 
                 StorkyDropMenuItem(
@@ -258,7 +332,8 @@ private fun BarSetsContractions(
                 secondTextButton = stringResource(R.string.clear),
                 enableFirstRequest = true,
                 firstRequest = {
-                    viewModel.deleteSetOfHistory(contraction.in_set)
+                    deleteSetOfContractions.invoke()
+                    //      viewModel.deleteSetOfHistory(contractionInSet)
                     dialogClearThisSetVisible = false
                 },
                 onDismissRequest = { dialogClearThisSetVisible = false },
