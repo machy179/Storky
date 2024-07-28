@@ -120,7 +120,7 @@ fun ImageTitleContentText(
             ) {
                 TextButton(
                     onClick = {
-                        navController.navigate(StorkyScreens.IndicatorHelpScreen.name)
+                        navController.navigate(StorkyScreens.HowToScreen.name)
                     }
                 ) {
                     Text(
@@ -223,10 +223,10 @@ fun EmailInput(
             onAction = onAction
         )
 
-/*        Spacer(
-            modifier = Modifier
-                .padding(bottom = 12.dp)
-        )*/
+        /*        Spacer(
+                    modifier = Modifier
+                        .padding(bottom = 12.dp)
+                )*/
     }
 
 

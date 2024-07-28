@@ -11,10 +11,8 @@ import android.os.Build
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.ui.ExperimentalComposeUiApi
-import androidx.compose.ui.res.stringResource
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import com.itextpdf.text.factories.GreekAlphabetFactory.getString
 import com.tappytaps.storky.MainActivity
 import com.tappytaps.storky.R
 

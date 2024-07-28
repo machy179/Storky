@@ -2,7 +2,6 @@
 
 package com.tappytaps.storky.screens.email
 
-import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement

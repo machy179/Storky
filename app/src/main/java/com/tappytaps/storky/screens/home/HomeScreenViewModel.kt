@@ -57,8 +57,9 @@ class HomeScreenViewModel @Inject constructor(
         mutableStateOf(false) //if StorkyPopUpDialog was automatically shown
     val dialogShownAutomatically = _dialogShownAutomatically
 
-    var isRunning =
-        false //because if is first open, stop watch still does not work - so nothing to save
+    private val _isRunning = mutableStateOf(false) //because if is first open, stop watch still does not work - so nothing to save
+    val isRunning = _isRunning
+
     private var timerJob: Job? = null
     private val _pauseStopWatch = mutableStateOf(false)
     val pauseStopWatch = _pauseStopWatch
@@ -114,7 +115,7 @@ class HomeScreenViewModel @Inject constructor(
 
     fun saveContraction() {
 
-        if (isRunning) { //because if is first open, countdowner still does not work - so nothing to save
+        if (_isRunning.value) { //because if is first open, countdowner still does not work - so nothing to save
             viewModelScope.launch {
                 try {
                     repository.addContraction(
@@ -146,10 +147,10 @@ class HomeScreenViewModel @Inject constructor(
         updateCurrentTime()
         _currentLengthBetweenContractions.value = 0
 
-        if (!isRunning) {
-            isRunning = true
+        if (!_isRunning.value) {
+            _isRunning.value = true
             timerJob = viewModelScope.launch {
-                while (isRunning) {
+                while (_isRunning.value) {
                     delay(1000) // wait for 1 second
                     Log.d(
                         "delete long press",
@@ -167,7 +168,7 @@ class HomeScreenViewModel @Inject constructor(
 
     fun stopStopwatch() {
         Log.d("delete long press", "4")
-        isRunning = false
+        _isRunning.value = false
         timerJob?.cancel() // Cancel the running coroutine in startStopwatch
 
     }
@@ -181,7 +182,7 @@ class HomeScreenViewModel @Inject constructor(
 
     fun pauseStopWatch() {
         Log.d("delete long press", "2")
-        _pauseStopWatch.value = true // !_pauseStopWatch.value
+        _pauseStopWatch.value = true //
         _currentLengthBetweenContractions.value =
             -1 //if timer was paused, then timeBetweenContractions is set as -1
         buttonStopContractionAlreadyPresed = false
@@ -190,9 +191,9 @@ class HomeScreenViewModel @Inject constructor(
     fun newMonitoring() {
         viewModelScope.launch {
             try {
-                if (isRunning) {
+                if (_isRunning.value) {
                     saveContraction()
-                    delay(200)
+                    delay(100)
                 }
                 val contractions = listOfContractions.first() // Collect the latest list
                 repository.updateContractionsToHistory(contractions).run {
@@ -201,6 +202,7 @@ class HomeScreenViewModel @Inject constructor(
                     _dialogShownAutomatically.value = false
                     _currentContractionLength.value = 0
                     _currentLengthBetweenContractions.value = 0
+                    _pauseStopWatch.value = false
                 }
                 stopStopwatch()
             } catch (e: Exception) {
@@ -333,12 +335,12 @@ class HomeScreenViewModel @Inject constructor(
             "StorkyService:",
             "updateFromService _currentLengthBetweenContractions.value" + _currentLengthBetweenContractions.value.toString()
         )
-        if (!isRunning && !_pauseStopWatch.value && _currentLengthBetweenContractions.value != 0) {
+        if (!_isRunning.value && !_pauseStopWatch.value && _currentLengthBetweenContractions.value != 0) {
             Log.d("StorkyService:", "updateFromService_startSotopWatch")
 
-            isRunning = true
+            _isRunning.value = true
             timerJob = viewModelScope.launch {
-                while (isRunning) {
+                while (_isRunning.value) {
                     delay(1000) // wait for 1 second
                     _currentLengthBetweenContractions.value += 1
                 }
@@ -387,7 +389,7 @@ class HomeScreenViewModel @Inject constructor(
         Log.d("Actual contraction deleteSetOfHistory: ", "deleteSetOfHistory")
         viewModelScope.launch(Dispatchers.IO) {
             repository.deleteContractionsBySet(set = set).run {
-                delay(200)
+                delay(100)
                 _listOfContractions.value = emptyList<Contraction>()
                 getAllActiveContractions()
                 _dialogShownAutomatically.value = false

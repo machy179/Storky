@@ -170,7 +170,7 @@ fun MainScreen(
                             .fillMaxWidth()
                     ) {
 
-                        if (contractionsList.isNullOrEmpty() && !viewModel.isRunning) {
+                        if (contractionsList.isNullOrEmpty() && !viewModel.isRunning.value) {
                             Box(
                                 modifier = Modifier
                                     .fillMaxSize(),
@@ -186,7 +186,7 @@ fun MainScreen(
                             }
 
                         } else {
-                            if (viewModel.isRunning) { //because if is first open, countdowner still does not work - so nothing to display on top text area
+                            if (viewModel.isRunning.value) { //because if is first open, countdowner still does not work - so nothing to display on top text area
                                 Column(
                                     horizontalAlignment = Alignment.CenterHorizontally,
                                     modifier = Modifier.fillMaxWidth()

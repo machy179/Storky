@@ -85,7 +85,7 @@ fun StorkyAppBar(
                     modifier = Modifier
                 ) {
                     Text(
-                        text = stringResource(id = R.string.next_button),
+                        text = stringResource(id = R.string.skip_button),
                         color = MaterialTheme.colorScheme.primary,
                         style = MaterialTheme.typography.labelLarge
                     )

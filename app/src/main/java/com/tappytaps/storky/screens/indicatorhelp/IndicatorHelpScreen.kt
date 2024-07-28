@@ -55,7 +55,7 @@ fun IndicatorHelpScreen(
                 closeIconVisible = true,
                 deleteIconVisible = false,
                 onClose = {
-                    navController.navigate(StorkyScreens.HomeScreen.name)
+                    navController.popBackStack() //navigate to back creen
                 },
                 scrollBehavior = scrollBehavior
             )

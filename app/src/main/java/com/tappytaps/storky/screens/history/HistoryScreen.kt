@@ -64,6 +64,8 @@ fun HistoryScreen(
 
     var dialogClearAllDataVisible by remember { mutableStateOf(false) }
     val context = LocalContext.current
+    val deleteIconVisible =
+        remember { mutableStateOf(false) }
 
 
     Scaffold(
@@ -73,7 +75,7 @@ fun HistoryScreen(
             StorkyAppBar(
                 titleNameOfScreen = stringResource(R.string.history),
                 backgroundColor = MaterialTheme.colorScheme.background,
-                deleteIconVisible = true,
+                deleteIconVisible = deleteIconVisible.value,
                 onDelete = {
                     dialogClearAllDataVisible = true
                 },
@@ -87,9 +89,23 @@ fun HistoryScreen(
 
         },
     ) { paddingValues ->
+        val rowOfActualContraction =
+            remember { mutableStateOf(false) } //...if it is possible to show row of actual contraction
+
+        if (homeViewModel.pauseStopWatch.value == true || homeViewModel.isRunning.value == true) {
+            rowOfActualContraction.value = true
+        } else {
+            rowOfActualContraction.value = false
+        }
 
 
-        if (listOfContractionsHistory.isNullOrEmpty() && listOfActiveContractions.isNullOrEmpty() && (homeViewModel.currentLengthBetweenContractions.value == 0)) {
+        if (listOfContractionsHistory.isNullOrEmpty()
+            && listOfActiveContractions.isNullOrEmpty()
+            && rowOfActualContraction.value == false
+        ) { //nothing to show, so show "It seems so empty"
+
+            deleteIconVisible.value = false
+
             Box(modifier = Modifier.fillMaxSize().padding(paddingValues)) {
                 Column(
                     modifier = Modifier
@@ -113,38 +129,53 @@ fun HistoryScreen(
                 }
             }
         } else {
+
+            deleteIconVisible.value = true
             val listState = rememberLazyListState()
             LaunchedEffect(key1 = Unit) {
                 listState.animateScrollToItem(index = 0) //it is for roll lazycolumn to top
             }
 
-            val listOfSetsOfContractions: List<Int> =
-                listOfContractionsHistory //to create list of all sets
+            val listOfSetsOfContractions: List<Int> = //to create list of all sets
+                listOfContractionsHistory
                     .map { it.in_set }
                     .distinct()
 
 
-            val sizeListOfActiveContractions = listOfActiveContractions.size
+
             LazyColumn(
                 modifier = Modifier.padding(paddingValues),
                 verticalArrangement = Arrangement.Top // Start items from the top
             ) {
 
-                //actual contractions
-                if(sizeListOfActiveContractions ==0 && (homeViewModel.currentContractionLength.value > 0 || homeViewModel.currentLengthBetweenContractions.value > 0)) {
+                //actual contractions:
+                //...if no listOfActiveContractions, just one row of actual contraction
+                val sizeListOfActiveContractions = listOfActiveContractions.size
+                if (sizeListOfActiveContractions == 0
+                    && rowOfActualContraction.value
+                ) {
                     item {
-                        firstRowOfSetsOfActiveContractions(listOfActiveContractions, homeViewModel, context)
+                        FirstRowOfSetsOfActiveContractions(
+                            listOfActiveContractions,
+                            homeViewModel,
+                            context
+                        )
                     }
                 }
 
-
+                //actual contractions:
+                //...in listOfActiveContractions is more than one Contraction
                 itemsIndexed(listOfActiveContractions,
                     key = { index, activeContraction -> activeContraction.id }
                 ) { index, contraction ->
                     val reversedIndex = sizeListOfActiveContractions - index
                     if (index == 0
                     ) {
-                        firstRowOfSetsOfActiveContractions(listOfActiveContractions, homeViewModel, context)
+                        FirstRowOfSetsOfActiveContractions(
+                            listOfActiveContractions,
+                            homeViewModel,
+                            context
+                        )
                     }
 
 
@@ -154,7 +185,10 @@ fun HistoryScreen(
                         deleteContraction = { historyViewModel.deleteContraction(contraction) }
                     )
 
-                    if (index == 1 || (index == 0 && homeViewModel.currentLengthBetweenContractions.value > 0)) {
+                    if ((index == 1 && !rowOfActualContraction.value)
+                        ||
+                        (index == 0 && rowOfActualContraction.value)
+                    ) {
                         if (!adsDisabled) {
                             StorkyNativeAdView()
                         }
@@ -165,10 +199,13 @@ fun HistoryScreen(
 
                 //history contractions
                 itemsIndexed(listOfSetsOfContractions) { index, inSetOfContractions ->
+                    val filteredContractions =
+                        listOfContractionsHistory.filter { it.in_set == inSetOfContractions }
+
                     Spacer(modifier = Modifier.height(24.dp))
 
                     BarSetsContractions(
-                        listOfContractions = listOfContractionsHistory.filter { it.in_set == inSetOfContractions },
+                        listOfContractions = filteredContractions,
                         id = inSetOfContractions,
                         deleteSetOfContractions = {
                             historyViewModel.deleteSetOfHistory(inSetOfContractions)
@@ -176,22 +213,23 @@ fun HistoryScreen(
                         shareSetOfContractions = {
                             historyViewModel.shareSetsOfHistoryContractionsByEmail(
                                 context = context,
-                                contractionInSet = inSetOfContractions.toInt()
+                                contractionInSet = inSetOfContractions
                             )
                         }
                     )
 
-                    val filteredContractions =
-                        listOfContractionsHistory.filter { it.in_set == inSetOfContractions }
-                    for ((idx, contraction) in filteredContractions.withIndex().reversed()) {
+                    val totalContractions = filteredContractions.size
+                    for ((idx, contraction) in filteredContractions.withIndex()) {
+                        val descendingIndex = totalContractions - idx
                         ContractionRowByItems(
                             contraction = contraction,
-                            numberOfContraction = idx + 1,
+                            numberOfContraction = descendingIndex,
                             deleteContraction = { historyViewModel.deleteContraction(contraction) }
                         )
 
                     }
                 }
+
 
             }
             if (dialogClearAllDataVisible) {
@@ -203,6 +241,7 @@ fun HistoryScreen(
                     enableFirstRequest = true,
                     firstRequest = {
                         historyViewModel.deleteAllHistory()
+                        homeViewModel.deleteActualSet(0)
                         dialogClearAllDataVisible = false
                     },
                     onDismissRequest = { dialogClearAllDataVisible = false },
@@ -216,7 +255,8 @@ fun HistoryScreen(
 }
 
 @Composable
-private fun firstRowOfSetsOfActiveContractions(
+private fun FirstRowOfSetsOfActiveContractions(
+    //first row of each sets - date and submenu
     listOfActiveContractions: List<Contraction>,
     homeViewModel: HomeScreenViewModel,
     context: Context,
@@ -248,7 +288,6 @@ private fun firstRowOfSetsOfActiveContractions(
 }
 
 
-
 @Composable
 private fun BarSetsContractions(
     listOfContractions: List<Contraction>? = null,
@@ -263,7 +302,7 @@ private fun BarSetsContractions(
         var menuExpanded by remember { mutableStateOf(false) }
         var dialogClearThisSetVisible by remember { mutableStateOf(false) }
         Text(
-            text = if(listOfContractions.isNullOrEmpty()) {
+            text = if (listOfContractions.isNullOrEmpty()) {
                 stringResource(R.string.today)
             } else {
 

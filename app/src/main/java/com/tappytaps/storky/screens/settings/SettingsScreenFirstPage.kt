@@ -97,7 +97,7 @@ fun SettingsScreenFirstPage(
 
                     IconButton(
                         onClick = {
-                            navController.navigate(StorkyScreens.HowToScreen.name)
+                            navController.navigate(StorkyScreens.IndicatorHelpScreen.name)
                         },
                         //      modifier = Modifier.padding(end = 16.dp)
                     ) {

@@ -1,8 +1,6 @@
 package com.tappytaps.storky
 
 import android.Manifest
-import android.app.AlarmManager
-import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -24,22 +22,16 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.app.ActivityCompat
-import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.google.android.gms.ads.MobileAds
 import com.tappytaps.storky.navigation.StorkyNavigation
-import com.tappytaps.storky.navigation.StorkyScreens
-import com.tappytaps.storky.notification.StorkyNotificationReceiver
 import com.tappytaps.storky.screens.home.HomeScreenViewModel
 import com.tappytaps.storky.ui.theme.StorkyTheme
 import dagger.hilt.android.AndroidEntryPoint
-import java.util.Calendar
 
 @ExperimentalMaterial3Api
 @ExperimentalFoundationApi
@@ -50,7 +42,6 @@ class MainActivity : ComponentActivity() {
     private val homeViewModel: HomeScreenViewModel by viewModels()
     private lateinit var stopwatchUpdateReceiver: BroadcastReceiver
     private var isReceiverRegistered = false
-    private var isUserLeaving = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -131,7 +122,7 @@ class MainActivity : ComponentActivity() {
     override fun onStop() {
         Log.d("StorkyService:", "onStop_in_Maint_activity")
         super.onStop()
-        if (homeViewModel.isRunning && !homeViewModel.pauseStopWatch.value) {
+        if (homeViewModel.isRunning.value && !homeViewModel.pauseStopWatch.value) {
             homeViewModel.startService(this)
             if (isReceiverRegistered) {
                 unregisterReceiver(stopwatchUpdateReceiver)
