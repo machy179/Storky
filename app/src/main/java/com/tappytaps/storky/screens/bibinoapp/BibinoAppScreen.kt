@@ -67,7 +67,7 @@ fun BibinoAppScreen(
         ) {
             Column(
                 modifier = Modifier.fillMaxSize().padding(paddingValues = paddingValues)
-                    .padding(start = 16.dp)
+                    .padding(start = 16.dp, end = 16.dp)
             ) {
 
 

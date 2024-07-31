@@ -12,7 +12,6 @@ import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -31,8 +30,6 @@ import com.tappytaps.storky.R
 import com.tappytaps.storky.components.StorkyAppBar
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.RadioButtonDefaults
 import androidx.compose.ui.Alignment
@@ -54,7 +51,7 @@ fun SettingsScreenSecondPage(
             StorkyAppBar(
                 titleNameOfScreen = stringResource(R.string.length_of_interval),
                 backgroundColor = MaterialTheme.colorScheme.background,
-                closeIconVisible = true,
+                backArrowIconVisible = true,
                 deleteIconVisible = false,
                 onClose = {
                     coroutineScope.launch {

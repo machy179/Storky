@@ -164,12 +164,12 @@ fun NavGraphBuilder.animatedComposable(
         route = route,
         enterTransition = {
             slideIntoContainer(
-                AnimatedContentTransitionScope.SlideDirection.Up, tween(500)
+                AnimatedContentTransitionScope.SlideDirection.Up, tween(600)
             )
         },
         exitTransition = {
             slideOutOfContainer(
-                AnimatedContentTransitionScope.SlideDirection.Down, tween(500)
+                AnimatedContentTransitionScope.SlideDirection.Down, tween(600)
             )
         }
     ) {

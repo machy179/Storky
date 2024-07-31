@@ -19,7 +19,7 @@ import androidx.core.view.WindowCompat
 
 private val DarkColorScheme = darkColorScheme(
     primary = Color(0xFFFFBAD1),
-    primaryContainer = Color(0xF87BAD),
+    primaryContainer = Color(0xFFF87BAD),
     secondary = Color(0xFFB9FFEA),
     tertiary = Color(0xFFFFBF99),
     error = Color(0xFFFFB4AB),
@@ -31,12 +31,16 @@ private val DarkColorScheme = darkColorScheme(
     onTertiary = Color(0xFF522300),
     onSurface = Color(0xFFF1DEE2),
     onSurfaceVariant = Color(0xFFDAC0C7),
-    surfaceContainerHigh = Color(0xFF32272A)
+    surfaceContainerHigh = Color(0xFF32272A),
+    outline = Color(0xFFA28B91),
+    surfaceContainer = Color(0xFF271D20),
+    surfaceContainerLow = Color(0xFF23191C)
+
 )
 
 private val LightColorScheme = lightColorScheme(
     primary = Color(0xFFFF81B3),
-    primaryContainer = Color(0xFFECF0),
+    primaryContainer = Color(0xFFFFECF0),
     secondary = Color(0xFF17C1A1),
     tertiary = Color(0xFFD99F71),
     error = Color(0xFFFF897D),
@@ -48,7 +52,10 @@ private val LightColorScheme = lightColorScheme(
     onTertiary = Color(0xFFFFFFFF),
     onSurface = Color(0xFF23191C),
     onSurfaceVariant = Color(0xFF554248),
-    surfaceContainerHigh = Color(0xFFF6E4E8)
+    surfaceContainerHigh = Color(0xFFF6E4E8),
+    outline = Color(0xFF877178),
+    surfaceContainer = Color(0xFFFCE9ED),
+    surfaceContainerLow = Color(0xFFFFF0F3)
 )
 
 

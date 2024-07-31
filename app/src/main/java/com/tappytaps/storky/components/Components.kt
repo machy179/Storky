@@ -59,7 +59,6 @@ import androidx.navigation.NavController
 import com.tappytaps.storky.R
 import com.tappytaps.storky.model.Contraction
 import com.tappytaps.storky.navigation.StorkyScreens
-import com.tappytaps.storky.ui.theme.ProgressIndicatorBackgroundColor
 import com.tappytaps.storky.ui.theme.WhiteColor
 import com.tappytaps.storky.utils.convertCalendarToText
 import com.tappytaps.storky.utils.convertSecondsToTimeString
@@ -706,7 +705,7 @@ fun CustomProgressBar(
             modifier = Modifier
                 .clip(RoundedCornerShape(15.dp))
                 .height(7.9.dp)
-                .background(ProgressIndicatorBackgroundColor)
+                .background(MaterialTheme.colorScheme.outline.copy(alpha = 0.08f))
                 .fillMaxWidth()
         ) {
             Row(

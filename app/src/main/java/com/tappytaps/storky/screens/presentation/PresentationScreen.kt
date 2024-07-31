@@ -104,7 +104,7 @@ fun HorizontalPagerWithButtonsScreen(navController: NavController) {
                     //        .align(Alignment.CenterHorizontally)
                     .padding(16.dp),
                 activeColor = MaterialTheme.colorScheme.primary,
-                inactiveColor = MaterialTheme.colorScheme.onSurfaceVariant
+                inactiveColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.1f)
 
 
             )

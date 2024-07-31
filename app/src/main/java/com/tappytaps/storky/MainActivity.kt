@@ -47,11 +47,10 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         MobileAds.initialize(this) {}
-
         enableEdgeToEdge(
-            /*            statusBarStyle = SystemBarStyle.dark(
+                        statusBarStyle = SystemBarStyle.dark(
                             scrim =  android.graphics.Color.TRANSPARENT,
-                        ),*/
+                        ),
             navigationBarStyle = SystemBarStyle.light(
                 scrim = android.graphics.Color.TRANSPARENT,
                 darkScrim = android.graphics.Color.TRANSPARENT
@@ -209,7 +208,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun StorkyApp(intent: Intent?) {
 
-    Surface(color = MaterialTheme.colorScheme.background,
+    Surface(color = MaterialTheme.colorScheme.surface,
         modifier = Modifier.fillMaxSize(), content = {
             Column(
                 verticalArrangement = Arrangement.Center,

@@ -133,7 +133,7 @@ fun MainScreenAppBar(
                         .background(
                             color = MaterialTheme.colorScheme.surfaceContainerLow
                         )
-                        .padding(bottom = 16.dp)
+                       // .padding(bottom = 16.dp)
                         .width(230.dp) //pořešit šířku, nevím
 
 

@@ -3,6 +3,8 @@
 package com.tappytaps.storky.components
 
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -25,6 +27,7 @@ fun StorkyAppBar(
     deleteIconVisible: Boolean = true,
     onDelete: (() -> Unit)? = null,
     closeIconVisible: Boolean = false,
+    backArrowIconVisible: Boolean = false,
     onClose: (() -> Unit)? = null,
     nextIconVisible: Boolean = false,
     onNext: (() -> Unit)? = null,
@@ -51,6 +54,16 @@ fun StorkyAppBar(
                 ) {
                     Icon(
                         painter = painterResource(id = R.drawable.close),
+                        contentDescription = "Delete Icon",
+                        tint = MaterialTheme.colorScheme.onSurface
+                    )
+                }
+            } else if (backArrowIconVisible) {
+                IconButton(
+                    onClick = { onClose?.invoke() }
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.ArrowBack,
                         contentDescription = "Delete Icon",
                         tint = MaterialTheme.colorScheme.onSurface
                     )
