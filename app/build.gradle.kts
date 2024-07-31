@@ -106,6 +106,8 @@ dependencies {
     implementation("com.google.android.gms:play-services-ads:23.2.0")
     implementation("com.android.billingclient:billing:7.0.0")
 
+    implementation ("androidx.compose.animation:animation:1.6.8")
+    implementation ("androidx.navigation:navigation-compose:2.7.7")
 
     
 

@@ -80,6 +80,7 @@ class MainActivity : ComponentActivity() {
                         intent?.getBooleanExtra("showContractionlScreen", false) ?: false
                     val currentContractionLength =
                         intent?.getIntExtra("currentContractionLength", 0) ?: 0
+                    Log.d("StorkyService:", "onReceive")
                     homeViewModel.updateFromService(
                         currentLengthBetweenContractions,
                         pauseStopWatch,
@@ -96,7 +97,13 @@ class MainActivity : ComponentActivity() {
         super.onResume()
         homeViewModel.stopService(this)
         if (!isReceiverRegistered) {
-            registerReceiver(stopwatchUpdateReceiver, IntentFilter("STOPWATCH_UPDATE"))
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                registerReceiver(stopwatchUpdateReceiver, IntentFilter("STOPWATCH_UPDATE"), RECEIVER_NOT_EXPORTED)
+                Log.d("StorkyService:", "onResume_registerReceiver")
+            } else {
+                registerReceiver(stopwatchUpdateReceiver, IntentFilter("STOPWATCH_UPDATE"))
+                Log.d("StorkyService:", "onResume_registerReceiver2")
+            }
             isReceiverRegistered = true
         }
 
@@ -140,6 +147,23 @@ class MainActivity : ComponentActivity() {
             unregisterReceiver(stopwatchUpdateReceiver)
             isReceiverRegistered = false
         }
+
+/*        if (isFinishing || isChangingConfigurations) {
+            // Aktivita je ukončována uživatelem
+            Log.d("Storky ActivityLifecycle", "onDestroy - Finishing by user")
+            homeViewModel.stopService(this)
+            if (isReceiverRegistered) {
+                unregisterReceiver(stopwatchUpdateReceiver)
+                isReceiverRegistered = false
+            }
+
+        } else if (isChangingConfigurations) {
+            // Aktivita je ukončována kvůli změně konfigurace
+            Log.d("Storky ActivityLifecycle", "onDestroy - Changing Configuration")
+        } else {
+            // Aktivita je ukončována systémem (např. kvůli nedostatku paměti)
+            Log.d("Storky ActivityLifecycle", "onDestroy - System")
+        }*/
     }
 
 

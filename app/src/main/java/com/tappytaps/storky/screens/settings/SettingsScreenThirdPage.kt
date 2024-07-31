@@ -10,8 +10,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Done
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -33,6 +31,11 @@ import com.tappytaps.storky.R
 import com.tappytaps.storky.components.StorkyAppBar
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.RadioButton
+import androidx.compose.material3.RadioButtonDefaults
+import androidx.compose.ui.Alignment
 
 
 @ExperimentalMaterial3Api
@@ -56,156 +59,74 @@ fun SettingsScreenThirdPage(
                 deleteIconVisible = false,
                 onClose = {
                     coroutineScope.launch {
-                        pagerState.animateScrollToPage(0)
+                        pagerState.scrollToPage(0)
                     }
                 },
                 scrollBehavior = scrollBehavior
             )
         },
     ) { paddingValues ->
-        val verticalPaddingOfRows = 8.dp
+        val verticalPaddingOfRows = 0.dp
         val verticalPaddingOfDivider = 0.dp
-        Box(
-            modifier = Modifier.fillMaxSize()
-        ) {
+        val coroutineScope = rememberCoroutineScope()
+
+        val contractionLengths = listOf(
+            50 to R.string.seconds_50,
+            60 to R.string.minute_1,
+            70 to R.string.minute_110,
+            80 to R.string.minute_120
+        )
+
+
+        Box(modifier = Modifier.fillMaxSize()) {
             Column(
-                modifier = Modifier.fillMaxSize().padding(paddingValues = paddingValues)
-                    .padding(horizontal = 16.dp)
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues)
+                    .padding(horizontal = 16.dp),
+                verticalArrangement = Arrangement.spacedBy(verticalPaddingOfRows)
             ) {
-
-                HorizontalDivider(modifier = Modifier.padding(vertical = verticalPaddingOfDivider))
-                Row(
-                    modifier = Modifier.fillMaxWidth().padding(vertical = verticalPaddingOfRows)
-                        .clickable {
-                            viewModel.setLengthOfContraction(50)
-                            coroutineScope.launch {
-
-                                pagerState.animateScrollToPage(0)
-                            }
-                        },
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                ) {
-                    Text(
-                        text = stringResource(R.string.seconds_50),
-                        style = MaterialTheme.typography.bodyLarge,
-                        textAlign = TextAlign.Start,
-                    )
-                    if (lengthOfContraction == 50) {
-                        Icon(
-                            imageVector = Icons.Filled.Done,
-                            //     painter = painterResource(id = ),
-                            contentDescription = "Center Icon",
-                            modifier = Modifier,
-                            tint = MaterialTheme.colorScheme.primary,
-
-                            )
+                contractionLengths.forEach { contractionLength ->
+                    val (value, labelRes) = contractionLength
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = verticalPaddingOfRows)
+                            .clickable {
+                                viewModel.setLengthOfContraction(value)
+                                coroutineScope.launch {
+                                    pagerState.scrollToPage(0)
+                                }
+                            },
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = stringResource(labelRes),
+                            style = MaterialTheme.typography.bodyLarge,
+                            textAlign = TextAlign.Start
+                        )
+                        RadioButton(
+                            selected = lengthOfContraction == value,
+                            onClick = {
+                                viewModel.setLengthOfContraction(value)
+                                coroutineScope.launch {
+                                    pagerState.scrollToPage(0)
+                                }
+                            },
+                            colors = RadioButtonDefaults.colors(selectedColor = MaterialTheme.colorScheme.primary)
+                        )
                     }
-
+                    HorizontalDivider(modifier = Modifier.padding(vertical = verticalPaddingOfDivider))
                 }
-                HorizontalDivider(modifier = Modifier.padding(vertical = verticalPaddingOfDivider))
-                Row(
-                    modifier = Modifier.fillMaxWidth().padding(vertical = verticalPaddingOfRows)
-                        .clickable {
-                            //            chooseOfLengthTime = 270
-                            viewModel.setLengthOfContraction(60)
-                            coroutineScope.launch {
-
-                                pagerState.animateScrollToPage(0)
-
-                            }
-                        },
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                ) {
-                    Text(
-                        text = stringResource(R.string.minute_1),
-                        style = MaterialTheme.typography.bodyLarge,
-                        textAlign = TextAlign.Start,
-                    )
-                    if (lengthOfContraction == 60) {
-                        Icon(
-                            imageVector = Icons.Filled.Done,
-                            //     painter = painterResource(id = ),
-                            contentDescription = "Center Icon",
-                            modifier = Modifier,
-                            tint = MaterialTheme.colorScheme.primary,
-
-                            )
-                    }
-
-
-                }
-                HorizontalDivider(modifier = Modifier.padding(vertical = verticalPaddingOfDivider))
-                Row(
-                    modifier = Modifier.fillMaxWidth().padding(vertical = verticalPaddingOfRows)
-                        .clickable {
-                            //          chooseOfLengthTime = 300
-                            viewModel.setLengthOfContraction(70)
-                            coroutineScope.launch {
-
-                                pagerState.animateScrollToPage(0)
-
-                            }
-                        },
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                ) {
-                    Text(
-                        text = stringResource(R.string.minute_110),
-                        style = MaterialTheme.typography.bodyLarge,
-                        textAlign = TextAlign.Start,
-                    )
-                    if (lengthOfContraction == 70) {
-                        Icon(
-                            imageVector = Icons.Filled.Done,
-                            //     painter = painterResource(id = ),
-                            contentDescription = "Center Icon",
-                            modifier = Modifier,
-                            tint = MaterialTheme.colorScheme.primary,
-
-                            )
-                    }
-
-                }
-                HorizontalDivider(modifier = Modifier.padding(vertical = verticalPaddingOfDivider))
-                Row(
-                    modifier = Modifier.fillMaxWidth().padding(vertical = verticalPaddingOfRows)
-                        .clickable {
-                            //     chooseOfLengthTime = 330
-                            viewModel.setLengthOfContraction(80)
-                            coroutineScope.launch {
-
-                                pagerState.animateScrollToPage(0)
-                            }
-                        },
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                ) {
-                    Text(
-                        text = stringResource(R.string.minute_120),
-                        style = MaterialTheme.typography.bodyLarge,
-                        textAlign = TextAlign.Start,
-                    )
-                    if (lengthOfContraction == 80) {
-                        Icon(
-                            imageVector = Icons.Filled.Done,
-                            //     painter = painterResource(id = ),
-                            contentDescription = "Center Icon",
-                            modifier = Modifier,
-                            tint = MaterialTheme.colorScheme.primary,
-
-                            )
-                    }
-
-                }
-                HorizontalDivider(modifier = Modifier.padding(vertical = verticalPaddingOfDivider))
-
             }
-
-
         }
-
 
     }
 
+
 }
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview

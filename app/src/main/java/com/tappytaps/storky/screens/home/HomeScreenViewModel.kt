@@ -362,7 +362,7 @@ class HomeScreenViewModel @Inject constructor(
             )
         ) {
             val alarmManager = application.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-            val intent = Intent(application, StorkyNotificationReceiver::class.java)
+            val intent = Intent(application, StorkyNotificationReceiver::class.java,)
             val pendingIntent = PendingIntent.getBroadcast(
                 application,
                 0,

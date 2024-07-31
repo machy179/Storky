@@ -193,7 +193,7 @@ fun UniversalButton(
         }
 
         Spacer(
-            modifier = Modifier.padding(bottom = 12.dp)
+            modifier = Modifier.padding(bottom = 24.dp)
         )
     }
 }
@@ -543,7 +543,7 @@ fun StorkyPopUpDialog(
 
 
                 Box(
-                    modifier = Modifier.align(Alignment.End)
+                    modifier = Modifier.align(Alignment.CenterHorizontally)
                         .padding(start = 30.dp, top = 30.dp, end = 30.dp, bottom = 0.dp)
 
 

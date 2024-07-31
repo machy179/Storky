@@ -1,13 +1,14 @@
 package com.tappytaps.storky.screens.settings
 
-import androidx.compose.runtime.Composable
-import androidx.navigation.NavController
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavController
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -22,6 +23,8 @@ fun SettingsScreen(
     })
 
     val coroutineScope = rememberCoroutineScope()
+
+
 
     HorizontalPager(
         userScrollEnabled = false,

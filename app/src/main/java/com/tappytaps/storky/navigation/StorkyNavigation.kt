@@ -29,6 +29,10 @@ import com.tappytaps.storky.screens.settings.SettingsScreen
 import com.tappytaps.storky.screens.settings.SettingsScreenViewModel
 import com.tappytaps.storky.screens.splash.SplashScreenViewModel
 import com.tappytaps.storky.screens.trybibino.TryBibinoScreen
+import androidx.compose.animation.*
+import androidx.compose.animation.core.tween
+import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavHostController
 
 @ExperimentalMaterial3Api
 @ExperimentalFoundationApi
@@ -96,9 +100,10 @@ fun StorkyNavigation(intent: Intent?) {
             )
         }
 
-        composable(StorkyScreens.HistoryScreen.name) {
+        animatedComposable(StorkyScreens.HistoryScreen.name,
+            navController = navController) {
             HistoryScreen(
-                navController = navController,
+                navController = it,
                 historyViewModel = historyViewModel,
                 listOfContractionsHistory = contractionsListHistory,
                 homeViewModel = homeViewModel,
@@ -107,36 +112,67 @@ fun StorkyNavigation(intent: Intent?) {
             )
         }
 
-        composable(StorkyScreens.IndicatorHelpScreen.name) {
-            IndicatorHelpScreen(navController = navController)
+        animatedComposable(StorkyScreens.IndicatorHelpScreen.name,
+            navController = navController) {
+            IndicatorHelpScreen(navController = it)
         }
 
 
-        composable(StorkyScreens.HowToScreen.name) {
-            HowToScreen(navController = navController)
+        animatedComposable(StorkyScreens.HowToScreen.name,
+            navController = navController) {
+            HowToScreen(navController = it)
         }
 
-        composable(StorkyScreens.SettingsScreen.name) {
+        animatedComposable(StorkyScreens.SettingsScreen.name,
+            navController = navController) {
             SettingsScreen(
-                navController = navController,
+                navController = it,
                 viewModel = settingsViewModel,
                 lengthOfInterval = lengthOfInterval,
                 lengthOfContraction = lengthOfContraction
             )
         }
 
-        composable(StorkyScreens.BibinoAppScreen.name) {
-            BibinoAppScreen(navController = navController)
+
+        animatedComposable(
+            route = StorkyScreens.BibinoAppScreen.name,
+            navController = navController
+        ) {
+            BibinoAppScreen(navController = it)
         }
 
-
-        composable(StorkyScreens.RemoveAdsScreen.name) {
-            RemoveAdsScreen(navController = navController,
-                viewModel = removeAdsViewModel)
+        animatedComposable(
+            route = StorkyScreens.RemoveAdsScreen.name,
+            navController = navController
+        ) {
+            RemoveAdsScreen(navController = it, viewModel = removeAdsViewModel)
         }
 
 
 
     }
 
+}
+
+//because of animation effect
+fun NavGraphBuilder.animatedComposable(
+    route: String,
+    navController: NavHostController,
+    content: @Composable (NavHostController) -> Unit
+) {
+    composable(
+        route = route,
+        enterTransition = {
+            slideIntoContainer(
+                AnimatedContentTransitionScope.SlideDirection.Up, tween(500)
+            )
+        },
+        exitTransition = {
+            slideOutOfContainer(
+                AnimatedContentTransitionScope.SlideDirection.Down, tween(500)
+            )
+        }
+    ) {
+        content(navController)
+    }
 }

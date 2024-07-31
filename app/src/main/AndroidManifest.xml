@@ -11,6 +11,8 @@
     <uses-permission android:name="android.permission.USE_EXACT_ALARM"/>
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK"/>
+
     <application
         android:name=".StorkyApplication"
         android:allowBackup="true"
@@ -54,16 +56,23 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
+        <!-- !!!!!!!! It is necessary to comunicate with tappy taps team, which foregroudn service type it will be, still mediaPlaybac, maybe helth - we need to add another permission for health foreground service -->
         <service
             android:name=".StopwatchService"
             android:exported="false"
-            android:foregroundServiceType="health"
+            android:foregroundServiceType="mediaPlayback"
             android:label="Storky service"
             tools:ignore="ForegroundServicePermission" />
 
         <receiver
             android:name=".notification.StorkyNotificationReceiver"
-            android:enabled="true"/>
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.tappytaps.storky.NOTIFY_AFTER_5_DAYS" />
+            </intent-filter>
+        </receiver>
+
     </application>
 
 </manifest>

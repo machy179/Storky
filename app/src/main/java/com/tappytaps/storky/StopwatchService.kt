@@ -13,6 +13,7 @@ import android.content.res.Configuration
 import android.os.Build
 import android.os.IBinder
 import android.os.PowerManager
+import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -78,6 +79,7 @@ class StopwatchService : Service() {
     }
 
     override fun onDestroy() {
+        Log.d("StorkyService:", "onDestroy in service")
         sendUpdateToViewModel()
         super.onDestroy()
         stopStopwatch()
@@ -195,6 +197,7 @@ class StopwatchService : Service() {
     }
 
     private fun sendUpdateToViewModel() {
+        Log.d("StorkyService:", "sendUpdateToViewModel in service")
         val intent = Intent("STOPWATCH_UPDATE").apply {
             putExtra("currentLengthBetweenContractions", currentLengthBetweenContractions)
             putExtra("pauseStopWatch", pauseStopWatch)
@@ -202,6 +205,9 @@ class StopwatchService : Service() {
             putExtra("currentContractionLength", currentContractionLength)
 
         }
+        intent.setPackage(this.packageName) //because of Android 14 and more and RECEIVER_NOT_EXPORTED: https://issuetracker.google.com/issues/293487554
+        Log.d("StorkyService:", "sendUpdateToViewModel in service 1")
         sendBroadcast(intent)
+        Log.d("StorkyService:", "sendUpdateToViewModel in service 2")
     }
 }

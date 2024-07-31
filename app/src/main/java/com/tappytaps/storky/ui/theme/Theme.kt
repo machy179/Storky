@@ -1,6 +1,7 @@
 package com.tappytaps.storky.ui.theme
 
 import android.app.Activity
+import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
@@ -9,6 +10,8 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.luminance
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.unit.dp
@@ -80,6 +83,25 @@ fun ChangeStatusBarTextColor(darkTheme: Boolean) { //function to change status b
         }
     }
 }
+@Composable
+fun ChangeNavigationBarColor(color: Color) {
+    val view = LocalView.current
+    val activity = LocalContext.current as Activity
+    val window = activity.window
+    window.navigationBarColor = color.toArgb()
+    if (!view.isInEditMode) {
+        SideEffect {
+
+            window.navigationBarColor = color.toArgb()
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                val insetsController = WindowCompat.getInsetsController(window, view)
+                insetsController?.isAppearanceLightNavigationBars = color.luminance() > 0.5
+            }
+        }
+    }
+}
+
 
 
 
