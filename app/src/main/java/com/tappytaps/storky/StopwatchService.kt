@@ -6,7 +6,6 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.app.Service
-import android.app.UiModeManager
 import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
@@ -52,17 +51,20 @@ class StopwatchService : Service() {
 
     private var notification: Notification? = null
     private var builder: NotificationCompat.Builder? = null
+    private var notificationManager: NotificationManager? = null
+
+    private val NOTIFICATION_ID = 1
 
     override fun onCreate() {
         super.onCreate()
         try {
             startForegroundService()
         } catch (e: Exception) {
-            Log.e("StopwatchService", "Error starting foreground service", e)
         }
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+
         currentLengthBetweenContractions =
             intent?.getIntExtra("currentLengthBetweenContractions", 0) ?: 0
         pauseStopWatch = intent?.getBooleanExtra("pauseStopWatch", false) ?: false
@@ -81,20 +83,16 @@ class StopwatchService : Service() {
                 }
             }
         //it's here so that this service doesn't kill itself after about 1 minute after turning the phone on - but I still had to add the above, because it didn't kill itself, but gradually went into Doze Mode
-
         return START_STICKY
     }
 
     override fun onDestroy() {
-        Log.d("StorkyService:", "onDestroy in service")
-        sendUpdateToViewModel()
         super.onDestroy()
-        stopStopwatch()
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            stopForeground(Service.STOP_FOREGROUND_REMOVE)
-        }
+        sendUpdateToViewModel()
 
-        // we need this release because of Doze Mode
+        stopStopwatch()
+
+        // We need this release because of Doze Mode
         try {
             wakeLock?.let {
                 if (it.isHeld) {
@@ -103,7 +101,10 @@ class StopwatchService : Service() {
             }
         } catch (e: Exception) {
         }
+        notificationManager?.cancel(NOTIFICATION_ID)
+
     }
+
 
     override fun onBind(intent: Intent?): IBinder? {
         return null
@@ -119,13 +120,12 @@ class StopwatchService : Service() {
             ).apply {
                 setShowBadge(false) // Ensure the notification does not show a badge on the app icon
             }
-            val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            manager.createNotificationChannel(channel)
+            notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager?.createNotificationChannel(channel)
         }
 
         notification = buildNotification()
-
-        startForeground(1, notification)
+        startForeground(NOTIFICATION_ID, notification)
 
     }
 
@@ -179,7 +179,6 @@ class StopwatchService : Service() {
             builder!!.setColorized(true)
                 .setColor(notificationColor)
         }
-
         return builder!!.build()
     }
 
@@ -196,10 +195,17 @@ class StopwatchService : Service() {
 
 
     private fun updateNotification() {
-        val notificationManager =
-            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+/*        notification =
+            builder?.setContentText(
+                    (if (showContractionlScreen) getString(R.string.contraction) else getString(
+                        R.string.length_of_interval
+                    )) + ": " + convertSecondsToTimeString(currentLengthBetweenContractions)
+                    )?.build()*/
+
         notification = buildNotification()
-        notificationManager.notify(1, notification)
+        notificationManager?.notify(1, notification)
+        Log.d("StorkyService:", "pdateNotification() 2")
     }
 
     private fun stopStopwatch() {
@@ -208,7 +214,6 @@ class StopwatchService : Service() {
     }
 
     private fun sendUpdateToViewModel() {
-        Log.d("StorkyService:", "sendUpdateToViewModel in service")
         val intent = Intent("STOPWATCH_UPDATE").apply {
             putExtra("currentLengthBetweenContractions", currentLengthBetweenContractions)
             putExtra("pauseStopWatch", pauseStopWatch)
@@ -217,8 +222,6 @@ class StopwatchService : Service() {
 
         }
         intent.setPackage(this.packageName) //because of Android 14 and more and RECEIVER_NOT_EXPORTED: https://issuetracker.google.com/issues/293487554
-        Log.d("StorkyService:", "sendUpdateToViewModel in service 1")
         sendBroadcast(intent)
-        Log.d("StorkyService:", "sendUpdateToViewModel in service 2")
     }
 }

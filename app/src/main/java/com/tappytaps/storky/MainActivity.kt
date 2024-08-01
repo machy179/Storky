@@ -10,12 +10,12 @@ import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -73,7 +73,9 @@ class MainActivity : ComponentActivity() {
 
 
         }
-        askPermissionPostNotification()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            askPermissionPostNotification()
+        }
 
 
 
@@ -102,9 +104,9 @@ class MainActivity : ComponentActivity() {
     override fun onResume() {
         Log.d("StorkyService:", "onResume_in_Maint_activity")
         super.onResume()
-        homeViewModel.stopService(this)
+      //  homeViewModel.stopService(this)
         if (!isReceiverRegistered) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 registerReceiver(
                     stopwatchUpdateReceiver,
                     IntentFilter("STOPWATCH_UPDATE"),
@@ -117,6 +119,8 @@ class MainActivity : ComponentActivity() {
             }
             isReceiverRegistered = true
         }
+
+        homeViewModel.stopService(this)
 
     }
 
@@ -185,6 +189,7 @@ class MainActivity : ComponentActivity() {
     }
 
 
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU) //it is important to check this on Android 12 nad below
     private fun askPermissionPostNotification() {
         val permissionCheck = ActivityCompat.checkSelfPermission(
             this@MainActivity,
