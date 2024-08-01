@@ -22,6 +22,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -70,13 +71,15 @@ fun MainScreen(
     val currentLengthBetweenContractions = viewModel.currentLengthBetweenContractions.value
 
     val pauseStopWatch = viewModel.pauseStopWatch.value
-    var dialogNewMonitoringVisible by remember { mutableStateOf(false) }
+    var dialogNewMonitoringVisible by rememberSaveable { mutableStateOf(false) }
 
     val averageContractionLength = viewModel.averageContractionLength.value
     val averageLengthBetweenContractions = viewModel.averageLengthBetweenContractions.value
 
     val dialogShownAutomatically = viewModel.dialogShownAutomatically
-    var showDialogAutomatically by remember { mutableStateOf(false) }
+    var showDialogAutomatically by rememberSaveable { mutableStateOf(false) }
+
+
 
     //check if is it possible to show StorkyPopUpDialog automatically:
     LaunchedEffect(

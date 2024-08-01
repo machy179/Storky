@@ -14,12 +14,17 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.rememberLottieComposition
 import com.tappytaps.storky.R
 import com.tappytaps.storky.components.StorkyAppBar
 import com.tappytaps.storky.components.UniversalButton
 import com.tappytaps.storky.utils.convertSecondsToTimeString
+import androidx.compose.runtime.getValue
+import com.airbnb.lottie.compose.LottieAnimation
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -28,6 +33,9 @@ fun ContractionScreen(
 ) {
     val currentLengthBetweenContractions = viewModel.currentLengthBetweenContractions.value
 
+    val composition by rememberLottieComposition(
+        spec = LottieCompositionSpec.RawRes(R.raw.storky_circle)
+    )
 
     Scaffold(
         topBar = {
@@ -54,6 +62,7 @@ fun ContractionScreen(
                     .fillMaxSize(),
                 contentAlignment = Alignment.Center
             ) {
+
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.SpaceBetween,
@@ -66,11 +75,21 @@ fun ContractionScreen(
                             .weight(1f)
                             .fillMaxWidth()
                     ) {
-                        Text(
-                            text = convertSecondsToTimeString(currentLengthBetweenContractions),
-                            style = MaterialTheme.typography.displayLarge,
-                            color = MaterialTheme.colorScheme.onPrimary
-                        )
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            LottieAnimation(
+                                composition = composition,
+                            )
+                            Text(
+                                text = convertSecondsToTimeString(currentLengthBetweenContractions),
+                                style = MaterialTheme.typography.displayLarge,
+                                color = MaterialTheme.colorScheme.onPrimary
+                            )
+                        }
+
                     }
 
                     Box(
@@ -99,4 +118,9 @@ fun ContractionScreen(
 
         }
     }
+}
+@Preview
+@Composable
+fun ContractionScreenPreview() {
+    ContractionScreen(viewModel = hiltViewModel<HomeScreenViewModel>())
 }

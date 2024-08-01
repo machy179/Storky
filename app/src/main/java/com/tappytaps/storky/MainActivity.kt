@@ -6,9 +6,11 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
+import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
@@ -46,11 +48,17 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+
+        if (!isTablet(this)) { //to determine if the device is a tablet
+            requestedOrientation = android.content.pm.ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        } else {
+            requestedOrientation = android.content.pm.ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+        }
         MobileAds.initialize(this) {}
         enableEdgeToEdge(
-                        statusBarStyle = SystemBarStyle.dark(
-                            scrim =  android.graphics.Color.TRANSPARENT,
-                        ),
+            statusBarStyle = SystemBarStyle.dark(
+                scrim = android.graphics.Color.TRANSPARENT,
+            ),
             navigationBarStyle = SystemBarStyle.light(
                 scrim = android.graphics.Color.TRANSPARENT,
                 darkScrim = android.graphics.Color.TRANSPARENT
@@ -97,7 +105,11 @@ class MainActivity : ComponentActivity() {
         homeViewModel.stopService(this)
         if (!isReceiverRegistered) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                registerReceiver(stopwatchUpdateReceiver, IntentFilter("STOPWATCH_UPDATE"), RECEIVER_NOT_EXPORTED)
+                registerReceiver(
+                    stopwatchUpdateReceiver,
+                    IntentFilter("STOPWATCH_UPDATE"),
+                    RECEIVER_NOT_EXPORTED
+                )
                 Log.d("StorkyService:", "onResume_registerReceiver")
             } else {
                 registerReceiver(stopwatchUpdateReceiver, IntentFilter("STOPWATCH_UPDATE"))
@@ -114,20 +126,27 @@ class MainActivity : ComponentActivity() {
 
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        Log.d("StorkyService:", "onSaveInstanceState")
-        super.onSaveInstanceState(outState)
-        // Aktivita je ukládána, což může indikovat, že bude zničena systémem
-        Log.d("StorkyService:", "onSaveInstanceState")
+    override fun onUserLeaveHint() {
+        super.onUserLeaveHint()
+        Log.d("StorkyService:", "--------------------onUserLeaveHint------------------")
     }
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        Log.d("StorkyService:", "onConfigurationChanged")
+
+    }
+
 
     override fun onPause() {
         Log.d("StorkyService:", "onPause_in_Maint_activity")
         super.onPause()
     }
+
     override fun onStop() {
         Log.d("StorkyService:", "onStop_in_Maint_activity")
         super.onStop()
+        //here uncomment:
         if (homeViewModel.isRunning.value && !homeViewModel.pauseStopWatch.value) {
             homeViewModel.startService(this)
             if (isReceiverRegistered) {
@@ -147,25 +166,23 @@ class MainActivity : ComponentActivity() {
             isReceiverRegistered = false
         }
 
-/*        if (isFinishing || isChangingConfigurations) {
-            // Aktivita je ukončována uživatelem
-            Log.d("Storky ActivityLifecycle", "onDestroy - Finishing by user")
-            homeViewModel.stopService(this)
-            if (isReceiverRegistered) {
-                unregisterReceiver(stopwatchUpdateReceiver)
-                isReceiverRegistered = false
-            }
+        /*        if (isFinishing || isChangingConfigurations) {
+                    // Aktivita je ukončována uživatelem
+                    Log.d("Storky ActivityLifecycle", "onDestroy - Finishing by user")
+                    homeViewModel.stopService(this)
+                    if (isReceiverRegistered) {
+                        unregisterReceiver(stopwatchUpdateReceiver)
+                        isReceiverRegistered = false
+                    }
 
-        } else if (isChangingConfigurations) {
-            // Aktivita je ukončována kvůli změně konfigurace
-            Log.d("Storky ActivityLifecycle", "onDestroy - Changing Configuration")
-        } else {
-            // Aktivita je ukončována systémem (např. kvůli nedostatku paměti)
-            Log.d("Storky ActivityLifecycle", "onDestroy - System")
-        }*/
+                } else if (isChangingConfigurations) {
+                    // Aktivita je ukončována kvůli změně konfigurace
+                    Log.d("Storky ActivityLifecycle", "onDestroy - Changing Configuration")
+                } else {
+                    // Aktivita je ukončována systémem (např. kvůli nedostatku paměti)
+                    Log.d("Storky ActivityLifecycle", "onDestroy - System")
+                }*/
     }
-
-
 
 
     private fun askPermissionPostNotification() {
@@ -219,6 +236,10 @@ fun StorkyApp(intent: Intent?) {
             }
         })
 
+}
+
+fun isTablet(context: Context): Boolean { //to determine if the device is a tablet
+    return (context.resources.configuration.screenLayout and Configuration.SCREENLAYOUT_SIZE_MASK) >= Configuration.SCREENLAYOUT_SIZE_LARGE
 }
 
 

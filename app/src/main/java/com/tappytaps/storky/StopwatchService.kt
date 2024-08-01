@@ -50,9 +50,16 @@ class StopwatchService : Service() {
 
     private var showContractionlScreen = false
 
+    private var notification: Notification? = null
+    private var builder: NotificationCompat.Builder? = null
+
     override fun onCreate() {
         super.onCreate()
-        startForegroundService()
+        try {
+            startForegroundService()
+        } catch (e: Exception) {
+            Log.e("StopwatchService", "Error starting foreground service", e)
+        }
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -83,6 +90,9 @@ class StopwatchService : Service() {
         sendUpdateToViewModel()
         super.onDestroy()
         stopStopwatch()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            stopForeground(Service.STOP_FOREGROUND_REMOVE)
+        }
 
         // we need this release because of Doze Mode
         try {
@@ -113,7 +123,8 @@ class StopwatchService : Service() {
             manager.createNotificationChannel(channel)
         }
 
-        val notification = buildNotification()
+        notification = buildNotification()
+
         startForeground(1, notification)
 
     }
@@ -133,7 +144,7 @@ class StopwatchService : Service() {
             PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
         )
 
-        val builder = NotificationCompat.Builder(this, notificationChannelId)
+        builder = NotificationCompat.Builder(this, notificationChannelId)
             .setContentTitle(resources.getString(R.string.foreground_service_title))
             .setContentText(
                 (if (showContractionlScreen) getString(R.string.contraction) else getString(
@@ -165,11 +176,11 @@ class StopwatchService : Service() {
                     R.color.service_primary
                 ) // Default to light theme color
             }
-            builder.setColorized(true)
+            builder!!.setColorized(true)
                 .setColor(notificationColor)
         }
 
-        return builder.build()
+        return builder!!.build()
     }
 
 
@@ -187,7 +198,7 @@ class StopwatchService : Service() {
     private fun updateNotification() {
         val notificationManager =
             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        val notification = buildNotification()
+        notification = buildNotification()
         notificationManager.notify(1, notification)
     }
 
