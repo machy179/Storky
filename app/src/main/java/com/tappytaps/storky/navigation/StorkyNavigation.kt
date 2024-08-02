@@ -62,7 +62,7 @@ fun StorkyNavigation(intent: Intent?) {
     val currentScreen = rememberSaveable { mutableStateOf(StorkyScreens.SplashScreen.name) }
 
 
-    LaunchedEffect(intent) { // because of clickink on notification after 5 days, the app is running and skip to TryBibinoScreen
+    LaunchedEffect(intent) { // because of click on notification after 5 days, the app is running and skip to TryBibinoScreen
         intent?.getStringExtra("screen")?.let { screen ->
             if (screen == "TryBibinoScreen") {
                 navController.navigate(StorkyScreens.TryBibinoScreen.name)

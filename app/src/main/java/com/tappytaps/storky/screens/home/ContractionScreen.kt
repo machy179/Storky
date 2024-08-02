@@ -25,6 +25,9 @@ import com.tappytaps.storky.components.UniversalButton
 import com.tappytaps.storky.utils.convertSecondsToTimeString
 import androidx.compose.runtime.getValue
 import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieConstants
+
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -82,6 +85,7 @@ fun ContractionScreen(
                         ) {
                             LottieAnimation(
                                 composition = composition,
+                                iterations = LottieConstants.IterateForever
                             )
                             Text(
                                 text = convertSecondsToTimeString(currentLengthBetweenContractions),

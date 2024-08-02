@@ -58,7 +58,7 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-        <!-- !!!!!!!! It is necessary to comunicate with tappy taps team, which foregroudn service type it will be, still mediaPlaybac, maybe helth - we need to add another permission for health foreground service -->
+        <!-- !!!!!!!! It is necessary to comunicate with tappy taps team, which foreground service type it will be, still mediaPlayback, maybe health - we need to add another permission for health foreground service -->
         <service
             android:name=".StopwatchService"
             android:exported="false"

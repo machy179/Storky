@@ -1,7 +1,9 @@
 package com.tappytaps.storky.screens.settings
 
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
@@ -58,3 +60,4 @@ fun SettingsScreen(
         }
     }
 }
+
