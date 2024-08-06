@@ -3,6 +3,7 @@ package com.tappytaps.storky.screens.home
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -15,8 +16,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.tappytaps.storky.R
@@ -24,6 +23,8 @@ import com.tappytaps.storky.components.StorkyAppBar
 import com.tappytaps.storky.components.UniversalButton
 import com.tappytaps.storky.utils.convertSecondsToTimeString
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieConstants
 
@@ -33,6 +34,8 @@ import com.airbnb.lottie.compose.LottieConstants
 @Composable
 fun ContractionScreen(
     viewModel: HomeScreenViewModel,
+    onPaddingValuesChanged: (PaddingValues) -> Unit,
+    bottomPadding: Int
 ) {
     val currentLengthBetweenContractions = viewModel.currentLengthBetweenContractions.value
 
@@ -54,9 +57,11 @@ fun ContractionScreen(
         },
         containerColor = MaterialTheme.colorScheme.primary
     ) { paddingValues ->
+        onPaddingValuesChanged(paddingValues) // Pass paddingValues back to HomeScreen
         Surface(
             modifier = Modifier
                 .padding(paddingValues)
+                .padding(bottom = bottomPadding.dp)
                 .fillMaxSize(),
             color = MaterialTheme.colorScheme.primary
         ) {
@@ -113,7 +118,6 @@ fun ContractionScreen(
                                 inverseColor = true,
                                 disableInsetNavigationBarPadding = true
                             )
-                            AdaptiveBannerAd()
                         }
 
                     }
@@ -122,9 +126,4 @@ fun ContractionScreen(
 
         }
     }
-}
-@Preview
-@Composable
-fun ContractionScreenPreview() {
-    ContractionScreen(viewModel = hiltViewModel<HomeScreenViewModel>())
 }

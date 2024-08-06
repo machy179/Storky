@@ -100,7 +100,8 @@ fun StorkyNavigation(intent: Intent?) {
                 viewModel = homeViewModel,
                 contractionsList = contractionsList,
                 lengthOfInterval = lengthOfInterval,
-                lengthOfContraction = lengthOfContraction
+                lengthOfContraction = lengthOfContraction,
+                adsDisabled = adsDisabled
             )
         }
 

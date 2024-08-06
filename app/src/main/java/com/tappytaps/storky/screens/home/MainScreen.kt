@@ -1,15 +1,13 @@
 package com.tappytaps.storky.screens.home
 
-import android.app.Activity
-import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -21,7 +19,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -31,17 +28,11 @@ import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavController
-import androidx.window.layout.WindowMetricsCalculator
-import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.AdSize
-import com.google.android.gms.ads.AdView
-import com.tappytaps.storky.BuildConfig
 import com.tappytaps.storky.R
 import com.tappytaps.storky.components.ContractionRow
 import com.tappytaps.storky.components.ContractionRowByItems
@@ -51,8 +42,6 @@ import com.tappytaps.storky.components.MainScreenAppBar
 import com.tappytaps.storky.components.UniversalButton
 import com.tappytaps.storky.model.Contraction
 import com.tappytaps.storky.navigation.StorkyScreens
-import com.tappytaps.storky.utils.Constants.AD_UNIT_ID_BANNER_TAPPYTAPS
-import com.tappytaps.storky.utils.Constants.AD_UNIT_ID_BANNER_TEST
 import com.tappytaps.storky.utils.convertSecondsToTimeString
 import com.tappytaps.storky.utils.convertSecondsToTimeString2
 
@@ -64,6 +53,8 @@ fun MainScreen(
     viewModel: HomeScreenViewModel,
     lengthOfInterval: Int,
     lengthOfContraction: Int,
+    onPaddingValuesChanged: (PaddingValues) -> Unit,
+    bottomPadding: Int
 ) {
 
     val currentContractionLength = viewModel.currentContractionLength.value
@@ -133,9 +124,11 @@ fun MainScreen(
             )
         }
     ) { paddingValues ->
+        onPaddingValuesChanged(paddingValues) // Pass paddingValues back to HomeScreen
         Surface(
             modifier = Modifier
                 .padding(paddingValues)
+                .padding(bottom = bottomPadding.dp)
                 .fillMaxSize(),
             color = MaterialTheme.colorScheme.background
         ) {
@@ -291,7 +284,6 @@ fun MainScreen(
                             disableInsetNavigationBarPadding = true
                         )
 
-                        AdaptiveBannerAd()
                     }
 
 
@@ -323,42 +315,3 @@ fun MainScreen(
     }
 }
 
-@Composable
-fun AdaptiveBannerAd() {
-    val context = LocalContext.current
-    val adView = remember { AdView(context) }
-
-    val adSize = remember {
-        calculateAdSize(context)
-    }
-
-    // Determine the ad unit ID based on whether the build is debug or release
-    val adUnitIdBanner = if (BuildConfig.DEBUG) AD_UNIT_ID_BANNER_TEST else AD_UNIT_ID_BANNER_TAPPYTAPS
-
-    adView.apply {
-        adUnitId = adUnitIdBanner
-        setAdSize(adSize)
-    }
-
-    val adRequest = remember { AdRequest.Builder().build() }
-    AndroidView(
-        factory = {
-            adView.apply {
-                loadAd(adRequest)
-            }
-        },
-        modifier = Modifier
-            .fillMaxWidth()
-            .wrapContentHeight()
-    )
-}
-
-fun calculateAdSize(context: Context): AdSize {
-    val metrics = WindowMetricsCalculator.getOrCreate()
-        .computeCurrentWindowMetrics(context as Activity)
-
-    val density = context.resources.displayMetrics.density
-    val adWidthPixels = metrics.bounds.width().toFloat()
-    val adWidth = (adWidthPixels / density).toInt()
-    return AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(context, adWidth)
-}

@@ -195,7 +195,7 @@ fun UniversalButton(
 
         if(bottomSpacer) {
             Spacer(
-                modifier = Modifier.padding(bottom = 24.dp)
+                modifier = Modifier.padding(bottom = 16.dp)
             )
         }
 
@@ -213,7 +213,7 @@ fun EmailInput(
 ) {
     Column(
         modifier = Modifier.background(color = MaterialTheme.colorScheme.background)
-            .padding(bottom = 24.dp)
+            .padding(bottom = 20.dp)
        //     .windowInsetsPadding(WindowInsets.navigationBars)
             .fillMaxWidth(), // Ensure Column takes full width
         horizontalAlignment = Alignment.CenterHorizontally // Center content horizontally

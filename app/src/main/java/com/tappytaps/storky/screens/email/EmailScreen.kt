@@ -60,6 +60,7 @@ fun EmailScreen(
 }
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AskEmailScreen(
     navController: NavController,
@@ -86,7 +87,7 @@ fun AskEmailScreen(
             )
 
         },
-    ) {paddingValues ->
+    ) { paddingValues ->
 
         Box(
             modifier = Modifier
@@ -100,9 +101,8 @@ fun AskEmailScreen(
 
             Column(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .align(Alignment.TopCenter),
-                 //   .verticalScroll(rememberScrollState()), // Enable vertical scrolling
+                    .fillMaxSize(),
+                //   .verticalScroll(rememberScrollState()), // Enable vertical scrolling
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
@@ -110,6 +110,7 @@ fun AskEmailScreen(
                     imageResId = imageResId,
                     titleResId = titleResId,
                     textResId = textResId,
+                    bottomSpace = true,
                     modifier = Modifier.fillMaxWidth() // Ensure it fills the width
                 )
             }
@@ -128,7 +129,7 @@ fun AskEmailScreen(
                 Row(
                     modifier = Modifier
                         .fillMaxWidth(),
-                       // .padding(16.dp),
+                    // .padding(16.dp),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     val email = rememberSaveable { mutableStateOf("") }
@@ -170,7 +171,7 @@ fun AskEmailScreen(
                 onDismissRequest = { showDialogSkipStep.value = false })
         }
 
-}
+    }
 }
 
 @Composable
