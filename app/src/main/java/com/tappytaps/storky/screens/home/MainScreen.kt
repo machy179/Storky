@@ -174,18 +174,25 @@ fun MainScreen(
                     ) {
 
                         if (contractionsList.isNullOrEmpty() && !viewModel.isRunning.value) {
-                            Box(
+                            Column(
                                 modifier = Modifier
-                                    .fillMaxSize(),
-                                contentAlignment = Alignment.Center
+                                    .fillMaxSize(), // Optional padding
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                verticalArrangement = Arrangement.Center // Center the content vertically
                             ) {
+                                // Fills the remaining space above the Box
                                 ImageTitleContentText(
                                     imageResId = R.drawable.girl_ball,
                                     titleResId = R.string.practical_knowledge_title,
                                     textResId = R.string.practical_knowledge_text,
                                     learnMore = true,
-                                    navController = navController
+                                    bottomSpace = true,
+                                    navController = navController,
+                                    modifier = Modifier.fillMaxWidth() // Ensure it fills the width
                                 )
+                          //      Spacer(modifier = Modifier.height(32.dp))
+
+
                             }
 
                         } else {

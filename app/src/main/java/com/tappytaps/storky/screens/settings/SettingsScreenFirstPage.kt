@@ -19,7 +19,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.PagerState
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -62,6 +64,8 @@ fun SettingsScreenFirstPage(
 ) {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
     val context = LocalContext.current
+    val scrollState = rememberScrollState()
+
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
@@ -73,7 +77,7 @@ fun SettingsScreenFirstPage(
                 onClose = {
                     navController.navigate(StorkyScreens.HomeScreen.name)
                 },
-                scrollBehavior = scrollBehavior
+                scrollBehavior = null
             )
         },
     ) { paddingValues ->
@@ -81,12 +85,16 @@ fun SettingsScreenFirstPage(
         Box(
             modifier = Modifier.fillMaxSize()
         ) {
+            // Scrollable content
             Column(
-                modifier = Modifier.fillMaxSize().padding(paddingValues = paddingValues)
-                    .padding(start = 16.dp)
+                modifier = Modifier
+                    .fillMaxSize()
+                    .verticalScroll(scrollState) // Add vertical scroll
+                    .padding(top = paddingValues.calculateTopPadding())
+
             ) {
                 Row(
-                    modifier = Modifier.fillMaxWidth(), // Ensure the Row takes up the full width
+                    modifier = Modifier.fillMaxWidth().padding(start = 16.dp),
                     horizontalArrangement = Arrangement.SpaceBetween, // Space out items to opposite ends
                 ) {
                     Text(
@@ -100,7 +108,6 @@ fun SettingsScreenFirstPage(
                         onClick = {
                             navController.navigate(StorkyScreens.IndicatorHelpScreen.name)
                         },
-                        //      modifier = Modifier.padding(end = 16.dp)
                     ) {
                         Icon(
                             painter = painterResource(id = R.drawable.info),
@@ -114,7 +121,7 @@ fun SettingsScreenFirstPage(
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(vertical = 8.dp)
+                        .padding(vertical = 8.dp).padding(start = 16.dp)
                         .clickable {
                             coroutineScope.launch { pagerState.animateScrollToPage(1) }
                         },
@@ -137,11 +144,11 @@ fun SettingsScreenFirstPage(
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(vertical = 8.dp)
+                        .padding(vertical = 8.dp).padding(start = 16.dp)
                         .clickable {
                             coroutineScope.launch { pagerState.animateScrollToPage(2) }
                         },
-                    verticalArrangement = Arrangement.SpaceBetween // Space out items to opposite ends
+                    verticalArrangement = Arrangement.SpaceBetween
                 ) {
                     Text(
                         text = stringResource(R.string.contraction),
@@ -157,14 +164,13 @@ fun SettingsScreenFirstPage(
                     )
                 }
 
-                Column(
-                    verticalArrangement = Arrangement.SpaceBetween // Space out items to opposite ends
+                Column(modifier = Modifier.padding(start = 8.dp),
+                    verticalArrangement = Arrangement.SpaceBetween
                 ) {
                     TextButton(
                         onClick = {
                             viewModel.setLengthOfInterval(300)
                             viewModel.setLengthOfContraction(60)
-                            //      coroutineScope.launch { pagerState.animateScrollToPage(2) }
                         }
                     ) {
                         Text(
@@ -176,21 +182,41 @@ fun SettingsScreenFirstPage(
                 }
 
                 Spacer(modifier = Modifier.weight(1f)) // Push the Box to the bottom
+
+                // Image Box aligned at the bottom center
+                Box(
+                    modifier = Modifier.fillMaxSize()
+                    //    .align(Alignment.BottomCenter)
+                ) {
+                    // Image centered in the Box
+                    Image(
+                        painter = painterResource(id = R.drawable.bibinomockup),
+                        contentDescription = "Bibino",
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+
+                    Box(
+                        modifier = Modifier
+                            .align(Alignment.TopStart)
+                            .padding(start = 16.dp, top = 32.dp)
+                    ) {
+                        Text(
+                            text = stringResource(R.string.created_by_bibino_baby_monitor),
+                            style = MaterialTheme.typography.titleMedium,
+                            color = MaterialTheme.colorScheme.onSurface,
+                            textAlign = TextAlign.Start
+                        )
+                    }
+                }
             }
 
-            // Image Box aligned at the bottom center
+
+            //button
             Box(
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
-
             ) {
-                // Image centered in the Box
-                Image(
-                    painter = painterResource(id = R.drawable.bibinomockup),
-                    contentDescription = "Bibino",
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier.fillMaxWidth()
-                )
 
                 // Button aligned at the bottom and overlapping the image
                 Box(
@@ -207,7 +233,6 @@ fun SettingsScreenFirstPage(
                     )
                     Button(
                         onClick = {
-
                             val intent = Intent(Intent.ACTION_VIEW).apply {
                                 data = Uri.parse(Constants.APP_PLAY_STORE_URL_BIBINO_BABY_APP)
                             }
@@ -221,23 +246,10 @@ fun SettingsScreenFirstPage(
                     ) {
                     }
                 }
-
-                Box(
-                    modifier = Modifier
-                        .align(Alignment.TopStart)
-                        .padding(start = 16.dp, top = 32.dp)
-                ) {
-                    Text(
-                        text = stringResource(R.string.created_by_bibino_baby_monitor),
-                        style = MaterialTheme.typography.titleMedium,
-                        color = MaterialTheme.colorScheme.onSurface,
-                        textAlign = TextAlign.Start
-                    )
-                }
             }
+
+
         }
-
-
     }
 }
 

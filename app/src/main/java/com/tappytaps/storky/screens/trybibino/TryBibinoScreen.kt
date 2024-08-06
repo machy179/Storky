@@ -66,25 +66,6 @@ fun ContentPageTryBibiono() {
 
     Box(modifier = Modifier.fillMaxSize()) {
 
-/*        TextButton(
-            onClick = {
-                navController.navigate(StorkyScreens.EmailScreen.name)
-            },
-            modifier = Modifier
-                .align(Alignment.TopEnd)
-                .padding(
-                    start = 10.dp,
-                    top = TOP_PADDING_NEXT,
-                    end = END_PADDING_NEXT,
-                    bottom = 12.dp
-                )
-        ) {
-            Text(
-                text = stringResource(id = R.string.next_button),
-                color = MaterialTheme.colorScheme.primary,
-                style = MaterialTheme.typography.labelLarge
-            )
-        }*/
 
 
         Column(
@@ -101,7 +82,8 @@ fun ContentPageTryBibiono() {
             ImageTitleContentText(
                 imageResId = imageResId,
                 titleResId = titleResId,
-                textResId = textResId
+                textResId = textResId,
+                modifier = Modifier.fillMaxWidth() // Ensure it fills the width
             )
 
         }

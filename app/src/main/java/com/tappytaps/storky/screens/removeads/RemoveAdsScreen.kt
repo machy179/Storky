@@ -2,6 +2,8 @@ package com.tappytaps.storky.screens.removeads
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.Application
+import android.content.SharedPreferences
 import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -80,16 +82,16 @@ fun RemoveAdsScreen(
                 horizontalAlignment = Alignment.CenterHorizontally // Center images horizontally
             ) {
 
-                var imageResId: Int = R.drawable.ads
-                var titleResId: Int = R.string.remove_ads_screen_title
-                var textResId: Int = R.string.remove_ads_screen_text
+                val imageResId: Int = R.drawable.ads
+                val titleResId: Int = R.string.remove_ads_screen_title
+                val textResId: Int = R.string.remove_ads_screen_text
 
 
                 ImageTitleContentText(
                     imageResId = imageResId,
                     titleResId = titleResId,
                     textResId = textResId,
-                    widthOfColumn = 302.dp
+                    modifier = Modifier.fillMaxWidth() // Ensure it fills the width
                 )
 
             }
@@ -115,9 +117,14 @@ fun RemoveAdsScreen(
                             }
                             navController.navigate(StorkyScreens.HomeScreen.name)
                         },
-                        disableInsetNavigationBarPadding = true
+                        disableInsetNavigationBarPadding = true,
+                        bottomSpacer = false
                     )
                 }
+
+                Spacer(
+                    modifier = Modifier.padding(bottom = 6.dp)
+                )
 
                 TextButton(
                     modifier = Modifier
@@ -132,7 +139,7 @@ fun RemoveAdsScreen(
                     )
                 }
                 Spacer(
-                    modifier = Modifier.padding(bottom = 12.dp)
+                    modifier = Modifier.padding(bottom = 6.dp)
                 )
                 Row(
                     modifier = Modifier.align(alignment = Alignment.CenterHorizontally)
@@ -172,6 +179,8 @@ fun RemoveAdsScreen(
         }
     }
 }
+
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview

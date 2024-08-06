@@ -81,6 +81,7 @@ fun ImageTitleContentText(
     Column(
         modifier = modifier
             .width(widthOfColumn)
+            .padding(start = 24.dp, end = 24.dp)
     ) {
         Image(
             painter = painterResource(id = imageResId),
@@ -90,7 +91,7 @@ fun ImageTitleContentText(
                 .fillMaxWidth()
             //           .padding(9.5.dp) // Padding around the image
         )
-        Spacer(modifier = Modifier.height(32.dp))
+        Spacer(modifier = Modifier.height(24.dp))
 
         Text(
             text = stringResource(titleResId),
@@ -112,7 +113,7 @@ fun ImageTitleContentText(
         )
 
         if (learnMore) {
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(8.dp))
             Column(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally
@@ -145,6 +146,7 @@ fun UniversalButton(
     onClick: () -> Unit,
     inverseColor: Boolean = false,
     disableInsetNavigationBarPadding: Boolean = false, //if it is used in HomeScreen on Scaffold, it is necessary to disable bottom padding of Inset NavigationBar
+    bottomSpacer: Boolean = true
 ) {
 
     val modifier = if (disableInsetNavigationBarPadding) {
@@ -191,9 +193,12 @@ fun UniversalButton(
 
         }
 
-        Spacer(
-            modifier = Modifier.padding(bottom = 24.dp)
-        )
+        if(bottomSpacer) {
+            Spacer(
+                modifier = Modifier.padding(bottom = 24.dp)
+            )
+        }
+
     }
 }
 
@@ -208,7 +213,8 @@ fun EmailInput(
 ) {
     Column(
         modifier = Modifier.background(color = MaterialTheme.colorScheme.background)
-            .windowInsetsPadding(WindowInsets.navigationBars)
+            .padding(bottom = 24.dp)
+       //     .windowInsetsPadding(WindowInsets.navigationBars)
             .fillMaxWidth(), // Ensure Column takes full width
         horizontalAlignment = Alignment.CenterHorizontally // Center content horizontally
     )

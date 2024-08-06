@@ -34,6 +34,13 @@ fun StorkyAppBar(
     scrollBehavior: TopAppBarScrollBehavior? = null,
 ) {
 
+    // Determine the scroll behavior based on the title
+/*    val customScrollBehavior = if (!titleNameOfScreen.isEmpty()) {
+        TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
+    } else {
+        null // No scroll behavior
+    }*/
+
     MediumTopAppBar(
         title = {
             Text(
@@ -110,6 +117,7 @@ fun StorkyAppBar(
         modifier = Modifier
             .fillMaxWidth(),
         scrollBehavior = scrollBehavior
+
     )
 
 

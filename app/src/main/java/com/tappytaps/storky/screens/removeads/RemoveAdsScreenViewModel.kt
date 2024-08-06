@@ -23,10 +23,11 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class RemoveAdsScreenViewModel @Inject constructor(
+open class RemoveAdsScreenViewModel @Inject constructor(
     private val sharedPreferences: SharedPreferences,
-    private val application: Application
+    application: Application
 ) : ViewModel(), PurchasesUpdatedListener {
+
     private val billingClient: BillingClient = BillingClient.newBuilder(application)
         .setListener(this)
         .enablePendingPurchases(PendingPurchasesParams.newBuilder().enableOneTimeProducts().build())
@@ -49,7 +50,7 @@ class RemoveAdsScreenViewModel @Inject constructor(
         })
     }
 
-    fun launchPurchaseFlow(activity: Activity) {
+    open fun launchPurchaseFlow(activity: Activity) {
         val productList = listOf(
             QueryProductDetailsParams.Product.newBuilder()
                 .setProductId("your_product_id")

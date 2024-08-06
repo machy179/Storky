@@ -106,12 +106,17 @@ fun HistoryScreen(
 
             deleteIconVisible.value = false
 
-            Box(modifier = Modifier.fillMaxSize().padding(paddingValues)) {
+            Box(
+                modifier = Modifier.fillMaxSize().padding(
+                    top = paddingValues.calculateTopPadding(),
+                    bottom = paddingValues.calculateBottomPadding()
+                )
+            ) {
                 Column(
                     modifier = Modifier
-                        .align(Alignment.Center),//.padding(paddingValues),
-                    horizontalAlignment = Alignment.CenterHorizontally, // Center images horizontally
-                    verticalArrangement = Arrangement.Center
+                        .fillMaxSize(), // Optional padding
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center // Center the content vertically
                 ) {
 
                     val imageResId: Int = R.drawable.empty
@@ -123,7 +128,8 @@ fun HistoryScreen(
                         imageResId = imageResId,
                         titleResId = titleResId,
                         textResId = textResId,
-                        bottomSpace = true
+                        bottomSpace = true,
+                        modifier = Modifier.fillMaxWidth()
                     )
 
                 }

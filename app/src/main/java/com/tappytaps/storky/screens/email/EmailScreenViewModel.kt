@@ -6,12 +6,12 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class EmailScreenViewModel @Inject constructor(
+open class EmailScreenViewModel @Inject constructor(
     private val repository: EmailRepository
 ): ViewModel() {
 
 
-        fun sendEmail(email: String) {
+        open fun sendEmail(email: String) {
             repository.sendEmail(email)
         }
 }

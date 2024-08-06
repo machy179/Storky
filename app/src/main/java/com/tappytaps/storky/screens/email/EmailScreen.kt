@@ -27,12 +27,11 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.tappytaps.storky.R
 import com.tappytaps.storky.components.CustomDialog
 import com.tappytaps.storky.components.EmailInput
@@ -40,6 +39,7 @@ import com.tappytaps.storky.components.UniversalButton
 import com.tappytaps.storky.components.ImageTitleContentText
 import com.tappytaps.storky.components.StorkyAppBar
 import com.tappytaps.storky.navigation.StorkyScreens
+import com.tappytaps.storky.repository.EmailRepository
 import com.tappytaps.storky.utils.isValidEmail
 
 @ExperimentalMaterial3Api
@@ -102,15 +102,18 @@ fun AskEmailScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .align(Alignment.TopCenter),
+                 //   .verticalScroll(rememberScrollState()), // Enable vertical scrolling
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
                 ImageTitleContentText(
                     imageResId = imageResId,
                     titleResId = titleResId,
-                    textResId = textResId
+                    textResId = textResId,
+                    modifier = Modifier.fillMaxWidth() // Ensure it fills the width
                 )
             }
+
 
             Column(
                 modifier = Modifier
@@ -190,7 +193,7 @@ fun DoneEmailScreen(navController: NavController) {
                 imageResId = imageResId,
                 titleResId = titleResId,
                 textResId = textResId,
-                widthOfColumn = 302.dp
+                modifier = Modifier.fillMaxWidth() // Ensure it fills the width
             )
 
         }
@@ -213,10 +216,30 @@ fun DoneEmailScreen(navController: NavController) {
 }
 
 
+/*@ExperimentalMaterial3Api
+@ExperimentalFoundationApi
+@Preview
+@Composable
+fun EmailScreenPreview() {
+    EmailScreen(
+        navController = NavController(LocalContext.current),
+        viewModel = hiltViewModel<EmailScreenViewModel>())
+}*/
+
+class MockEmailScreenViewModel(repository: EmailRepository) : EmailScreenViewModel(repository) {
+    override fun sendEmail(email: String) {
+        // Dummy implementation
+    }
+}
+
 @ExperimentalMaterial3Api
 @ExperimentalFoundationApi
 @Preview
 @Composable
 fun EmailScreenPreview() {
-    EmailScreen(NavController(LocalContext.current))
+    val mockViewModel = MockEmailScreenViewModel(repository = EmailRepository())
+    EmailScreen(
+        navController = rememberNavController(),
+        viewModel = mockViewModel
+    )
 }
