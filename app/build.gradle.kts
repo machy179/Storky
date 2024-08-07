@@ -15,13 +15,13 @@ plugins {
 }
 
 android {
-    namespace = "com.tappytaps.storky"
-    compileSdk = 34
+    namespace = "com.tappytaps.android.storky"
+    compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.tappytaps.storky"
+        applicationId = "com.tappytaps.android.storky"
         minSdk = 23
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
 
@@ -96,7 +96,7 @@ dependencies {
 
     implementation("androidx.compose.material3:material3:1.2.1")
     implementation("androidx.compose.material3:material3-window-size-class:1.2.1")
-    implementation("androidx.compose.material3:material3-adaptive-navigation-suite:1.3.0-beta04")
+    implementation("androidx.compose.material3:material3-adaptive-navigation-suite:1.3.0-beta05")
 
     implementation("com.google.accompanist:accompanist-pager:0.35.1-alpha")
     implementation("com.google.accompanist:accompanist-pager-indicators:0.35.1-alpha")

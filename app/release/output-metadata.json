@@ -4,7 +4,7 @@
     "type": "APK",
     "kind": "Directory"
   },
-  "applicationId": "com.tappytaps.storky",
+  "applicationId": "com.tappytaps.android.storky",
   "variantName": "release",
   "elements": [
     {
