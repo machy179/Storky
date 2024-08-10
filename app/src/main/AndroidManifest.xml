@@ -10,8 +10,10 @@
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM"/>
     <uses-permission android:name="android.permission.USE_EXACT_ALARM"/>
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="com.android.vending.BILLING" />
 
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK"/>
+
 
     <application
         android:name=".StorkyApplication"
@@ -29,6 +31,11 @@
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="ca-app-pub-3940256099942544~3347511713" />
         <!-- Sample AdMob app ID: ca-app-pub-3940256099942544~3347511713, it is neccessary to change with app ID on the AdMob -->
+
+        <meta-data
+            android:name="com.google.android.play.billingclient.version"
+            android:value="7.0.0" />
+
 
 
         <!-- very important android:configChanges="orientation|screenSize - activity will handle configuration changes itself for example by rotate screen

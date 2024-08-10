@@ -57,7 +57,7 @@ fun StorkyNavigation(intent: Intent?) {
     val lengthOfContraction = settingsViewModel.lengthOfContraction.value
 
     val removeAdsViewModel = hiltViewModel<RemoveAdsScreenViewModel>()
-    val adsDisabled by removeAdsViewModel.adsDisabled.collectAsState()
+    val adsDisabled = removeAdsViewModel.adsDisabled.collectAsState()
 
     val currentScreen = rememberSaveable { mutableStateOf(StorkyScreens.SplashScreen.name) }
 
@@ -101,7 +101,7 @@ fun StorkyNavigation(intent: Intent?) {
                 contractionsList = contractionsList,
                 lengthOfInterval = lengthOfInterval,
                 lengthOfContraction = lengthOfContraction,
-                adsDisabled = adsDisabled
+                adsDisabled = adsDisabled.value
             )
         }
 
@@ -114,7 +114,7 @@ fun StorkyNavigation(intent: Intent?) {
                 listOfContractionsHistory = contractionsListHistory,
                 homeViewModel = homeViewModel,
                 listOfActiveContractions = contractionsList,
-                adsDisabled = adsDisabled
+                adsDisabled = adsDisabled.value
             )
         }
 

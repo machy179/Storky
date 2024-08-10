@@ -110,7 +110,8 @@ fun RemoveAdsScreen(
                         onClick = {
                             activity?.let {
                                 Log.d("remove ads Storky","1")
-                                viewModel.launchPurchaseFlow(it)
+                       //         viewModel.launchPurchaseFlow(it)
+                                    viewModel.startPurchase(it)
                             }
                             navController.navigate(StorkyScreens.HomeScreen.name)
                         },
