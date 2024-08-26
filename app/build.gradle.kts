@@ -82,36 +82,35 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
 
 
-    implementation("androidx.hilt:hilt-navigation-compose:1.2.0") //hilt
-    implementation("com.google.dagger:hilt-android:2.51.1") //hilt
-    kapt("com.google.dagger:hilt-android-compiler:2.51.1") //hilt
+    implementation(libs.androidx.hilt.navigation.compose) //hilt
+    implementation(libs.hilt.android) //hilt
+    kapt(libs.hilt.android.compiler) //hilt
 
 
-    implementation("androidx.room:room-runtime:2.6.1") //room
-    annotationProcessor("androidx.room:room-compiler:2.6.1") //room
-    implementation("androidx.room:room-ktx:2.6.1") //room
-    kapt("androidx.room:room-compiler:2.6.1") //room
+    implementation(libs.androidx.room.runtime) //room
+    annotationProcessor(libs.androidx.room.compiler) //room
+    implementation(libs.androidx.room.ktx) //room
+    kapt(libs.androidx.room.compiler) //room
 
-    implementation("io.coil-kt:coil-compose:2.1.0") //pro načítání Vector Drawable.
+    implementation(libs.coil.compose) //Vector Drawable.
 
-    implementation("androidx.compose.material3:material3:1.2.1")
-    implementation("androidx.compose.material3:material3-window-size-class:1.2.1")
-    implementation("androidx.compose.material3:material3-adaptive-navigation-suite:1.3.0-beta05")
+    implementation(libs.material3)
+    //   implementation("androidx.compose.material3:material3-window-size-class:1.2.1")
+    implementation(libs.androidx.material3.adaptive.navigation.suite)
 
-    implementation("com.google.accompanist:accompanist-pager:0.35.1-alpha")
-    implementation("com.google.accompanist:accompanist-pager-indicators:0.35.1-alpha")
+    implementation(libs.accompanist.pager)
+    implementation(libs.accompanist.pager.indicators)
 
-    implementation("com.itextpdf:itextpdf:5.5.13.4")
+    implementation(libs.itextpdf)
 
-    implementation("com.google.android.gms:play-services-ads:23.2.0")
-    implementation("com.android.billingclient:billing:7.0.0")
+    implementation(libs.play.services.ads)
+    implementation(libs.billing)
 
-    implementation ("androidx.compose.animation:animation:1.6.8")
-    implementation ("androidx.navigation:navigation-compose:2.7.7")
+    implementation(libs.androidx.animation)
+    implementation(libs.androidx.navigation.compose)
 
-    implementation("com.airbnb.android:lottie-compose:6.4.1")
+    implementation(libs.lottie.compose)
 
-    
 
 }
 

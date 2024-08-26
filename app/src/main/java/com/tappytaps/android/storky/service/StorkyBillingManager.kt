@@ -3,6 +3,8 @@ package com.tappytaps.android.storky.service
 import android.app.Activity
 import android.app.Application
 import android.content.SharedPreferences
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import com.android.billingclient.api.AcknowledgePurchaseParams
 import com.android.billingclient.api.BillingClient
@@ -22,7 +24,7 @@ import javax.inject.Inject
 
 class StorkyBillingManager @Inject constructor(
     application: Application,
-    private val sharedPreferences: SharedPreferences
+    private val sharedPreferences: SharedPreferences,
 ) {
 
     private val billingClient: BillingClient = BillingClient.newBuilder(application)
@@ -51,9 +53,18 @@ class StorkyBillingManager @Inject constructor(
     }
 
     private fun startConnection() {
+        //because of bug on Google Play - more than 999 connection attempts
+        if (billingClient.isReady) {
+            // Billing client is already connected, no need to reconnect
+            return
+        }
         billingClient.startConnection(object : BillingClientStateListener {
+            //Create new scratch file from selection
             override fun onBillingServiceDisconnected() {
-                startConnection()
+                // Add a delay or backoff strategy before attempting to reconnect
+                Handler(Looper.getMainLooper()).postDelayed({
+                    startConnection()
+                }, 2000) // Retry after 2 seconds
             }
 
             override fun onBillingSetupFinished(billingResult: BillingResult) {
@@ -71,11 +82,13 @@ class StorkyBillingManager @Inject constructor(
                 .build()
         ) { billingResult, purchases ->
             if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
-                val purchased = purchases.any { it.purchaseState == Purchase.PurchaseState.PURCHASED }
+                val purchased =
+                    purchases.any { it.purchaseState == Purchase.PurchaseState.PURCHASED }
 
-                if (purchased != _adsDisabled.value) {
-                    _adsDisabled.value = !purchased
-                    savePurchaseStateToPreferences(purchased)
+                if (purchased != _adsDisabled.value) {//in shared preferences the value false is stored as not purchased, but Google verified that the gmail account has already purchased it
+                    //this will be a previously purchased application, uninstall and then reinstall, so it is also necessary to set it in the app that the user bought it
+                    _adsDisabled.value = !_adsDisabled.value
+                    savePurchaseStateToPreferences(adsRemoved = _adsDisabled.value)
                 }
 
                 if (false) { //IMPORTANT, it is just for debugging billing - here is purchase deactivated after new open app - so it can be testing purchase again
@@ -88,8 +101,12 @@ class StorkyBillingManager @Inject constructor(
                             billingClient.consumeAsync(consumeParams) { consumeResult, purchaseToken ->
                                 if (consumeResult.responseCode == BillingClient.BillingResponseCode.OK) {
                                     Log.d("BillingManager", "Purchase consumed: $purchaseToken")
+                                    savePurchaseStateToPreferences(adsRemoved = false)
                                 } else {
-                                    Log.e("BillingManager", "Failed to consume purchase: ${consumeResult.debugMessage}")
+                                    Log.e(
+                                        "BillingManager",
+                                        "Failed to consume purchase: ${consumeResult.debugMessage}"
+                                    )
                                 }
                             }
                         }
@@ -145,7 +162,7 @@ class StorkyBillingManager @Inject constructor(
             billingClient.acknowledgePurchase(acknowledgePurchaseParams) { billingResult ->
                 if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
                     _adsDisabled.value = true
-                    savePurchaseStateToPreferences(true)
+                    savePurchaseStateToPreferences(adsRemoved = true)
                 }
             }
         }

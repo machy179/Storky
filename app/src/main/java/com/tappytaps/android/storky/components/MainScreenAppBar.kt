@@ -54,6 +54,7 @@ fun MainScreenAppBar(
     intervalContractionTextCurrent: String = "36 sec",
     showDialogAutomatically: Boolean,
     onDismisStorkyPopUpDialog: (() -> Unit)? = null,
+    adsDisabled: Boolean,
 
     ) {
     var menuExpanded by remember { mutableStateOf(false) }
@@ -186,14 +187,16 @@ fun MainScreenAppBar(
                         )
                     )
 
-                    StorkyDropMenuItem(
-                        icon = R.drawable.noads,
-                        text = R.string.remove_ads,
-                        primaryColorIcon = true,
-                        onClick = {
-                            menuExpanded = false
-                            navController.navigate(StorkyScreens.RemoveAdsScreen.name)
-                        })
+                    if(!adsDisabled) {
+                        StorkyDropMenuItem(
+                            icon = R.drawable.noads,
+                            text = R.string.remove_ads,
+                            primaryColorIcon = true,
+                            onClick = {
+                                menuExpanded = false
+                                navController.navigate(StorkyScreens.RemoveAdsScreen.name)
+                            })
+                    }
 
                     StorkyDropMenuItem(
                         icon = R.drawable.hearh,

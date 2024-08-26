@@ -107,7 +107,8 @@ fun StorkyNavigation(intent: Intent?) {
 
         animatedComposable(
             StorkyScreens.HistoryScreen.name,
-            navController = navController) {
+            navController = navController
+        ) {
             HistoryScreen(
                 navController = it,
                 historyViewModel = historyViewModel,
@@ -120,20 +121,23 @@ fun StorkyNavigation(intent: Intent?) {
 
         animatedComposable(
             StorkyScreens.IndicatorHelpScreen.name,
-            navController = navController) {
+            navController = navController
+        ) {
             IndicatorHelpScreen(navController = it)
         }
 
 
         animatedComposable(
             StorkyScreens.HowToScreen.name,
-            navController = navController) {
+            navController = navController
+        ) {
             HowToScreen(navController = it)
         }
 
         animatedComposable(
             StorkyScreens.SettingsScreen.name,
-            navController = navController) {
+            navController = navController
+        ) {
             SettingsScreen(
                 navController = it,
                 viewModel = settingsViewModel,
@@ -158,7 +162,6 @@ fun StorkyNavigation(intent: Intent?) {
         }
 
 
-
     }
 
 }
@@ -167,7 +170,7 @@ fun StorkyNavigation(intent: Intent?) {
 fun NavGraphBuilder.animatedComposable(
     route: String,
     navController: NavHostController,
-    content: @Composable (NavHostController) -> Unit
+    content: @Composable (NavHostController) -> Unit,
 ) {
     composable(
         route = route,

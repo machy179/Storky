@@ -53,7 +53,8 @@ fun MainScreen(
     lengthOfInterval: Int,
     lengthOfContraction: Int,
     onPaddingValuesChanged: (PaddingValues) -> Unit,
-    bottomPadding: Int
+    bottomPadding: Int,
+    adsDisabled: Boolean,
 ) {
 
     val currentContractionLength = viewModel.currentContractionLength.value
@@ -68,7 +69,6 @@ fun MainScreen(
 
     val dialogShownAutomatically = viewModel.dialogShownAutomatically
     var showDialogAutomatically by rememberSaveable { mutableStateOf(false) }
-
 
 
     //check if is it possible to show StorkyPopUpDialog automatically:
@@ -119,7 +119,8 @@ fun MainScreen(
                         viewModel.setDialogShownAutomaticallyTrue()
                         showDialogAutomatically = false
                     }
-                }
+                },
+                adsDisabled = adsDisabled
             )
         }
     ) { paddingValues ->
@@ -182,7 +183,7 @@ fun MainScreen(
                                     navController = navController,
                                     modifier = Modifier.fillMaxWidth() // Ensure it fills the width
                                 )
-                          //      Spacer(modifier = Modifier.height(32.dp))
+                                //      Spacer(modifier = Modifier.height(32.dp))
 
 
                             }

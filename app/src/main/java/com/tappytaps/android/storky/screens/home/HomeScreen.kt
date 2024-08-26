@@ -46,10 +46,18 @@ fun HomeScreen(
     contractionsList: List<Contraction>,
     lengthOfInterval: Int,
     lengthOfContraction: Int,
-    adsDisabled: Boolean
+    adsDisabled: Boolean,
 ) {
     var paddingValuesState by remember { mutableStateOf(PaddingValues()) } // State to hold paddingValues
     var adHeight by remember { mutableStateOf(0) } // State to store ad height in dp
+
+    //check if user bought the app in current session - so adHeight is setting to 0
+    LaunchedEffect(
+        adsDisabled
+    ) {
+        if (adsDisabled == true) adHeight = 0
+    }
+
 
     Box(
         modifier = Modifier
@@ -68,7 +76,9 @@ fun HomeScreen(
                 onPaddingValuesChanged = { paddingValues -> // Receive paddingValues from ContractionScreen
                     paddingValuesState = paddingValues
                 },
-                bottomPadding = adHeight
+                bottomPadding = adHeight,
+                adsDisabled = adsDisabled
+
             )
         } else {
             ChangeStatusBarTextColor(true)
@@ -80,22 +90,22 @@ fun HomeScreen(
                 bottomPadding = adHeight
             )
         }
-        if(!adsDisabled) {
+        if (!adsDisabled) {
 
 
-        Column(
-            modifier = Modifier
-                .fillMaxSize().padding(bottom = paddingValuesState.calculateBottomPadding())
-                .align(Alignment.BottomCenter),
+            Column(
+                modifier = Modifier
+                    .fillMaxSize().padding(bottom = paddingValuesState.calculateBottomPadding())
+                    .align(Alignment.BottomCenter),
 
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Bottom
-        ) {
-            AdaptiveBannerAd { heightInDp ->
-                adHeight = heightInDp // Update ad height when calculated
-                Log.d("Adaptive banner height:", adHeight.toString())
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Bottom
+            ) {
+                AdaptiveBannerAd { heightInDp ->
+                    adHeight = heightInDp // Update ad height when calculated
+                    Log.d("Adaptive banner height:", adHeight.toString())
+                }
             }
-        }
         }
 
     }
@@ -115,6 +125,7 @@ fun AdaptiveBannerAd(onAdHeightCalculated: (Int) -> Unit) {
     // Determine the ad unit ID based on whether the build is debug or release
     val adUnitIdBanner =
         if (BuildConfig.DEBUG) Constants.AD_UNIT_ID_BANNER_TEST else Constants.AD_UNIT_ID_BANNER_TAPPYTAPS
+
 
     adView.apply {
         adUnitId = adUnitIdBanner
