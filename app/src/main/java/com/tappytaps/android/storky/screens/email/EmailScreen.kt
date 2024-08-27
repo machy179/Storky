@@ -4,7 +4,6 @@ package com.tappytaps.android.storky.screens.email
 
 import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.gestures.animateScrollBy
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -26,7 +25,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -78,6 +76,9 @@ fun AskEmailScreen(
     val showDialogInvalidEmail = remember { mutableStateOf(false) }
     val showDialogSkipStep = remember { mutableStateOf(false) }
 
+    val scrollState = rememberScrollState()
+    val isImeVisible = WindowInsets.isImeVisible
+
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
 
@@ -106,13 +107,11 @@ fun AskEmailScreen(
             val titleResId: Int = R.string.email_title
             val textResId: Int = R.string.email_text
 
-            val isImeVisible = WindowInsets.isImeVisible
-
             Column(
                 modifier = Modifier
                     .fillMaxSize()
                     .imePadding() // Adds padding to avoid overlapping with the keyboard
-                   .verticalScroll(rememberScrollState()),
+                   .verticalScroll(scrollState),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
@@ -130,7 +129,6 @@ fun AskEmailScreen(
                         .fillMaxSize()
                 ) {
                     val email = rememberSaveable { mutableStateOf("") }
-                    val isImeVisible = WindowInsets.isImeVisible
 
                     Row(
                         modifier = Modifier
@@ -157,8 +155,8 @@ fun AskEmailScreen(
                     if(isImeVisible) {
                         Row(
                             modifier = Modifier
-                                .fillMaxWidth(),
-                            //       .imePadding(),
+                                .fillMaxWidth()
+                                   .imePadding(),
                             // .padding(16.dp),
                             horizontalArrangement = Arrangement.SpaceBetween
 
@@ -179,6 +177,7 @@ fun AskEmailScreen(
                             )
 
                         }
+
                     }
 
 

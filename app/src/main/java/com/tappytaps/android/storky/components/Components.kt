@@ -216,7 +216,6 @@ fun UniversalButton(
     fun EmailInput(
         modifier: Modifier = Modifier,
         emailState: MutableState<String>,
-        labelId: String = "Email",
         imeAction: ImeAction = ImeAction.Next,
         onAction: KeyboardActions = KeyboardActions.Default,
     ) {
@@ -231,16 +230,11 @@ fun UniversalButton(
             InputField(
                 modifier = modifier,
                 valueState = emailState,
-                labelId = labelId,
                 keyboardType = KeyboardType.Email,
                 imeAction = imeAction,
                 onAction = onAction
             )
 
-            /*        Spacer(
-                        modifier = Modifier
-                            .padding(bottom = 12.dp)
-                    )*/
         }
 
 
@@ -250,7 +244,6 @@ fun UniversalButton(
     fun InputField(
         modifier: Modifier = Modifier,
         valueState: MutableState<String>,
-        labelId: String,
         isSingleLine: Boolean = true,
         keyboardType: KeyboardType = KeyboardType.Text,
         imeAction: ImeAction = ImeAction.Next,
@@ -454,7 +447,6 @@ fun UniversalButton(
         visibleTimeBetweenContractions: Boolean = false, //if is used for timeBetweenContractions, is true
         maxLength: Int = 60,
     ) {
-        val maxLength = maxLength
 
         Box(
             modifier = modifier
