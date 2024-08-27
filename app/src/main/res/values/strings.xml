@@ -29,7 +29,7 @@
     <string name="skip_step_text">Skip this step only if you\'re 100% sure how to measure the contractions properly.</string>
     <string name="check_your_inbox_title">Check your inbox</string>
     <string name="check_your_inbox_text">We’ve sent you a message. Confirm your email address, so Storky can send you the contraction records. If you haven’t received the email, check the SPAM folder.</string>
-
+    <string name="send_email">Confirm</string>
 
     <!--  all screens -->
     <string name="skip">Skip</string>

@@ -115,7 +115,8 @@ fun ContractionScreen(
                                     viewModel.setAlarmAfter5Days()
                                 },
                                 inverseColor = true,
-                                disableInsetNavigationBarPadding = true
+                                disableInsetNavigationBarPadding = true,
+                                sendButton = true
                             )
                         }
 

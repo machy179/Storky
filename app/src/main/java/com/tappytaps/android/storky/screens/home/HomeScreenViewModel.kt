@@ -316,7 +316,6 @@ class HomeScreenViewModel @Inject constructor(
 
     fun stopService(context: Context) {
         val intent = Intent(context, StopwatchService::class.java)
-
         context.stopService(intent)
     }
 

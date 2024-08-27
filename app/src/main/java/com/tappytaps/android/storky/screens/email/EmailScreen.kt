@@ -4,22 +4,29 @@ package com.tappytaps.android.storky.screens.email
 
 import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.gestures.animateScrollBy
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.isImeVisible
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -60,7 +67,7 @@ fun EmailScreen(
 }
 
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
 fun AskEmailScreen(
     navController: NavController,
@@ -93,16 +100,19 @@ fun AskEmailScreen(
             modifier = Modifier
                 .padding(paddingValues)
                 .fillMaxSize()
-                .imePadding()
+
         ) {
             val imageResId: Int = R.drawable.guide
             val titleResId: Int = R.string.email_title
             val textResId: Int = R.string.email_text
 
+            val isImeVisible = WindowInsets.isImeVisible
+
             Column(
                 modifier = Modifier
-                    .fillMaxSize(),
-                //   .verticalScroll(rememberScrollState()), // Enable vertical scrolling
+                    .fillMaxSize()
+                    .imePadding() // Adds padding to avoid overlapping with the keyboard
+                   .verticalScroll(rememberScrollState()),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
@@ -113,42 +123,71 @@ fun AskEmailScreen(
                     bottomSpace = true,
                     modifier = Modifier.fillMaxWidth() // Ensure it fills the width
                 )
-            }
 
-
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .align(Alignment.BottomCenter),
-
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Bottom
-            ) {
                 Spacer(modifier = Modifier.weight(1f))
-
-                Row(
+                Column(
                     modifier = Modifier
-                        .fillMaxWidth(),
-                    // .padding(16.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween
+                        .fillMaxSize()
                 ) {
                     val email = rememberSaveable { mutableStateOf("") }
+                    val isImeVisible = WindowInsets.isImeVisible
 
-                    EmailInput(
-                        emailState = email,
-                        onAction = KeyboardActions {
-                            if (isValidEmail(email.value)) {
-                                showDoneEmailScreen.value = true
-                                viewModel.sendEmail(email.value).run {
-                                    Log.d("try to send e-mail: ", "email ${email.value} was sent")
-                                }
-                            } else {
-                                showDialogInvalidEmail.value = true
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        // .padding(16.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+
+
+                        EmailInput(
+                            emailState = email,
+                            onAction = KeyboardActions {
+                                sendEmailAddress(
+                                    email,
+                                    showDoneEmailScreen,
+                                    viewModel,
+                                    showDialogInvalidEmail
+                                )
                             }
+                        )
+                    }
+
+
+                    if(isImeVisible) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            //       .imePadding(),
+                            // .padding(16.dp),
+                            horizontalArrangement = Arrangement.SpaceBetween
+
+                        ) {
+
+                            UniversalButton(
+                                text = stringResource(R.string.send_email),
+                                onClick = {
+                                    sendEmailAddress(
+                                        email,
+                                        showDoneEmailScreen,
+                                        viewModel,
+                                        showDialogInvalidEmail
+                                    )
+                                },
+                                sendButton = true,
+                                disableInsetNavigationBarPadding = true
+                            )
+
                         }
-                    )
+                    }
+
+
                 }
+
             }
+
+
+
         }
         if (showDialogInvalidEmail.value) {
             CustomDialog(title = stringResource(R.string.invalid_email_address),
@@ -171,6 +210,22 @@ fun AskEmailScreen(
                 onDismissRequest = { showDialogSkipStep.value = false })
         }
 
+    }
+}
+
+private fun sendEmailAddress(
+    email: MutableState<String>,
+    showDoneEmailScreen: MutableState<Boolean>,
+    viewModel: EmailScreenViewModel,
+    showDialogInvalidEmail: MutableState<Boolean>,
+) {
+    if (isValidEmail(email.value)) {
+        showDoneEmailScreen.value = true
+        viewModel.sendEmail(email.value).run {
+            Log.d("try to send e-mail: ", "email ${email.value} was sent")
+        }
+    } else {
+        showDialogInvalidEmail.value = true
     }
 }
 
@@ -208,7 +263,8 @@ fun DoneEmailScreen(navController: NavController) {
                 text = stringResource(id = R.string.got_it),
                 onClick = {
                     navController.navigate(StorkyScreens.HomeScreen.name)
-                }
+                },
+                sendButton = true
             )
         }
 

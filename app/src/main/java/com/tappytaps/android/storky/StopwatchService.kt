@@ -63,6 +63,11 @@ class StopwatchService : Service() {
         }
     }
 
+    override fun onTaskRemoved(rootIntent: Intent?) {
+        super.onTaskRemoved(rootIntent)
+        stopSelf()
+    }
+
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
 
         currentLengthBetweenContractions =
@@ -195,13 +200,6 @@ class StopwatchService : Service() {
 
 
     private fun updateNotification() {
-
-/*        notification =
-            builder?.setContentText(
-                    (if (showContractionlScreen) getString(R.string.contraction) else getString(
-                        R.string.length_of_interval
-                    )) + ": " + convertSecondsToTimeString(currentLengthBetweenContractions)
-                    )?.build()*/
 
         notification = buildNotification()
         notificationManager?.notify(1, notification)

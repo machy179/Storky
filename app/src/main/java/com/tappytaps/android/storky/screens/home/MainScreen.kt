@@ -281,7 +281,8 @@ fun MainScreen(
                                 viewModel.setShowContractionlScreen(value = true)
 
                             },
-                            disableInsetNavigationBarPadding = true
+                            disableInsetNavigationBarPadding = true,
+                            sendButton = true
                         )
 
                     }

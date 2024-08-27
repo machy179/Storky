@@ -113,23 +113,6 @@ class MainActivity : ComponentActivity() {
 
     }
 
-    override fun onRestart() {
-        super.onRestart()
-
-    }
-
-    override fun onUserLeaveHint() {
-        super.onUserLeaveHint()
-    }
-
-    override fun onConfigurationChanged(newConfig: Configuration) {
-        super.onConfigurationChanged(newConfig)
-    }
-
-
-    override fun onPause() {
-        super.onPause()
-    }
 
     override fun onStop() {
         super.onStop()
@@ -146,7 +129,7 @@ class MainActivity : ComponentActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        homeViewModel.stopService(this)
+       // homeViewModel.stopService(this)
         if (isReceiverRegistered) {
             unregisterReceiver(stopwatchUpdateReceiver)
             isReceiverRegistered = false

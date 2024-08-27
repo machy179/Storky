@@ -102,7 +102,8 @@ fun ContentPageTryBibiono() {
                         data = Uri.parse(Constants.APP_PLAY_STORE_URL_BIBINO_BABY_APP)
                     }
                     context.startActivity(intent)
-                }
+                },
+                sendButton = true
             )
         }
 

@@ -109,7 +109,8 @@ fun StorkyNativeAdView() {
                             UniversalButton(
                                 text = it,
                                 onClick = { },
-                                disableInsetNavigationBarPadding = true
+                                disableInsetNavigationBarPadding = true,
+                                sendButton = true
                             )
                         }
                     }

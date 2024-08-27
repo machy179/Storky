@@ -116,7 +116,8 @@ fun RemoveAdsScreen(
                             navController.navigate(StorkyScreens.HomeScreen.name)
                         },
                         disableInsetNavigationBarPadding = true,
-                        bottomSpacer = false
+                        bottomSpacer = false,
+                        sendButton = true
                     )
                 }
 
