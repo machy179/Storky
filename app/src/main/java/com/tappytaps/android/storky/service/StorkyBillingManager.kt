@@ -6,6 +6,7 @@ import android.content.SharedPreferences
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import androidx.compose.runtime.mutableStateOf
 import com.android.billingclient.api.AcknowledgePurchaseParams
 import com.android.billingclient.api.BillingClient
 import com.android.billingclient.api.BillingClientStateListener
@@ -35,7 +36,7 @@ class StorkyBillingManager @Inject constructor(
                 }
             }
             // Reset isPurchaseInProgress when purchase flow finishes
-            isPurchaseInProgress = false
+            _isPurchaseInProgress.value = false
         }
         .enablePendingPurchases(PendingPurchasesParams.newBuilder().enableOneTimeProducts().build())
         .build()
@@ -43,9 +44,9 @@ class StorkyBillingManager @Inject constructor(
     private val _adsDisabled = MutableStateFlow(true)
     val adsDisabled: StateFlow<Boolean> = _adsDisabled.asStateFlow()
 
-    // Track whether a purchase is in progress
-    @Volatile
-    private var isPurchaseInProgress = false
+
+    private var _isPurchaseInProgress = mutableStateOf(false)
+    val isPurchaseInProgress = _isPurchaseInProgress
 
     init {
         _adsDisabled.value = sharedPreferences.getBoolean("ads_disabled", false)
@@ -91,7 +92,7 @@ class StorkyBillingManager @Inject constructor(
                     savePurchaseStateToPreferences(adsRemoved = _adsDisabled.value)
                 }
 
-                if (false) { //IMPORTANT, it is just for debugging billing - here is purchase deactivated after new open app - so it can be testing purchase again
+                if (true) { //IMPORTANT, it is just for debugging billing - here is purchase deactivated after new open app - so it can be testing purchase again
                     purchases.forEach { purchase ->
                         if (purchase.purchaseState == Purchase.PurchaseState.PURCHASED) {
                             val consumeParams = ConsumeParams.newBuilder()
@@ -117,12 +118,12 @@ class StorkyBillingManager @Inject constructor(
     }
 
     fun startPurchase(activity: Activity) {
-        if (isPurchaseInProgress) {
+        if (_isPurchaseInProgress.value) {
             Log.d("BillingManager", "Purchase already in progress, ignoring subsequent request.")
             return
         }
 
-        isPurchaseInProgress = true
+        _isPurchaseInProgress.value = true
 
         val productList = listOf(
             QueryProductDetailsParams.Product.newBuilder()
@@ -148,7 +149,7 @@ class StorkyBillingManager @Inject constructor(
                 billingClient.launchBillingFlow(activity, flowParams)
             } else {
                 // Reset the flag if queryProductDetailsAsync fails
-                isPurchaseInProgress = false
+                _isPurchaseInProgress.value = false
             }
         }
     }

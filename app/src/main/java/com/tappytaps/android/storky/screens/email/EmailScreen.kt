@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.imeNestedScroll
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.isImeVisible
 import androidx.compose.foundation.layout.padding
@@ -97,9 +98,13 @@ fun AskEmailScreen(
         },
     ) { paddingValues ->
 
+        var paddingOfBox = if (isImeVisible) {
+            Modifier.padding(top=paddingValues.calculateTopPadding())
+        } else {
+            Modifier.padding(paddingValues)
+        }
         Box(
-            modifier = Modifier
-                .padding(paddingValues)
+            modifier = paddingOfBox
                 .fillMaxSize()
 
         ) {
@@ -155,8 +160,8 @@ fun AskEmailScreen(
                     if(isImeVisible) {
                         Row(
                             modifier = Modifier
-                                .fillMaxWidth()
-                                   .imePadding(),
+                                .fillMaxWidth(),
+                 //                  .imePadding(),
                             // .padding(16.dp),
                             horizontalArrangement = Arrangement.SpaceBetween
 

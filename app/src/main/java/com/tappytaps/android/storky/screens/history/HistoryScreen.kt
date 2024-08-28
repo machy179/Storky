@@ -92,7 +92,7 @@ fun HistoryScreen(
         val rowOfActualContraction =
             remember { mutableStateOf(false) } //...if it is possible to show row of actual contraction
 
-        if (homeViewModel.pauseStopWatch.value == true || homeViewModel.isRunning.value == true) {
+        if (homeViewModel.isRunning.value == true) {
             rowOfActualContraction.value = true
         } else {
             rowOfActualContraction.value = false

@@ -33,6 +33,7 @@ open class RemoveAdsScreenViewModel @Inject constructor(
 ) : ViewModel() {
 
     val adsDisabled: StateFlow<Boolean> = billingManager.adsDisabled
+    val purchaseInProgress = billingManager.isPurchaseInProgress
 
     fun startPurchase(activity: Activity) {
         billingManager.startPurchase(activity)

@@ -145,7 +145,7 @@ class StopwatchService : Service() {
         val pendingIntent = PendingIntent.getActivity(
             this,
             0,
-            notificationIntent,
+           notificationIntent,
             PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
         )
 

@@ -7,6 +7,7 @@ import android.content.IntentFilter
 import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
@@ -42,6 +43,12 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        if (savedInstanceState != null) {
+            Log.d("Storky killing: ", "1 savedInstanceState != null")
+        } else {
+            Log.d("Storky killing: ", "2savedInstanceState == null")
+        }
 
 
         if (!isTablet(this)) { //to determine if the device is a tablet

@@ -157,7 +157,9 @@ fun StorkyNavigation(intent: Intent?) {
             route = StorkyScreens.RemoveAdsScreen.name,
             navController = navController
         ) {
-            RemoveAdsScreen(navController = it, viewModel = removeAdsViewModel)
+            RemoveAdsScreen(navController = it,
+                viewModel = removeAdsViewModel,
+                adsDisabled = adsDisabled.value)
         }
 
 

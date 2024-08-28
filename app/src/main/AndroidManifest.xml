@@ -41,6 +41,7 @@
 
         <!-- very important android:configChanges="orientation|screenSize - activity will handle configuration changes itself for example by rotate screen
          onConfigurationChanged will be called instead of ondestroy-->
+
         <activity
             android:name=".MainActivity"
             android:configChanges="orientation|screenSize"

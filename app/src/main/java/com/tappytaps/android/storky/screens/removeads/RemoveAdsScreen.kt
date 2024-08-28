@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -44,12 +45,14 @@ import com.tappytaps.android.storky.navigation.StorkyScreens
 fun RemoveAdsScreen(
     navController: NavController,
     viewModel: RemoveAdsScreenViewModel,
+    adsDisabled: Boolean,
 ) {
 
     val context = LocalContext.current
     val activity = context as? Activity
 
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
+    var purchaseInProgress = viewModel.purchaseInProgress.value
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
 
@@ -93,82 +96,103 @@ fun RemoveAdsScreen(
                 )
 
             }
+
+
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
                     .align(Alignment.BottomCenter)
             ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Center
-                ) {
+                if (!purchaseInProgress) {
 
-                    UniversalButton(
-                        text = stringResource(id = R.string.remove_ads_screen_button_text),
-                        subText = stringResource(id = R.string.remove_ads_screen_button_subtext),
-                        onClick = {
-                            activity?.let {
-                                Log.d("remove ads Storky","1")
-                       //         viewModel.launchPurchaseFlow(it)
-                                    viewModel.startPurchase(it)
-                            }
-                            navController.navigate(StorkyScreens.HomeScreen.name)
-                        },
-                        disableInsetNavigationBarPadding = true,
-                        bottomSpacer = false,
-                        sendButton = true
-                    )
-                }
+                    if (!adsDisabled) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            horizontalArrangement = Arrangement.Center
+                        ) {
 
-                Spacer(
-                    modifier = Modifier.padding(bottom = 6.dp)
-                )
-
-                TextButton(
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    onClick = {
-                        //TODO
+                            UniversalButton(
+                                text = stringResource(id = R.string.remove_ads_screen_button_text),
+                                subText = stringResource(id = R.string.remove_ads_screen_button_subtext),
+                                onClick = {
+                                    activity?.let {
+                                        Log.d("remove ads Storky", "1")
+                                        viewModel.startPurchase(it)
+                                    }
+                                },
+                                disableInsetNavigationBarPadding = true,
+                                bottomSpacer = false,
+                                sendButton = true
+                            )
+                        }
                     }
-                ) {
-                    Text(
-                        text = stringResource(id = R.string.restore_purchase),
-                        style = MaterialTheme.typography.labelLarge
+
+
+                    Spacer(
+                        modifier = Modifier.padding(bottom = 6.dp)
                     )
-                }
-                Spacer(
-                    modifier = Modifier.padding(bottom = 6.dp)
-                )
-                Row(
-                    modifier = Modifier.align(alignment = Alignment.CenterHorizontally)
-                        .padding(bottom = 16.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Text(
-                        text = stringResource(id = R.string.you_agree_to_our) + " ",
-                        style = MaterialTheme.typography.labelLarge
-                    )
-                    Text(
-                        text = stringResource(id = R.string.terms_of_service) + " ",
-                        style = MaterialTheme.typography.labelLarge,
-                        color = MaterialTheme.colorScheme.primary,
-                        modifier = Modifier.clickable {
+
+                    TextButton(
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        onClick = {
                             //TODO
                         }
+                    ) {
+                        Text(
+                            text = stringResource(id = R.string.restore_purchase),
+                            style = MaterialTheme.typography.labelLarge
+                        )
+                    }
+                    Spacer(
+                        modifier = Modifier.padding(bottom = 6.dp)
                     )
-                    Text(
-                        text = stringResource(id = R.string.and) + " ",
-                        style = MaterialTheme.typography.labelLarge
-                    )
-                    Text(
-                        text = stringResource(id = R.string.privacy_policy),
-                        style = MaterialTheme.typography.labelLarge,
-                        color = MaterialTheme.colorScheme.primary,
-                        modifier = Modifier.clickable {
-                            //TODO
-                        }
-                    )
+                    Row(
+                        modifier = Modifier.align(alignment = Alignment.CenterHorizontally)
+                            .padding(bottom = 16.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Text(
+                            text = stringResource(id = R.string.you_agree_to_our) + " ",
+                            style = MaterialTheme.typography.labelLarge
+                        )
+                        Text(
+                            text = stringResource(id = R.string.terms_of_service) + " ",
+                            style = MaterialTheme.typography.labelLarge,
+                            color = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.clickable {
+                                //TODO
+                            }
+                        )
+                        Text(
+                            text = stringResource(id = R.string.and) + " ",
+                            style = MaterialTheme.typography.labelLarge
+                        )
+                        Text(
+                            text = stringResource(id = R.string.privacy_policy),
+                            style = MaterialTheme.typography.labelLarge,
+                            color = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.clickable {
+                                //TODO
+                            }
+                        )
+                    }
+
+                } else {
+
+
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .align(Alignment.CenterHorizontally)
+                            .padding(bottom = 100.dp), // Adjust padding to match the previous layout
+                        contentAlignment = Alignment.Center // Centers content both horizontally and vertically
+                    ) {
+                        CircularProgressIndicator()
+                    }
+
+
                 }
 
 
@@ -180,12 +204,13 @@ fun RemoveAdsScreen(
 }
 
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview
 @Composable
 fun RemoveAdsPreview() {
-    RemoveAdsScreen(NavController(LocalContext.current),
-        viewModel = hiltViewModel<RemoveAdsScreenViewModel>()
+    RemoveAdsScreen(
+        NavController(LocalContext.current),
+        viewModel = hiltViewModel<RemoveAdsScreenViewModel>(),
+        adsDisabled = false
     )
 }

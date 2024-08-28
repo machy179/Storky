@@ -10,6 +10,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.compose.runtime.mutableStateOf
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.tappytaps.android.storky.StopwatchService
@@ -26,6 +27,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
@@ -35,10 +37,14 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeScreenViewModel @Inject constructor(
+    private val savedStateHandle: SavedStateHandle,
     private val repository: ContractionsRepository,
     private val application: Application,
     private val pdfCreatorAndSender: PdfCreatorAndSender
 ) : ViewModel() {
+
+
+
 
     private val _listOfContractions =
         MutableStateFlow<List<Contraction>>(emptyList()) //it is list of active Contractions
@@ -61,7 +67,7 @@ class HomeScreenViewModel @Inject constructor(
     val isRunning = _isRunning
 
     private var timerJob: Job? = null
-    private val _pauseStopWatch = mutableStateOf(false)
+    private val _pauseStopWatch = mutableStateOf(true)
     val pauseStopWatch = _pauseStopWatch
 
     private val _averageContractionLength = mutableStateOf(0)
@@ -202,7 +208,7 @@ class HomeScreenViewModel @Inject constructor(
                     _dialogShownAutomatically.value = false
                     _currentContractionLength.value = 0
                     _currentLengthBetweenContractions.value = 0
-                    _pauseStopWatch.value = false
+                    _pauseStopWatch.value = true
                 }
                 stopStopwatch()
             } catch (e: Exception) {
