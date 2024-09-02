@@ -19,6 +19,7 @@ import com.google.android.gms.ads.*
 import com.google.android.gms.ads.nativead.NativeAd
 import com.google.android.gms.ads.nativead.NativeAdOptions
 import com.tappytaps.android.storky.BuildConfig
+import com.tappytaps.android.storky.ui.theme.AdsBackgroundColor
 import com.tappytaps.android.storky.utils.Constants
 
 @Composable
@@ -43,7 +44,7 @@ fun StorkyNativeAdView() {
         adLoader.loadAd(AdRequest.Builder().build())
     }
 
-    val backgroundColor = if (nativeAd != null) MaterialTheme.colorScheme.surfaceContainerLow else Color.Transparent
+    var backgroundColor = if (nativeAd != null) MaterialTheme.colorScheme.surfaceContainerLow else AdsBackgroundColor
 
     Box(
         modifier = Modifier
@@ -53,6 +54,7 @@ fun StorkyNativeAdView() {
             .background(backgroundColor, shape = RoundedCornerShape(16.dp))
     ) {
         if (nativeAd != null) {
+            backgroundColor = if (nativeAd != null) MaterialTheme.colorScheme.surfaceContainerLow else Color.Transparent
             nativeAd?.let { ad ->
                 Row(
                     modifier = Modifier

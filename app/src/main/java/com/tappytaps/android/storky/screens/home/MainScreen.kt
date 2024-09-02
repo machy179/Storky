@@ -95,7 +95,7 @@ fun MainScreen(
                 intervalBetweenTextSetting = convertSecondsToTimeString2(lengthOfInterval),
                 navController = navController,
                 backgroundColor = MaterialTheme.colorScheme.background,
-                pauseIconVisible = !pauseStopWatch &&  !(contractionsList.isNullOrEmpty()) && isRunning.value,
+                pauseIconVisible = !pauseStopWatch && isRunning.value,
                 intervalContractionTextCurrent = if (averageContractionLength != 0) convertSecondsToTimeString2(
                     averageContractionLength
                 ) else "-:--",
