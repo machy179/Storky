@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 import androidx.room.Room
 import com.tappytaps.android.storky.data.StorkyDatabase
 import com.tappytaps.android.storky.data.StorkyDatabaseDao
+import com.tappytaps.android.storky.model.StorkyStopwatchState
 import com.tappytaps.android.storky.repository.EmailRepository
 import com.tappytaps.android.storky.service.PdfCreatorAndSender
 import dagger.Module
@@ -49,5 +50,11 @@ object AppModule {
     @Singleton
     fun provideSharedPreferences(@ApplicationContext context: Context): SharedPreferences {
         return context.getSharedPreferences("contraction_prefs", Context.MODE_PRIVATE)
+    }
+
+    @Provides
+    @Singleton
+    fun provideStorkyStopwatchState(): StorkyStopwatchState {
+        return StorkyStopwatchState()
     }
 }

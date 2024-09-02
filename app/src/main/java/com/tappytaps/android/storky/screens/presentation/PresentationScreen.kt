@@ -90,7 +90,7 @@ fun HorizontalPagerWithButtonsScreen(navController: NavController) {
     ) {
         HorizontalPager(
             state = pagerState,
-            modifier = Modifier.weight(1f).padding(top=64.dp)
+            modifier = Modifier.weight(1f).padding(top = 64.dp)
 
         ) { page ->
 

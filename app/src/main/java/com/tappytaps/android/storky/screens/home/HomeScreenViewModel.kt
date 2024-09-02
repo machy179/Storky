@@ -10,11 +10,11 @@ import android.util.Log
 import android.widget.Toast
 import androidx.compose.runtime.mutableStateOf
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.tappytaps.android.storky.StopwatchService
 import com.tappytaps.android.storky.model.Contraction
+import com.tappytaps.android.storky.model.StorkyStopwatchState
 import com.tappytaps.android.storky.notification.StorkyNotificationReceiver
 import com.tappytaps.android.storky.repository.ContractionsRepository
 import com.tappytaps.android.storky.service.PdfCreatorAndSender
@@ -27,7 +27,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
@@ -37,23 +36,21 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeScreenViewModel @Inject constructor(
-    private val savedStateHandle: SavedStateHandle,
     private val repository: ContractionsRepository,
     private val application: Application,
-    private val pdfCreatorAndSender: PdfCreatorAndSender
+    private val pdfCreatorAndSender: PdfCreatorAndSender,
+    private val storkyStopwatchState: StorkyStopwatchState,
 ) : ViewModel() {
-
-
-
 
     private val _listOfContractions =
         MutableStateFlow<List<Contraction>>(emptyList()) //it is list of active Contractions
     val listOfContractions = _listOfContractions.asStateFlow()
 
-    private val _currentContractionLength = mutableStateOf(0)
+    private val _currentContractionLength = storkyStopwatchState.currentContractionLength
     val currentContractionLength = _currentContractionLength
 
-    private val _currentLengthBetweenContractions = mutableStateOf(0)
+    private val _currentLengthBetweenContractions =
+        storkyStopwatchState.currentLengthBetweenContractions
     val currentLengthBetweenContractions = _currentLengthBetweenContractions
 
     private val _currentTimeDateContraction = mutableStateOf(getCurrentCalendar())
@@ -63,11 +60,14 @@ class HomeScreenViewModel @Inject constructor(
         mutableStateOf(false) //if StorkyPopUpDialog was automatically shown
     val dialogShownAutomatically = _dialogShownAutomatically
 
-    private val _isRunning = mutableStateOf(false) //because if is first open, stop watch still does not work - so nothing to save
+    private val _isRunning =
+        storkyStopwatchState.isRunning //because if is first open, stop watch still does not work - so nothing to save
     val isRunning = _isRunning
 
+
     private var timerJob: Job? = null
-    private val _pauseStopWatch = mutableStateOf(true)
+
+    private val _pauseStopWatch = storkyStopwatchState.pauseStopWatch
     val pauseStopWatch = _pauseStopWatch
 
     private val _averageContractionLength = mutableStateOf(0)
@@ -76,8 +76,9 @@ class HomeScreenViewModel @Inject constructor(
     private val _averageLengthBetweenContractions = mutableStateOf(0)
     val averageLengthBetweenContractions = _averageLengthBetweenContractions
 
-    private val _showContractionlScreen = mutableStateOf(false)
+    private val _showContractionlScreen = storkyStopwatchState.showContractionlScreen
     val showContractionlScreen = _showContractionlScreen
+
 
     private var buttonStopContractionAlreadyPresed =
         false //for delete Contraction, if this is true, we have to delete last Contraction in _listOfContractions
@@ -97,7 +98,6 @@ class HomeScreenViewModel @Inject constructor(
             repository.getAllActiveContractions().distinctUntilChanged()
                 .collect { listOfContractions ->
                     if (listOfContractions.isEmpty()) {
-                        Log.d("Empty", ": Empty list")
                     } else {
                         _listOfContractions.value = listOfContractions
                     }
@@ -131,7 +131,6 @@ class HomeScreenViewModel @Inject constructor(
                             contractionTime = _currentTimeDateContraction.value
                         )
                     )
-                    Log.e("Save to database 1:", "1")
                 } catch (e: Exception) {
                     Log.e("Save to database error:", e.toString())
                 }
@@ -140,7 +139,6 @@ class HomeScreenViewModel @Inject constructor(
     }
 
     fun updateCurrentTime() {
-        Log.d("delete long press", "6")
         _currentTimeDateContraction.value = getCurrentCalendar()
     }
 
@@ -149,7 +147,6 @@ class HomeScreenViewModel @Inject constructor(
     }
 
     fun startStopwatch() {
-        Log.d("delete long press", "5")
         updateCurrentTime()
         _currentLengthBetweenContractions.value = 0
 
@@ -157,37 +154,26 @@ class HomeScreenViewModel @Inject constructor(
             _isRunning.value = true
             timerJob = viewModelScope.launch {
                 while (_isRunning.value) {
-                    delay(1000) // wait for 1 second
-                    Log.d(
-                        "delete long press",
-                        "_currentLengthBetweenContractions.value: " + _currentLengthBetweenContractions.value.toString()
-                    )
+                    delay(1000)
                     if (!_pauseStopWatch.value) _currentLengthBetweenContractions.value += 1
-                    Log.d(
-                        "delete long press",
-                        "_currentLengthBetweenContractions.value2: " + _currentLengthBetweenContractions.value.toString()
-                    )
                 }
             }
         }
     }
 
     fun stopStopwatch() {
-        Log.d("delete long press", "4")
         _isRunning.value = false
         timerJob?.cancel() // Cancel the running coroutine in startStopwatch
 
     }
 
     fun newStart() {
-        Log.d("delete long press", "3")
         _pauseStopWatch.value = false
         stopStopwatch()
         startStopwatch()
     }
 
     fun pauseStopWatch() {
-        Log.d("delete long press", "2")
         _pauseStopWatch.value = true //
         _currentLengthBetweenContractions.value =
             -1 //if timer was paused, then timeBetweenContractions is set as -1
@@ -251,7 +237,6 @@ class HomeScreenViewModel @Inject constructor(
                     getAllActiveContractions()
                 } else {
                     repository.deleteContraction(contraction)
-                    Log.d("delete long press", "1")
                 }
 
 
@@ -264,7 +249,7 @@ class HomeScreenViewModel @Inject constructor(
         buttonStopContractionAlreadyPresed = value
     }
 
-    fun deleteCurrentContraction() { //function for dele current Contraction from ContractionScreen
+    fun deleteCurrentContraction() { //function for delete current Contraction from ContractionScreen
         viewModelScope.launch {
             try {
                 if (_listOfContractions.value.size > 0 && buttonStopContractionAlreadyPresed) {
@@ -304,20 +289,13 @@ class HomeScreenViewModel @Inject constructor(
 
 
     fun startService(context: Context) {
-        Log.d("StorkyService:", "startService_from_HomeScreenViewModel")
-        val intent = Intent(context, StopwatchService::class.java).apply {
-            putExtra("currentLengthBetweenContractions", _currentLengthBetweenContractions.value)
-            putExtra("showContractionlScreen", _showContractionlScreen.value)
-            putExtra("pauseStopWatch", _pauseStopWatch.value)
-            putExtra("currentContractionLength", _currentContractionLength.value)
-        }
+        val intent = Intent(context, StopwatchService::class.java)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            // context.startForegroundService(intent)
             ContextCompat.startForegroundService(context, intent)
         } else {
             context.startService(intent)
         }
-        //    context.startService(intent)
+        timerJob?.cancel()
     }
 
     fun stopService(context: Context) {
@@ -325,37 +303,18 @@ class HomeScreenViewModel @Inject constructor(
         context.stopService(intent)
     }
 
-    fun updateFromService(
-        currentLengthBetweenContractions: Int,
-        pauseStopWatch: Boolean,
-        showContractionlScreen: Boolean,
-        currentContractionLength: Int,
-    ) {
-        Log.d("StorkyService:", "updateFromService")
-        _currentLengthBetweenContractions.value = currentLengthBetweenContractions
-        _pauseStopWatch.value = pauseStopWatch
-        _showContractionlScreen.value = showContractionlScreen
-        _currentContractionLength.value = currentContractionLength
-        Log.d(
-            "StorkyService:",
-            "updateFromService _currentLengthBetweenContractions.value" + _currentLengthBetweenContractions.value.toString()
-        )
-        if (!_isRunning.value && !_pauseStopWatch.value && _currentLengthBetweenContractions.value != 0) {
-            Log.d("StorkyService:", "updateFromService_startSotopWatch")
 
+    fun checkIfItIsFromService() {
+        //it is necessary to check the conditions when they are launched, the user returns to the application from the serivice and it is necessary to run timerJob:
+        if ((timerJob == null || timerJob!!.isCancelled) && !_pauseStopWatch.value && _currentLengthBetweenContractions.value != 0) {
             _isRunning.value = true
             timerJob = viewModelScope.launch {
                 while (_isRunning.value) {
                     delay(1000) // wait for 1 second
-                    _currentLengthBetweenContractions.value += 1
+                    if (!_pauseStopWatch.value) _currentLengthBetweenContractions.value += 1
                 }
             }
         }
-        Log.d(
-            "StorkyService:",
-            "updateFromService currentLengthBetweenContractions=" + currentLengthBetweenContractions.toString()
-        )
-        Log.d("StorkyService:", "updateFromService pauseStopWatch=" + pauseStopWatch.toString())
     }
 
 
@@ -367,7 +326,7 @@ class HomeScreenViewModel @Inject constructor(
             )
         ) {
             val alarmManager = application.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-            val intent = Intent(application, StorkyNotificationReceiver::class.java,)
+            val intent = Intent(application, StorkyNotificationReceiver::class.java)
             val pendingIntent = PendingIntent.getBroadcast(
                 application,
                 0,
@@ -380,7 +339,7 @@ class HomeScreenViewModel @Inject constructor(
             }.timeInMillis
 
             /*            val timeInMillis =
-                            System.currentTimeMillis() + 1 * 60 * 1000 // 1 minuty v milisekundách*/
+                            System.currentTimeMillis() + 1 * 60 * 1000 // just for testitng: 1 minute in milisec*/
 
             alarmManager.setExact(AlarmManager.RTC_WAKEUP, triggerTime, pendingIntent)
 
@@ -390,8 +349,6 @@ class HomeScreenViewModel @Inject constructor(
     }
 
     fun deleteActualSet(set: Int) {
-        Log.d("Storky delete:", "clicked")
-        Log.d("Actual contraction deleteSetOfHistory: ", "deleteSetOfHistory")
         viewModelScope.launch(Dispatchers.IO) {
             repository.deleteContractionsBySet(set = set).run {
                 delay(100)
@@ -411,17 +368,17 @@ class HomeScreenViewModel @Inject constructor(
         context: Context,
         contractionInSet: Int,
         currentContractionLength: Int,
-        currentTimeDateContraction: Calendar
+        currentTimeDateContraction: Calendar,
     ) {
-        shareSetOfContractionsByEmail(context = context,
+        shareSetOfContractionsByEmail(
+            context = context,
             contractionInSet = contractionInSet,
             listOfContractions = _listOfContractions,
             pdfCreatorAndSender = pdfCreatorAndSender,
             viewModel = this,
             currentContractionLength = currentContractionLength,
             currentTimeDateContraction = currentTimeDateContraction
-            )
-
+        )
 
 
     }

@@ -57,7 +57,7 @@ fun TryBibinoScreen(navController: NavController) {
         },
     ) {
 
-    ContentPageTryBibiono()
+        ContentPageTryBibiono()
     }
 }
 
@@ -65,7 +65,6 @@ fun TryBibinoScreen(navController: NavController) {
 fun ContentPageTryBibiono() {
 
     Box(modifier = Modifier.fillMaxSize()) {
-
 
 
         Column(

@@ -1,6 +1,7 @@
 package com.tappytaps.android.storky
 
 import android.annotation.SuppressLint
+import android.app.Application
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -15,9 +16,11 @@ import android.os.PowerManager
 import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.runtime.MutableState
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
+import com.tappytaps.android.storky.model.StorkyStopwatchState
 import com.tappytaps.android.storky.repository.ContractionsRepository
 import com.tappytaps.android.storky.utils.convertSecondsToTimeString
 import dagger.hilt.android.AndroidEntryPoint
@@ -35,19 +38,16 @@ class StopwatchService : Service() {
     // plus give this to manifestu  <uses-permission android:name="android.permission.WAKE_LOCK" />
     //and put the wakeLock attribute in the code as I put it...viz https://robertohuertas.com/2019/06/29/android_foreground_services/
 
-
     @Inject
-    lateinit var repository: ContractionsRepository
+    lateinit var storkyStopwatchState: StorkyStopwatchState
 
     private var serviceJob: Job? = null
-    private val serviceScope = CoroutineScope(Dispatchers.Default) //bylo IO
+    private val serviceScope = CoroutineScope(Dispatchers.Default)
 
     private var isRunning = false
-    private var currentLengthBetweenContractions = 0
-    private var currentContractionLength = 0
-    private var pauseStopWatch = false
-
-    private var showContractionlScreen = false
+    private lateinit var currentLengthBetweenContractions: MutableState<Int>
+    private lateinit var pauseStopWatch: MutableState<Boolean>
+    private lateinit var showContractionlScreen: MutableState<Boolean>
 
     private var notification: Notification? = null
     private var builder: NotificationCompat.Builder? = null
@@ -57,24 +57,21 @@ class StopwatchService : Service() {
 
     override fun onCreate() {
         super.onCreate()
+        currentLengthBetweenContractions = storkyStopwatchState.currentLengthBetweenContractions
+        showContractionlScreen = storkyStopwatchState.showContractionlScreen
+        pauseStopWatch = storkyStopwatchState.pauseStopWatch
         try {
             startForegroundService()
         } catch (e: Exception) {
         }
     }
 
-    override fun onTaskRemoved(rootIntent: Intent?) {
+    override fun onTaskRemoved(rootIntent: Intent?) { //if user kill the Activity, thi metod will be called - so this metod viwll destroy this service
         super.onTaskRemoved(rootIntent)
         stopSelf()
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-
-        currentLengthBetweenContractions =
-            intent?.getIntExtra("currentLengthBetweenContractions", 0) ?: 0
-        pauseStopWatch = intent?.getBooleanExtra("pauseStopWatch", false) ?: false
-        showContractionlScreen = intent?.getBooleanExtra("showContractionlScreen", false) ?: false
-        currentContractionLength = intent?.getIntExtra("currentContractionLength", 0) ?: 0
 
         isRunning = true
         startStopwatch()
@@ -93,8 +90,6 @@ class StopwatchService : Service() {
 
     override fun onDestroy() {
         super.onDestroy()
-        sendUpdateToViewModel()
-
         stopStopwatch()
 
         // We need this release because of Doze Mode
@@ -125,7 +120,8 @@ class StopwatchService : Service() {
             ).apply {
                 setShowBadge(false) // Ensure the notification does not show a badge on the app icon
             }
-            notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager =
+                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             notificationManager?.createNotificationChannel(channel)
         }
 
@@ -142,19 +138,22 @@ class StopwatchService : Service() {
     private fun buildNotification(): Notification {
         val notificationChannelId = "STORKY_SERVICE_CHANNEL"
         val notificationIntent = Intent(this, MainActivity::class.java)
+            .apply {
+                flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+            }
         val pendingIntent = PendingIntent.getActivity(
             this,
             0,
-           notificationIntent,
+            notificationIntent,
             PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
         )
 
         builder = NotificationCompat.Builder(this, notificationChannelId)
             .setContentTitle(resources.getString(R.string.foreground_service_title))
             .setContentText(
-                (if (showContractionlScreen) getString(R.string.contraction) else getString(
+                (if (showContractionlScreen.value) getString(R.string.contraction) else getString(
                     R.string.length_of_interval
-                )) + ": " + convertSecondsToTimeString(currentLengthBetweenContractions)
+                )) + ": " + convertSecondsToTimeString(currentLengthBetweenContractions.value)
             )
             .setSmallIcon(R.drawable.ic_launcher_foreground) // Ensure this is a valid drawable resource
             .setContentIntent(pendingIntent)
@@ -162,7 +161,7 @@ class StopwatchService : Service() {
             .setSilent(true) // Makes the notification silent
 
 
-        if (showContractionlScreen) {
+        if (showContractionlScreen.value) {
             val currentModeType =
                 resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
             val notificationColor = when (currentModeType) {
@@ -192,34 +191,22 @@ class StopwatchService : Service() {
         serviceJob = serviceScope.launch {
             while (isRunning) {
                 delay(1000) // wait for 1 second
-                if (!pauseStopWatch) currentLengthBetweenContractions += 1
+                if (!pauseStopWatch.value) currentLengthBetweenContractions.value += 1
                 updateNotification() // Update the notification with the new value
+
             }
         }
     }
 
 
     private fun updateNotification() {
-
         notification = buildNotification()
         notificationManager?.notify(1, notification)
-        Log.d("StorkyService:", "pdateNotification() 2")
     }
 
     private fun stopStopwatch() {
         isRunning = false
         serviceJob?.cancel() // Cancel the running coroutine
-    }
-
-    private fun sendUpdateToViewModel() {
-        val intent = Intent("STOPWATCH_UPDATE").apply {
-            putExtra("currentLengthBetweenContractions", currentLengthBetweenContractions)
-            putExtra("pauseStopWatch", pauseStopWatch)
-            putExtra("showContractionlScreen", showContractionlScreen)
-            putExtra("currentContractionLength", currentContractionLength)
-
-        }
-        intent.setPackage(this.packageName) //because of Android 14 and more and RECEIVER_NOT_EXPORTED: https://issuetracker.google.com/issues/293487554
-        sendBroadcast(intent)
+        serviceJob = null
     }
 }

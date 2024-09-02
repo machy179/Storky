@@ -11,7 +11,7 @@ data class Contraction(
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0,
 
-    @ColumnInfo(name = "length_of_contraction" )
+    @ColumnInfo(name = "length_of_contraction")
     val lengthOfContraction: Int,
 
     @ColumnInfo(name = "time_between_contraction")
@@ -22,8 +22,8 @@ data class Contraction(
     val contractionTime: Calendar,
 
     @ColumnInfo(name = "in_history")
-    val inHistory: Boolean = false, //if this Contraction is visible in HomeScreen, it is false, if it is visible in History, it is true
+    val inHistory: Boolean = false, //if this Contraction is visible in HomeScreen, it is false, if it is visible just in History, it is true
 
     @ColumnInfo(name = "in_set") //for set up, in which set of history it is - when the user saves the current list to history
     val in_set: Int = 0,
-    )
+)

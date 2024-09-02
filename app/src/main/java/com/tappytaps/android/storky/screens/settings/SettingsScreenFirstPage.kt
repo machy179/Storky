@@ -164,7 +164,8 @@ fun SettingsScreenFirstPage(
                     )
                 }
 
-                Column(modifier = Modifier.padding(start = 8.dp),
+                Column(
+                    modifier = Modifier.padding(start = 8.dp),
                     verticalArrangement = Arrangement.SpaceBetween
                 ) {
                     TextButton(

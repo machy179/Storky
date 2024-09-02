@@ -16,8 +16,7 @@ enum class StorkyScreens {
     IndicatorHelpScreen;
 
     companion object {
-        fun fromRoute(route: String?): StorkyScreens
-                = when(route?.substringBefore("/")) {
+        fun fromRoute(route: String?): StorkyScreens = when (route?.substringBefore("/")) {
             SplashScreen.name -> SplashScreen
             PresentationScreen.name -> PresentationScreen
             TryBibinoScreen.name -> TryBibinoScreen

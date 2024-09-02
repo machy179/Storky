@@ -99,9 +99,8 @@ fun HistoryScreen(
         }
 
 
-        if (listOfContractionsHistory.isNullOrEmpty()
-            && listOfActiveContractions.isNullOrEmpty()
-            && rowOfActualContraction.value == false
+        if ((listOfContractionsHistory.isNullOrEmpty()
+                    && listOfActiveContractions.isNullOrEmpty()) && !rowOfActualContraction.value
         ) { //nothing to show, so show "It seems so empty"
 
             deleteIconVisible.value = false

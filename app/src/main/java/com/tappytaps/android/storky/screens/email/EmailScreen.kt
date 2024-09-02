@@ -99,7 +99,7 @@ fun AskEmailScreen(
     ) { paddingValues ->
 
         var paddingOfBox = if (isImeVisible) {
-            Modifier.padding(top=paddingValues.calculateTopPadding())
+            Modifier.padding(top = paddingValues.calculateTopPadding())
         } else {
             Modifier.padding(paddingValues)
         }
@@ -116,7 +116,7 @@ fun AskEmailScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .imePadding() // Adds padding to avoid overlapping with the keyboard
-                   .verticalScroll(scrollState),
+                    .verticalScroll(scrollState),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
@@ -157,11 +157,11 @@ fun AskEmailScreen(
                     }
 
 
-                    if(isImeVisible) {
+                    if (isImeVisible) {
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth(),
-                 //                  .imePadding(),
+                            //                  .imePadding(),
                             // .padding(16.dp),
                             horizontalArrangement = Arrangement.SpaceBetween
 
@@ -189,7 +189,6 @@ fun AskEmailScreen(
                 }
 
             }
-
 
 
         }

@@ -15,12 +15,12 @@ object Constants {
     const val AD_UNIT_ID_BANNER_TEST =
         "ca-app-pub-3940256099942544/9214589741" // Just test Ad Unit ID
     const val AD_UNIT_ID_BANNER_TAPPYTAPS =
-        "ca-app-pub-7656172151000850/8335954586" // Replace with TappyTaps Ad Unit ID
+        "ca-app-pub-7656172151000850/8335954586"
 
     const val AD_UNIT_ID_NATIVE_TEST =
         "ca-app-pub-3940256099942544/2247696110" // Just test Ad Unit ID
     const val AD_UNIT_ID_NATIVE_TAPPYTAPS =
-        "ca-app-pub-7656172151000850/8335954586" // Replace with TappyTaps Ad Unit ID
+        "ca-app-pub-7656172151000850/8335954586"
 
     const val BILLING_ID_BUY_APP_TAPPYTAPS = "unlock"
 }

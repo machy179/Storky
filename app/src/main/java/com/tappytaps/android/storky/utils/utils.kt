@@ -228,26 +228,29 @@ fun checkStortkyNotificationAfter5Days(
 
 }
 
-fun shareSetOfContractionsByEmail( //function for create pdf of list of contractions and send it by e-mail
+fun shareSetOfContractionsByEmail(
+    //function for create pdf of list of contractions and send it by e-mail
     context: Context,
     contractionInSet: Int,
     listOfContractions: MutableStateFlow<List<Contraction>>,
     viewModel: ViewModel,
     pdfCreatorAndSender: PdfCreatorAndSender,
     currentContractionLength: Int? = null,
-    currentTimeDateContraction: Calendar? = null
+    currentTimeDateContraction: Calendar? = null,
 ) {
 
-    val filteredContractionList: MutableList<Contraction>  = listOfContractions
+    val filteredContractionList: MutableList<Contraction> = listOfContractions
         .value
         .filter { it.in_set == contractionInSet }
         .toMutableList()
 
     // if there is stop watch running and it is saving of actual contractions, it is necessary to save current contraction
-    if(currentTimeDateContraction != null && currentContractionLength != null && currentContractionLength != 0) {
-        val newContraction = Contraction(contractionTime = currentTimeDateContraction,
+    if (currentTimeDateContraction != null && currentContractionLength != null && currentContractionLength != 0) {
+        val newContraction = Contraction(
+            contractionTime = currentTimeDateContraction,
             lengthOfContraction = currentContractionLength,
-            timeBetweenContractions = 0)
+            timeBetweenContractions = 0
+        )
 
         filteredContractionList.add(0, newContraction)
     }

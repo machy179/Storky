@@ -1,5 +1,6 @@
 package com.tappytaps.android.storky.screens.home
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -26,7 +27,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.unit.dp
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieConstants
-
+import com.tappytaps.android.storky.ui.theme.AdsBackgroundColor
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -34,7 +35,7 @@ import com.airbnb.lottie.compose.LottieConstants
 fun ContractionScreen(
     viewModel: HomeScreenViewModel,
     onPaddingValuesChanged: (PaddingValues) -> Unit,
-    bottomPadding: Int
+    bottomPadding: Int,
 ) {
     val currentLengthBetweenContractions = viewModel.currentLengthBetweenContractions.value
 
@@ -60,6 +61,7 @@ fun ContractionScreen(
         Surface(
             modifier = Modifier
                 .padding(paddingValues)
+                .background(AdsBackgroundColor)
                 .padding(bottom = bottomPadding.dp)
                 .fillMaxSize(),
             color = MaterialTheme.colorScheme.primary

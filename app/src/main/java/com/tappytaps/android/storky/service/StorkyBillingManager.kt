@@ -92,7 +92,7 @@ class StorkyBillingManager @Inject constructor(
                     savePurchaseStateToPreferences(adsRemoved = _adsDisabled.value)
                 }
 
-                if (true) { //IMPORTANT, it is just for debugging billing - here is purchase deactivated after new open app - so it can be testing purchase again
+                if (false) { //IMPORTANT, it is just for debugging billing - here is purchase deactivated after new open app - so it can be testing purchase again
                     purchases.forEach { purchase ->
                         if (purchase.purchaseState == Purchase.PurchaseState.PURCHASED) {
                             val consumeParams = ConsumeParams.newBuilder()

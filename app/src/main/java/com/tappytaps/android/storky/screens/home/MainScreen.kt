@@ -1,5 +1,6 @@
 package com.tappytaps.android.storky.screens.home
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -41,6 +42,7 @@ import com.tappytaps.android.storky.components.MainScreenAppBar
 import com.tappytaps.android.storky.components.UniversalButton
 import com.tappytaps.android.storky.model.Contraction
 import com.tappytaps.android.storky.navigation.StorkyScreens
+import com.tappytaps.android.storky.ui.theme.AdsBackgroundColor
 import com.tappytaps.android.storky.utils.convertSecondsToTimeString
 import com.tappytaps.android.storky.utils.convertSecondsToTimeString2
 
@@ -60,6 +62,7 @@ fun MainScreen(
     val currentContractionLength = viewModel.currentContractionLength.value
     val currentTimeDateContraction = viewModel.currentTimeDateContraction.value
     val currentLengthBetweenContractions = viewModel.currentLengthBetweenContractions.value
+    val isRunning = viewModel.isRunning
 
     val pauseStopWatch = viewModel.pauseStopWatch.value
     var dialogNewMonitoringVisible by rememberSaveable { mutableStateOf(false) }
@@ -92,7 +95,7 @@ fun MainScreen(
                 intervalBetweenTextSetting = convertSecondsToTimeString2(lengthOfInterval),
                 navController = navController,
                 backgroundColor = MaterialTheme.colorScheme.background,
-                pauseIconVisible = !pauseStopWatch,
+                pauseIconVisible = !pauseStopWatch &&  !(contractionsList.isNullOrEmpty()) && isRunning.value,
                 intervalContractionTextCurrent = if (averageContractionLength != 0) convertSecondsToTimeString2(
                     averageContractionLength
                 ) else "-:--",
@@ -128,6 +131,8 @@ fun MainScreen(
         Surface(
             modifier = Modifier
                 .padding(paddingValues)
+
+                .background(AdsBackgroundColor)
                 .padding(bottom = bottomPadding.dp)
                 .fillMaxSize(),
             color = MaterialTheme.colorScheme.background

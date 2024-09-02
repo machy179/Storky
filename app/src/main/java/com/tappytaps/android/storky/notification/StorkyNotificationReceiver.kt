@@ -19,9 +19,11 @@ import com.tappytaps.android.storky.R
 
 const val notificationID = 2
 const val channelID = "STORKY_POPUP_AFTER_5DAYS_CHANNEL"
+
 class StorkyNotificationReceiver : BroadcastReceiver() { //receiver for notification after 5 days
 
-    @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class,
+    @OptIn(
+        ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class,
         ExperimentalComposeUiApi::class
     )
     @SuppressLint("MissingPermission")
@@ -30,7 +32,12 @@ class StorkyNotificationReceiver : BroadcastReceiver() { //receiver for notifica
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             putExtra("screen", "TryBibinoScreen")
         }
-        val pendingIntent: PendingIntent = PendingIntent.getActivity(context, 0, mainIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+        val pendingIntent: PendingIntent = PendingIntent.getActivity(
+            context,
+            0,
+            mainIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
 
         val notificationBuilder = NotificationCompat.Builder(context, channelID)
             .setSmallIcon(R.drawable.ic_launcher_foreground)
@@ -44,7 +51,11 @@ class StorkyNotificationReceiver : BroadcastReceiver() { //receiver for notifica
 
         // Create Notification channel if necessary
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(channelID, "Storky Notification Channel", NotificationManager.IMPORTANCE_HIGH).apply {
+            val channel = NotificationChannel(
+                channelID,
+                "Storky Notification Channel",
+                NotificationManager.IMPORTANCE_HIGH
+            ).apply {
                 setShowBadge(false) // Ensure the notification does not show a badge on the app icon
             }
             notificationManager.createNotificationChannel(channel)

@@ -166,7 +166,6 @@ fun HowToScreen(
 }
 
 
-
 @Composable
 private fun PinkBullet(primaryColor: Boolean) {
     Box(

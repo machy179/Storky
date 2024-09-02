@@ -1,11 +1,8 @@
 package com.tappytaps.android.storky
 
-import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.content.IntentFilter
 import android.content.res.Configuration
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -38,18 +35,9 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     private val homeViewModel: HomeScreenViewModel by viewModels()
-    private lateinit var stopwatchUpdateReceiver: BroadcastReceiver
-    private var isReceiverRegistered = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        if (savedInstanceState != null) {
-            Log.d("Storky killing: ", "1 savedInstanceState != null")
-        } else {
-            Log.d("Storky killing: ", "2savedInstanceState == null")
-        }
-
 
         if (!isTablet(this)) { //to determine if the device is a tablet
             requestedOrientation = android.content.pm.ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
@@ -76,46 +64,12 @@ class MainActivity : ComponentActivity() {
 
         }
 
-
-
-
-        stopwatchUpdateReceiver =
-            object : BroadcastReceiver() { //receiver for communication between Service and Activity
-                override fun onReceive(context: Context?, intent: Intent?) {
-                    val currentLengthBetweenContractions =
-                        intent?.getIntExtra("currentLengthBetweenContractions", 0) ?: 0
-                    val pauseStopWatch = intent?.getBooleanExtra("pauseStopWatch", false) ?: false
-                    val showContractionlScreen =
-                        intent?.getBooleanExtra("showContractionlScreen", false) ?: false
-                    val currentContractionLength =
-                        intent?.getIntExtra("currentContractionLength", 0) ?: 0
-                    homeViewModel.updateFromService(
-                        currentLengthBetweenContractions,
-                        pauseStopWatch,
-                        showContractionlScreen,
-                        currentContractionLength
-                    )
-                }
-            }
     }
 
 
     override fun onResume() {
         super.onResume()
-        //  homeViewModel.stopService(this)
-        if (!isReceiverRegistered) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                registerReceiver(
-                    stopwatchUpdateReceiver,
-                    IntentFilter("STOPWATCH_UPDATE"),
-                    RECEIVER_NOT_EXPORTED
-                )
-            } else {
-                registerReceiver(stopwatchUpdateReceiver, IntentFilter("STOPWATCH_UPDATE"))
-            }
-            isReceiverRegistered = true
-        }
-
+        homeViewModel.checkIfItIsFromService()
         homeViewModel.stopService(this)
 
     }
@@ -126,22 +80,7 @@ class MainActivity : ComponentActivity() {
         //here uncomment:
         if (homeViewModel.isRunning.value && !homeViewModel.pauseStopWatch.value) {
             homeViewModel.startService(this)
-            if (isReceiverRegistered) {
-                unregisterReceiver(stopwatchUpdateReceiver)
-                isReceiverRegistered = false
-            }
         }
-    }
-
-
-    override fun onDestroy() {
-        super.onDestroy()
-       // homeViewModel.stopService(this)
-        if (isReceiverRegistered) {
-            unregisterReceiver(stopwatchUpdateReceiver)
-            isReceiverRegistered = false
-        }
-
     }
 
 }
