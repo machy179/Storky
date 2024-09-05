@@ -98,10 +98,10 @@ fun MainScreen(
                 pauseIconVisible = !pauseStopWatch && isRunning.value,
                 intervalContractionTextCurrent = if (averageContractionLength != 0) convertSecondsToTimeString2(
                     averageContractionLength
-                ) else "-:--",
+                ) else stringResource(R.string.no_data_yet),
                 intervalBetweenTextCurrent = if (averageLengthBetweenContractions != 0) convertSecondsToTimeString2(
                     averageLengthBetweenContractions
-                ) else "-:--",
+                ) else stringResource(R.string.no_data_yet),
                 onPause = {
                     viewModel.pauseStopWatch()
                 },

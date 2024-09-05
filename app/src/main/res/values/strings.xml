@@ -85,6 +85,7 @@
     <string name="intervals_should_be_shorter_than">Intervals should be shorter than </string>
     <string name="contractions_should_be_shorter_than">Contractions should be longer </string>
     <string name="now">Now </string>
+    <string name="no_data_yet">no data yet</string>
 
     <!--  IndicatorHelpScreen -->
     <string name="storky_indicator">Storky indicator</string>
