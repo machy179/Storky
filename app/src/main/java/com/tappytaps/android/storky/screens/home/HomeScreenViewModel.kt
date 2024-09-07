@@ -35,7 +35,7 @@ import java.util.Calendar
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeScreenViewModel @Inject constructor(
+open class HomeScreenViewModel @Inject constructor(
     private val repository: ContractionsRepository,
     private val application: Application,
     private val pdfCreatorAndSender: PdfCreatorAndSender,

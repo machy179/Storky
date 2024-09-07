@@ -3,6 +3,8 @@ package com.tappytaps.android.storky.screens.removeads
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.util.Log
+import android.widget.Toast
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -15,20 +17,33 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Snackbar
+import androidx.compose.material3.SnackbarData
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -53,7 +68,24 @@ fun RemoveAdsScreen(
 
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
     var purchaseInProgress = viewModel.purchaseInProgress.value
+
+    val snackbarHostState = remember { SnackbarHostState() }
+    val purchaseMessage = stringResource(id = R.string.toast_purchase_made)
+    //check if user bought "remove-ads"
+    LaunchedEffect(adsDisabled) {
+        if (adsDisabled) {
+            snackbarHostState.showSnackbar(
+                message = purchaseMessage,
+                duration = SnackbarDuration.Short
+            )
+
+      //      Toast.makeText(context,  purchaseMessage, Toast.LENGTH_LONG).show()
+        }
+    }
+
     Scaffold(
+        snackbarHost = { SnackbarHost(hostState = snackbarHostState,
+            snackbar = { snackbarData -> CustomSnackbar(text = purchaseMessage) }) },
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
 
         topBar = {
@@ -200,6 +232,29 @@ fun RemoveAdsScreen(
 
 
         }
+    }
+}
+
+@Composable
+fun CustomSnackbar(text: String) {
+    Snackbar(
+        modifier = Modifier.padding(16.dp)
+            .background(
+                color = MaterialTheme.colorScheme.surfaceContainerLow,
+        shape = RoundedCornerShape(24.dp)
+    ),
+        containerColor = MaterialTheme.colorScheme.surfaceContainerLow,
+        contentColor = MaterialTheme.colorScheme.onSurface,
+
+    ) {
+        Text(
+            text = text,
+            style = MaterialTheme.typography.bodyLarge,
+            modifier = Modifier
+                .padding(start = 24.dp, end = 24.dp),
+            textAlign = TextAlign.Center // Center the text horizontally
+        )
+
     }
 }
 

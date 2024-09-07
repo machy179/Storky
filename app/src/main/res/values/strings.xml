@@ -58,6 +58,7 @@
     <string name="yesterday">Yesterday</string>
     <string name="new_monitoring_title">Start new monitoring?</string>
     <string name="new_monitoring_text">Are you sure you want to start new monitoring? The current one will be stored in History.</string>
+    <string name="contraction_time">Contraction time</string>
 
     <!--  history screens -->
     <string name="history">History</string>
@@ -108,6 +109,7 @@
 
     <!--  HowTosScreen -->
     <string name="how_to">How to</string>
+    <string name="birth_guide">Birth guide</string>
     <string name="basic_terms">Basic terms</string>
     <string name="contraction_description">During labour the uterus contracts and moves your baby down. During contraction your abdomen becomes hard.</string>
     <string name="interval_description">It\'s a time from the beginning of one contraction to the beginning of the following one. It is the time of duration of the contraction plus rest time after.</string>
@@ -162,6 +164,7 @@
     <string name="terms_of_service">Terms of Service</string>
     <string name="and">and</string>
     <string name="privacy_policy">Privacy Policy.</string>
+    <string name="toast_purchase_made">Purchase made. Ads have been removed.</string>
 
     <!--  foreground service -->
     <string name="foreground_service_title">Storky</string>

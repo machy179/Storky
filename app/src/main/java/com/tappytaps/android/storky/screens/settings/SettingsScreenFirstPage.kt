@@ -93,11 +93,16 @@ fun SettingsScreenFirstPage(
                     .padding(top = paddingValues.calculateTopPadding())
 
             ) {
+                Spacer(modifier = Modifier.height(height = 16.dp))
+
                 Row(
-                    modifier = Modifier.fillMaxWidth().padding(start = 16.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 16.dp),
                     horizontalArrangement = Arrangement.SpaceBetween, // Space out items to opposite ends
                 ) {
                     Text(
+                        modifier = Modifier.align(Alignment.CenterVertically),
                         text = stringResource(R.string.storky_indicator),
                         style = MaterialTheme.typography.titleMedium,
                         color = MaterialTheme.colorScheme.onSurface,
@@ -108,15 +113,16 @@ fun SettingsScreenFirstPage(
                         onClick = {
                             navController.navigate(StorkyScreens.IndicatorHelpScreen.name)
                         },
+                        modifier = Modifier.align(Alignment.CenterVertically)
                     ) {
                         Icon(
                             painter = painterResource(id = R.drawable.info),
                             contentDescription = "Center Icon",
-                            modifier = Modifier,
                             tint = MaterialTheme.colorScheme.primary,
                         )
                     }
                 }
+
 
                 Column(
                     modifier = Modifier
@@ -130,12 +136,14 @@ fun SettingsScreenFirstPage(
                     Text(
                         text = stringResource(R.string.interval),
                         style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.onSurface,
                         textAlign = TextAlign.Start,
                         modifier = Modifier.padding(top = 6.dp)
                     )
                     Text(
                         text = convertSecondsToStringResource(lengthOfInterval),
                         style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                         textAlign = TextAlign.Start,
                         modifier = Modifier.padding(bottom = 6.dp)
                     )
@@ -153,12 +161,14 @@ fun SettingsScreenFirstPage(
                     Text(
                         text = stringResource(R.string.contraction),
                         style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.onSurface,
                         textAlign = TextAlign.Start,
                         modifier = Modifier.padding(top = 6.dp)
                     )
                     Text(
                         text = convertSecondsToStringResource(lengthOfContraction),
                         style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                         textAlign = TextAlign.Start,
                         modifier = Modifier.padding(bottom = 6.dp)
                     )
@@ -223,7 +233,7 @@ fun SettingsScreenFirstPage(
                 Box(
                     modifier = Modifier
                         .align(Alignment.BottomCenter)
-                        .padding(bottom = 60.dp) // Adjust padding as needed
+                        .padding(bottom = paddingValues.calculateBottomPadding())
                         .height(72.dp)
                         .width(328.dp)
                 ) {

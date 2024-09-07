@@ -100,6 +100,7 @@ fun SettingsScreenSecondPage(
                         Text(
                             text = stringResource(labelRes),
                             style = MaterialTheme.typography.bodyLarge,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
                             textAlign = TextAlign.Start
                         )
                         RadioButton(

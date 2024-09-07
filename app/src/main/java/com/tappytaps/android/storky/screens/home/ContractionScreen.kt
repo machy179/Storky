@@ -1,5 +1,7 @@
 package com.tappytaps.android.storky.screens.home
 
+import android.app.Application
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -24,9 +26,20 @@ import com.tappytaps.android.storky.components.StorkyAppBar
 import com.tappytaps.android.storky.components.UniversalButton
 import com.tappytaps.android.storky.utils.convertSecondsToTimeString
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.compose.rememberNavController
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieConstants
+import com.tappytaps.android.storky.data.StorkyDatabaseDao
+import com.tappytaps.android.storky.model.StorkyStopwatchState
+import com.tappytaps.android.storky.repository.ContractionsRepository
+import com.tappytaps.android.storky.repository.EmailRepository
+import com.tappytaps.android.storky.screens.email.EmailScreen
+import com.tappytaps.android.storky.screens.email.EmailScreenViewModel
+import com.tappytaps.android.storky.screens.email.MockEmailScreenViewModel
+import com.tappytaps.android.storky.service.PdfCreatorAndSender
 import com.tappytaps.android.storky.ui.theme.AdsBackgroundColor
 
 
@@ -93,11 +106,25 @@ fun ContractionScreen(
                                 composition = composition,
                                 iterations = LottieConstants.IterateForever
                             )
-                            Text(
-                                text = convertSecondsToTimeString(currentLengthBetweenContractions),
-                                style = MaterialTheme.typography.displayLarge,
-                                color = MaterialTheme.colorScheme.onPrimary
-                            )
+                            Column(
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                verticalArrangement = Arrangement.Center,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                            ) {
+                                Text(
+                                    text = convertSecondsToTimeString(currentLengthBetweenContractions),
+                                    style = MaterialTheme.typography.displayLarge,
+                                    color = MaterialTheme.colorScheme.onPrimary
+                                )
+
+                                Text(
+                                    text = stringResource(R.string.contraction_time),
+                                    style = MaterialTheme.typography.bodyLarge,
+                                    color = MaterialTheme.colorScheme.onPrimary
+                                )
+                            }
+
                         }
 
                     }
@@ -128,4 +155,19 @@ fun ContractionScreen(
 
         }
     }
+}
+
+
+
+
+
+@Preview
+@Composable
+fun ContractionScreenPreview() {
+
+    ContractionScreen(
+        viewModel = hiltViewModel<HomeScreenViewModel>(),
+        onPaddingValuesChanged = {},
+        bottomPadding = 0
+    )
 }

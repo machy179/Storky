@@ -42,6 +42,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.platform.LocalContext
@@ -413,7 +414,7 @@ fun UniversalButton(
                                     text = getFormattedDate(contractionTime),
                                     style = MaterialTheme.typography.labelMedium,
                                     color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                    modifier = Modifier.align(Alignment.CenterHorizontally) // Center horizontally
+                                    modifier = Modifier.align(Alignment.CenterHorizontally).alpha(0.6f)
                                 )
                             }
 
@@ -421,7 +422,7 @@ fun UniversalButton(
                                 text = convertCalendarToText(contractionTime),
                                 style = MaterialTheme.typography.labelMedium,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                modifier = Modifier.align(Alignment.CenterHorizontally) // Center horizontally
+                                modifier = Modifier.align(Alignment.CenterHorizontally).alpha(0.6f)  // Center horizontally
                             )
                         }
 
@@ -463,7 +464,8 @@ fun UniversalButton(
                         R.string.contraction
                     ) + " ${numberOfContraction.toString()}",
                     style = MaterialTheme.typography.labelMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.alpha(0.6f)
                 )
 
                 Text(
@@ -731,6 +733,8 @@ fun UniversalButton(
                 }
             }
         }
+
+
     }
 
 

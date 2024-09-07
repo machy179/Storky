@@ -43,7 +43,7 @@ fun HowToScreen(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             StorkyAppBar(
-                titleNameOfScreen = stringResource(R.string.how_to),
+                titleNameOfScreen = stringResource(R.string.birth_guide),
                 backgroundColor = MaterialTheme.colorScheme.background,
                 closeIconVisible = true,
                 deleteIconVisible = false,
@@ -64,10 +64,12 @@ fun HowToScreen(
                 Column(
                     modifier = Modifier.padding(horizontal = 16.dp)
                 ) {
+                    Spacer(modifier = Modifier.height(height = 24.dp))
                     Column {
                         Text(
                             text = stringResource(R.string.basic_terms),
                             style = MaterialTheme.typography.headlineSmall,
+                            color = MaterialTheme.colorScheme.onSurface,
                             textAlign = TextAlign.Start
                         )
                         Spacer(modifier = Modifier.height(16.dp))
@@ -76,6 +78,7 @@ fun HowToScreen(
                         Text(
                             text = stringResource(R.string.contraction_description),
                             style = MaterialTheme.typography.bodyLarge,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
                             textAlign = TextAlign.Start
                         )
 
@@ -88,6 +91,7 @@ fun HowToScreen(
                         Text(
                             text = stringResource(R.string.interval_description),
                             style = MaterialTheme.typography.bodyLarge,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
                             textAlign = TextAlign.Start
                         )
 
@@ -95,18 +99,21 @@ fun HowToScreen(
                         Spacer(modifier = Modifier.height(16.dp))
                         Text(
                             text = stringResource(R.string.true_labour),
+                            color = MaterialTheme.colorScheme.onSurface,
                             style = MaterialTheme.typography.titleMedium
                         )
                         Spacer(modifier = Modifier.height(6.dp))
                         Text(
                             text = stringResource(R.string.true_labour_description),
                             style = MaterialTheme.typography.bodyLarge,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
                             textAlign = TextAlign.Start
                         )
 
                         Spacer(modifier = Modifier.height(30.dp))
                         Text(
                             text = stringResource(R.string.labour_phases),
+                            color = MaterialTheme.colorScheme.onSurface,
                             style = MaterialTheme.typography.headlineSmall,
                             textAlign = TextAlign.Start
                         )
@@ -114,11 +121,13 @@ fun HowToScreen(
 
                         Text(
                             text = stringResource(R.string.early_labour_phase),
+                            color = MaterialTheme.colorScheme.onSurface,
                             style = MaterialTheme.typography.titleMedium
                         )
                         Spacer(modifier = Modifier.height(6.dp))
                         Text(
                             text = stringResource(R.string.early_labour_phase_description),
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
                             style = MaterialTheme.typography.bodyLarge,
                             textAlign = TextAlign.Start
                         )
@@ -126,33 +135,39 @@ fun HowToScreen(
 
                         Text(
                             text = stringResource(R.string.active_labour_phase),
+                            color = MaterialTheme.colorScheme.onSurface,
                             style = MaterialTheme.typography.titleMedium
                         )
                         Spacer(modifier = Modifier.height(6.dp))
                         Text(
                             text = stringResource(R.string.active_labour_phase_description),
                             style = MaterialTheme.typography.bodyLarge,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
                             textAlign = TextAlign.Start
                         )
                         Spacer(modifier = Modifier.height(24.dp))
                         Text(
                             text = stringResource(R.string.transition_phase),
+                            color = MaterialTheme.colorScheme.onSurface,
                             style = MaterialTheme.typography.titleMedium
                         )
                         Spacer(modifier = Modifier.height(6.dp))
                         Text(
                             text = stringResource(R.string.transition_phase_description),
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
                             style = MaterialTheme.typography.bodyLarge,
                             textAlign = TextAlign.Start
                         )
                         Spacer(modifier = Modifier.height(24.dp))
                         Text(
                             text = stringResource(R.string.pushing_and_delivery),
+                            color = MaterialTheme.colorScheme.onSurface,
                             style = MaterialTheme.typography.titleMedium
                         )
                         Spacer(modifier = Modifier.height(6.dp))
                         Text(
                             text = stringResource(R.string.pushing_and_delivery_description),
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
                             style = MaterialTheme.typography.bodyLarge,
                             textAlign = TextAlign.Start
                         )
@@ -184,7 +199,9 @@ private fun TextWithBullet(text: String, primaryColor: Boolean = true) {
     Row(verticalAlignment = Alignment.CenterVertically) {
         PinkBullet(primaryColor = primaryColor)
         Spacer(modifier = Modifier.width(9.dp))
-        Text(text = text, style = MaterialTheme.typography.titleMedium)
+        Text(text = text,
+            style = MaterialTheme.typography.titleMedium,
+            color = MaterialTheme.colorScheme.onSurface)
     }
 }
 

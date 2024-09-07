@@ -1,6 +1,7 @@
 package com.tappytaps.android.storky.screens.indicatorhelp
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -61,26 +62,31 @@ fun IndicatorHelpScreen(
             )
         },
     ) { paddingValues ->
+
         LazyColumn(
             modifier = Modifier
                 .padding(paddingValues)
                 .fillMaxSize(),
             verticalArrangement = Arrangement.Top,
         ) {
+
             item {
                 Column(
                     modifier = Modifier.padding(horizontal = 16.dp)
                 ) {
+                    Spacer(modifier = Modifier.height(height = 24.dp))
                     Column {
                         Text(
                             text = stringResource(R.string.how_it_works_title),
                             style = MaterialTheme.typography.titleLarge,
+                            color = MaterialTheme.colorScheme.onSurface,
                             textAlign = TextAlign.Start
                         )
                         Spacer(modifier = Modifier.height(8.dp))
                         Text(
                             text = stringResource(R.string.how_it_works_text),
                             style = MaterialTheme.typography.bodyLarge,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
                             textAlign = TextAlign.Start
                         )
                         Spacer(modifier = Modifier.height(8.dp))
@@ -100,7 +106,8 @@ fun IndicatorHelpScreen(
                                     Text(
                                         text = stringResource(R.string.conditions_not_met_title),
                                         style = MaterialTheme.typography.labelMedium,
-                                        textAlign = TextAlign.Center
+                                        textAlign = TextAlign.Center,
+                                                color = MaterialTheme.colorScheme.onSurfaceVariant,
                                     )
                                 }
                             }
@@ -116,7 +123,8 @@ fun IndicatorHelpScreen(
                                     Text(
                                         text = stringResource(R.string.conditions_met_title),
                                         style = MaterialTheme.typography.labelMedium,
-                                        textAlign = TextAlign.Center
+                                        textAlign = TextAlign.Center,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                                     )
                                 }
                             }
@@ -128,41 +136,41 @@ fun IndicatorHelpScreen(
                         Text(
                             text = stringResource(R.string.conditions_title),
                             style = MaterialTheme.typography.titleLarge,
-                            textAlign = TextAlign.Start
+                            textAlign = TextAlign.Start,
+                            color = MaterialTheme.colorScheme.onSurface,
                         )
                         Spacer(modifier = Modifier.height(6.dp))
                         Text(
                             text = stringResource(R.string.conditions_text),
                             style = MaterialTheme.typography.bodyLarge,
-                            textAlign = TextAlign.Start
+                            textAlign = TextAlign.Start,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
                         Spacer(modifier = Modifier.height(6.dp))
-                        TextButton(
-                            onClick = {
-                                navController.navigate(StorkyScreens.SettingsScreen.name)
-                            },
-                            modifier = Modifier
-                                .padding(horizontal = 10.dp, vertical = 12.dp)
-                        ) {
                             Text(
+                                modifier = Modifier.padding(vertical = 12.dp)
+                                    .clickable {navController.navigate(StorkyScreens.SettingsScreen.name)
+                                },
                                 text = stringResource(id = R.string.change_conditions),
                                 color = MaterialTheme.colorScheme.primary,
                                 style = MaterialTheme.typography.labelLarge
                             )
-                        }
+
                     }
                     Spacer(modifier = Modifier.height(31.dp))
                     Column {
                         Text(
                             text = stringResource(R.string.when_to_go_title),
                             style = MaterialTheme.typography.titleLarge,
-                            textAlign = TextAlign.Start
+                            textAlign = TextAlign.Start,
+                            color = MaterialTheme.colorScheme.onSurface,
                         )
                         Spacer(modifier = Modifier.height(8.dp))
                         Text(
                             text = stringResource(R.string.when_to_go_text),
                             style = MaterialTheme.typography.bodyLarge,
-                            textAlign = TextAlign.Start
+                            textAlign = TextAlign.Start,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
                         Spacer(modifier = Modifier.height(16.dp))
                         TextWithBullet(stringResource(R.string.when_to_go_row_1))
@@ -189,12 +197,9 @@ fun IndicatorHelpScreen(
 fun WhiteStorkBullet(conditionsMet: Boolean) {
     Box(
         modifier = Modifier
-            .size(56.dp)
-            .shadow(8.dp, CircleShape) // Apply shadow with a specified elevation and shape
-            .clip(CircleShape) // Clip the content to the CircleShape to match the background shape
+            .size(56.dp)  .clip(CircleShape) // Clip the content to the CircleShape to match the background shape
             .background(
-                color = WhiteColor,
-                shape = CircleShape
+                color = MaterialTheme.colorScheme.surfaceContainerHigh
             ),
         contentAlignment = Alignment.Center // Centers the icon within the Box
     ) {
@@ -226,7 +231,7 @@ fun TextWithBullet(text: String) {
     Row(verticalAlignment = Alignment.CenterVertically) {
         PinkBullet()
         Spacer(modifier = Modifier.width(8.dp))
-        Text(text = text, style = MaterialTheme.typography.bodyLarge)
+        Text(text = text, style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurfaceVariant,)
     }
 }
 
