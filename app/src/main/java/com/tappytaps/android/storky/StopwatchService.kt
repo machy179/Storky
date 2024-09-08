@@ -68,7 +68,13 @@ class StopwatchService : Service() {
 
     override fun onTaskRemoved(rootIntent: Intent?) { //if user kill the Activity, thi metod will be called - so this metod viwll destroy this service
         super.onTaskRemoved(rootIntent)
+        storkyStopwatchState.currentContractionLength.value = 0
+        storkyStopwatchState.currentLengthBetweenContractions.value = 0
+        storkyStopwatchState.showContractionlScreen.value = false
+        storkyStopwatchState.pauseStopWatch.value = true
+        storkyStopwatchState.isRunning.value = false
         stopSelf()
+        Log.d("Storky destroy", "onTaskRemoved: ")
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {

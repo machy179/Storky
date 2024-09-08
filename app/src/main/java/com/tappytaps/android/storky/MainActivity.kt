@@ -69,8 +69,15 @@ class MainActivity : ComponentActivity() {
 
     override fun onResume() {
         super.onResume()
+        Log.d("Storky destroy", "onResume: ")
         homeViewModel.checkIfItIsFromService()
         homeViewModel.stopService(this)
+
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+Log.d("Storky destroy", "onDestroy: ")
 
     }
 

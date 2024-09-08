@@ -43,7 +43,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -104,10 +107,15 @@ fun RemoveAdsScreen(
     ) {
 
         Box(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier.fillMaxSize().padding(start = 24.dp, end = 24.dp)
                 .windowInsetsPadding(WindowInsets.navigationBars)
         ) {
+            Column(
+                modifier = Modifier.fillMaxSize(), // Fill the entire screen
+                verticalArrangement = Arrangement.SpaceBetween // Space between top and bottom
+            ) {
 
+            }
 
             Column(
                 modifier = Modifier
@@ -180,36 +188,33 @@ fun RemoveAdsScreen(
                     Spacer(
                         modifier = Modifier.padding(bottom = 6.dp)
                     )
-                    Row(
-                        modifier = Modifier.align(alignment = Alignment.CenterHorizontally)
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
                             .padding(bottom = 16.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween
+                        horizontalAlignment = Alignment.CenterHorizontally // Ensures the text is centered
                     ) {
                         Text(
-                            text = stringResource(id = R.string.you_agree_to_our) + " ",
-                            style = MaterialTheme.typography.labelLarge
-                        )
-                        Text(
-                            text = stringResource(id = R.string.terms_of_service) + " ",
-                            style = MaterialTheme.typography.labelLarge,
-                            color = MaterialTheme.colorScheme.primary,
-                            modifier = Modifier.clickable {
-                                //TODO
-                            }
-                        )
-                        Text(
-                            text = stringResource(id = R.string.and) + " ",
-                            style = MaterialTheme.typography.labelLarge
-                        )
-                        Text(
-                            text = stringResource(id = R.string.privacy_policy),
-                            style = MaterialTheme.typography.labelLarge,
-                            color = MaterialTheme.colorScheme.primary,
-                            modifier = Modifier.clickable {
+                            text = buildAnnotatedString {
+                                append(stringResource(id = R.string.you_agree_to_our) + " ")
+                                withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.primary)) {
+                                    append(stringResource(id = R.string.terms_of_service) + " ")
+                                }
+                                append(stringResource(id = R.string.and) + " ")
+                                withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.primary)) {
+                                    append(stringResource(id = R.string.privacy_policy))
+                                }
+                            },
+                            style = MaterialTheme.typography.labelMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            textAlign = TextAlign.Center, // Ensures the text is centered
+                            modifier = Modifier.fillMaxWidth().clickable {
                                 //TODO
                             }
                         )
                     }
+
+
 
                 } else {
 

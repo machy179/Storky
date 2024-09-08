@@ -305,7 +305,7 @@ open class HomeScreenViewModel @Inject constructor(
 
 
     fun checkIfItIsFromService() {
-        //it is necessary to check the conditions when they are launched, the user returns to the application from the serivice and it is necessary to run timerJob:
+         //it is necessary to check the conditions when they are launched, the user returns to the application from the serivice and it is necessary to run timerJob:
         if ((timerJob == null || timerJob!!.isCancelled) && !_pauseStopWatch.value && _currentLengthBetweenContractions.value != 0) {
             _isRunning.value = true
             timerJob = viewModelScope.launch {

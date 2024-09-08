@@ -175,9 +175,9 @@ fun MainScreen(
                         if (contractionsList.isNullOrEmpty() && !viewModel.isRunning.value) {
                             Column(
                                 modifier = Modifier
-                                    .fillMaxSize(), // Optional padding
+                                    .fillMaxSize(),
                                 horizontalAlignment = Alignment.CenterHorizontally,
-                                verticalArrangement = Arrangement.Center // Center the content vertically
+                                verticalArrangement = Arrangement.Center
                             ) {
                                 // Fills the remaining space above the Box
                                 ImageTitleContentText(
@@ -231,14 +231,6 @@ fun MainScreen(
                                     )
                                 }
 
-
-
-                                ContractionRow(
-                                    lengthOfContraction = currentContractionLength,
-                                    contractionTime = currentTimeDateContraction,
-                                    timeBetweenContractions = currentLengthBetweenContractions,
-                                    numberOfContraction = contractionsList.size + 1
-                                )
                             }
 
                             val listState = rememberLazyListState()
@@ -253,6 +245,17 @@ fun MainScreen(
                                 state = listState,
 
                                 ) {
+                                item {
+                                    if (viewModel.isRunning.value) { //because if is first open, countdowner still does not work - so nothing to display on top text area
+                                        ContractionRow(
+                                            lengthOfContraction = currentContractionLength,
+                                            contractionTime = currentTimeDateContraction,
+                                            timeBetweenContractions = currentLengthBetweenContractions,
+                                            numberOfContraction = contractionsList.size + 1
+                                        )
+                                    }
+
+                                }
                                 var reverseIndex = contractionsList.size
                                 itemsIndexed(contractionsList) { index, contraction ->
                                     reverseIndex = contractionsList.size - index
