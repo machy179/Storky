@@ -47,6 +47,7 @@
 
     <string name="pause">Pause</string>
     <string name="restart">New monitoring</string>
+    <string name="start">Start</string>
     <string name="remove_ads">Remove ads</string>
     <string name="after_birth">After birth</string>
     <string name="share_app">Share app</string>

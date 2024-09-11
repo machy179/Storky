@@ -165,6 +165,7 @@ class StopwatchService : Service() {
             .setContentIntent(pendingIntent)
             .setOngoing(true) // Ensures the notification cannot be swiped away
             .setSilent(true) // Makes the notification silent
+            .setColorized(false)
 
 
         if (showContractionlScreen.value) {

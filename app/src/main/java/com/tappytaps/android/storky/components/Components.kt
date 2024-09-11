@@ -514,7 +514,7 @@ fun UniversalButton(
                         clip = false // Whether to clip the shadow to the shape
                     )
                     .background(
-                        color = MaterialTheme.colorScheme.surfaceContainerLow,
+                        color = MaterialTheme.colorScheme.surfaceContainer,
                         shape = RoundedCornerShape(24.dp)
                     )
             ) {
@@ -532,6 +532,7 @@ fun UniversalButton(
                                 R.string.conditions_not_met_title
                             ),
                             style = MaterialTheme.typography.titleMedium,
+                            color = MaterialTheme.colorScheme.onSurface,
                             modifier = Modifier.align(Alignment.CenterHorizontally)
                                 .padding(start = 24.dp, end = 24.dp, top = 24.dp),
                             textAlign = TextAlign.Center // Center the text horizontally
@@ -542,6 +543,7 @@ fun UniversalButton(
                                 R.string.conditions_not_met_text
                             ),
                             style = MaterialTheme.typography.bodyLarge,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
                             modifier = Modifier.align(Alignment.CenterHorizontally)
                                 .padding(start = 24.dp, end = 24.dp),
                             textAlign = TextAlign.Center // Center the text horizontally

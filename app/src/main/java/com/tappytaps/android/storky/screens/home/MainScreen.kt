@@ -308,8 +308,8 @@ fun MainScreen(
                     CustomDialog(
                         title = stringResource(R.string.new_monitoring_title),
                         text = stringResource(R.string.new_monitoring_text),
-                        firstTextButton = stringResource(R.string.no),
-                        secondTextButton = stringResource(R.string.ok),
+                        firstTextButton = stringResource(R.string.cancel),
+                        secondTextButton = stringResource(R.string.start),
                         enableFirstRequest = true,
                         firstRequest = {
                             viewModel.newMonitoring()
