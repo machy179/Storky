@@ -1,7 +1,6 @@
 package com.tappytaps.android.storky
 
 import android.annotation.SuppressLint
-import android.app.Application
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -21,7 +20,6 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import com.tappytaps.android.storky.model.StorkyStopwatchState
-import com.tappytaps.android.storky.repository.ContractionsRepository
 import com.tappytaps.android.storky.utils.convertSecondsToTimeString
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
@@ -161,7 +159,7 @@ class StopwatchService : Service() {
                     R.string.length_of_interval
                 )) + ": " + convertSecondsToTimeString(currentLengthBetweenContractions.value)
             )
-            .setSmallIcon(R.drawable.ic_launcher_foreground) // Ensure this is a valid drawable resource
+            .setSmallIcon(R.drawable.ic_launcher_monochromatic) // Ensure this is a valid drawable resource
             .setContentIntent(pendingIntent)
             .setOngoing(true) // Ensures the notification cannot be swiped away
             .setSilent(true) // Makes the notification silent
