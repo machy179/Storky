@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
@@ -69,22 +68,13 @@ class MainActivity : ComponentActivity() {
 
     override fun onResume() {
         super.onResume()
-        Log.d("Storky destroy", "onResume: ")
         homeViewModel.checkIfItIsFromService()
         homeViewModel.stopService(this)
 
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-Log.d("Storky destroy", "onDestroy: ")
-
-    }
-
-
     override fun onStop() {
         super.onStop()
-        //here uncomment:
         if (homeViewModel.isRunning.value && !homeViewModel.pauseStopWatch.value) {
             homeViewModel.startService(this)
         }

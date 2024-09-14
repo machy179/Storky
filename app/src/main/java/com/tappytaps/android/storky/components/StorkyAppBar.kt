@@ -2,6 +2,7 @@
 
 package com.tappytaps.android.storky.components
 
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -21,7 +22,6 @@ import com.tappytaps.android.storky.R
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun StorkyAppBar(
-    //AppBar for whole app, instead for Main screen - here is used MainScreenAppBar
     titleNameOfScreen: String = "",
     backgroundColor: Color,
     deleteIconVisible: Boolean = true,
@@ -32,95 +32,92 @@ fun StorkyAppBar(
     nextIconVisible: Boolean = false,
     onNext: (() -> Unit)? = null,
     scrollBehavior: TopAppBarScrollBehavior? = null,
+    useMediumTopAppBar: Boolean = true // Parametr pro volbu typu AppBar
 ) {
+    // Společná část pro titulek
+    val titleContent: @Composable () -> Unit = {
+        Text(
+            text = titleNameOfScreen,
+            style = MaterialTheme.typography.headlineSmall,
+            color = MaterialTheme.colorScheme.onSurface
+        )
+    }
 
-    // Determine the scroll behavior based on the title
-/*    val customScrollBehavior = if (!titleNameOfScreen.isEmpty()) {
-        TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
-    } else {
-        null // No scroll behavior
-    }*/
+    // Společná část pro navigační ikony
+    val navigationIconContent: @Composable () -> Unit = {
+        if (closeIconVisible) {
+            IconButton(onClick = { onClose?.invoke() }) {
+                Icon(
+                    painter = painterResource(id = R.drawable.close),
+                    contentDescription = "Close Icon",
+                    tint = MaterialTheme.colorScheme.onSurface
+                )
+            }
+        } else if (backArrowIconVisible) {
+            IconButton(onClick = { onClose?.invoke() }) {
+                Icon(
+                    imageVector = Icons.Default.ArrowBack,
+                    contentDescription = "Back Arrow Icon",
+                    tint = MaterialTheme.colorScheme.onSurface
+                )
+            }
+        }
+    }
 
-    MediumTopAppBar(
-        title = {
-            Text(
-                text = titleNameOfScreen,
-                style = MaterialTheme.typography.headlineSmall,
-                color = MaterialTheme.colorScheme.onSurface
-            )
-        },
-        colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = backgroundColor,
-            scrolledContainerColor = backgroundColor,
+    // Společná část pro akce
+    val actionsContent: @Composable RowScope.() -> Unit = {
+        // Delete icon
+        if (deleteIconVisible) {
+            IconButton(onClick = { onDelete?.invoke() }) {
+                Icon(
+                    painter = painterResource(id = R.drawable.delete),
+                    contentDescription = "Delete Icon",
+                    tint = if (backgroundColor == MaterialTheme.colorScheme.primary)
+                        MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurface
+                )
+            }
+        }
 
+        // Next icon
+        if (nextIconVisible) {
+            TextButton(onClick = { onNext?.invoke() }) {
+                Text(
+                    text = stringResource(id = R.string.skip_button),
+                    color = MaterialTheme.colorScheme.primary,
+                    style = MaterialTheme.typography.labelLarge
+                )
+            }
+        }
+    }
+
+    // Zobrazení TopAppBar nebo MediumTopAppBar na základě parametru
+    if (useMediumTopAppBar) {
+        MediumTopAppBar(
+            title = titleContent,
+            colors = TopAppBarDefaults.mediumTopAppBarColors(
+                containerColor = backgroundColor,
+                scrolledContainerColor = backgroundColor
             ),
-        navigationIcon = {
-            if (closeIconVisible) {
-                IconButton(
-                    onClick = { onClose?.invoke() }
-                ) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.close),
-                        contentDescription = "Delete Icon",
-                        tint = MaterialTheme.colorScheme.onSurface
-                    )
-                }
-            } else if (backArrowIconVisible) {
-                IconButton(
-                    onClick = { onClose?.invoke() }
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.ArrowBack,
-                        contentDescription = "Delete Icon",
-                        tint = MaterialTheme.colorScheme.onSurface
-                    )
-                }
-            }
-
-        },
-        actions = {
-
-
-            // Delete icon
-            if (deleteIconVisible) {
-                IconButton(
-                    onClick = { onDelete?.invoke() }
-                ) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.delete),
-                        contentDescription = "Delete Icon",
-                        tint = if (backgroundColor == MaterialTheme.colorScheme.primary) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurface
-                    )
-                }
-            }
-
-            // Next icon
-            if (nextIconVisible) {
-                TextButton(
-                    onClick = {
-                        if (onNext != null) {
-                            onNext.invoke()
-                        }
-                    },
-                    modifier = Modifier
-                ) {
-                    Text(
-                        text = stringResource(id = R.string.skip_button),
-                        color = MaterialTheme.colorScheme.primary,
-                        style = MaterialTheme.typography.labelLarge
-                    )
-                }
-            }
-
-
-        },
-        modifier = Modifier
-            .fillMaxWidth(),
-        scrollBehavior = scrollBehavior
-
-    )
-
-
+            navigationIcon = navigationIconContent,
+            actions = actionsContent, // RowScope je vyžadováno zde
+            modifier = Modifier.fillMaxWidth(),
+            scrollBehavior = scrollBehavior
+        )
+    } else {
+        TopAppBar(
+            title = titleContent,
+            colors = TopAppBarDefaults.topAppBarColors(
+                containerColor = backgroundColor,
+                scrolledContainerColor = backgroundColor
+            ),
+            navigationIcon = navigationIconContent,
+            actions = actionsContent, // RowScope je vyžadováno zde
+            modifier = Modifier.fillMaxWidth(),
+            scrollBehavior = scrollBehavior
+        )
+    }
 }
+
+
 
 

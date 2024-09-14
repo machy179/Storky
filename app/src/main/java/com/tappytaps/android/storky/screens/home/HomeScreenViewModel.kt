@@ -305,8 +305,9 @@ open class HomeScreenViewModel @Inject constructor(
 
 
     fun checkIfItIsFromService() {
-         //it is necessary to check the conditions when they are launched, the user returns to the application from the serivice and it is necessary to run timerJob:
+         //it is necessary to check if the user is back from the service (background app):
         if ((timerJob == null || timerJob!!.isCancelled) && !_pauseStopWatch.value && _currentLengthBetweenContractions.value != 0) {
+            //the user returns to the application from the serivice and it is necessary to run timerJob:
             _isRunning.value = true
             timerJob = viewModelScope.launch {
                 while (_isRunning.value) {
@@ -314,7 +315,12 @@ open class HomeScreenViewModel @Inject constructor(
                     if (!_pauseStopWatch.value) _currentLengthBetweenContractions.value += 1
                 }
             }
-        }
+
+            if(_currentLengthBetweenContractions.value > 1200 && _showContractionlScreen.value == false) {
+                //if the application goes from the background to the foreground, the measurement is running, there is no contraction and the measurement is longer than 20 minutes, then the measurement is paused
+                pauseStopWatch()
+            }
+       }
     }
 
 

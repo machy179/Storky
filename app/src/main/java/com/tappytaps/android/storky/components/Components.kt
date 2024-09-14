@@ -149,6 +149,7 @@ fun UniversalButton(
     disableInsetNavigationBarPadding: Boolean = false, //if it is used in HomeScreen on Scaffold, it is necessary to disable bottom padding of Inset NavigationBar
     bottomSpacer: Boolean = true,
     sendButton: Boolean = false,
+    purchaseButton: Boolean = false,
 ) {
 
     val modifier = if (disableInsetNavigationBarPadding) {
@@ -168,7 +169,12 @@ fun UniversalButton(
             Modifier
                 .height(56.dp)
                 .width(296.dp)
-        } else {
+        } else if (purchaseButton) {
+            Modifier
+                .height(62.dp)
+                .width(264.dp)
+        }
+        else {
             Modifier
                 .height(56.dp)
                 .width(264.dp)
