@@ -16,7 +16,7 @@ class SplashScreenViewModel @Inject constructor(
         if (isFirstRun) {
             sharedPreferences.edit().putBoolean("is_first_run", false).apply()
         }
-        return true // isFirstRun
+        return isFirstRun
     }
 
 
