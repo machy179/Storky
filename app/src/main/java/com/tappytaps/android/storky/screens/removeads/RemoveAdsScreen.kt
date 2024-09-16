@@ -74,13 +74,15 @@ fun RemoveAdsScreen(
                 duration = SnackbarDuration.Short
             )
 
-      //      Toast.makeText(context,  purchaseMessage, Toast.LENGTH_LONG).show()
+            //      Toast.makeText(context,  purchaseMessage, Toast.LENGTH_LONG).show()
         }
     }
 
     Scaffold(
-        snackbarHost = { SnackbarHost(hostState = snackbarHostState,
-            snackbar = { snackbarData -> CustomSnackbar(text = purchaseMessage) }) },
+        snackbarHost = {
+            SnackbarHost(hostState = snackbarHostState,
+                snackbar = { snackbarData -> CustomSnackbar(text = purchaseMessage) })
+        },
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
 
         topBar = {
@@ -99,135 +101,132 @@ fun RemoveAdsScreen(
         },
     ) {
 
-            Column(modifier = Modifier.fillMaxSize()
-                .windowInsetsPadding(WindowInsets.navigationBars)) {
-                Box(
+        Column(
+            modifier = Modifier.fillMaxSize()
+                .windowInsetsPadding(WindowInsets.navigationBars)
+        ) {
+            Box(
+                modifier = Modifier
+                    .padding(top = it.calculateTopPadding())
+                    .weight(1f)
+            ) {
+                Column(
                     modifier = Modifier
-                        .padding(top = it.calculateTopPadding())
-                        .weight(1f)
+                        .align(Alignment.Center),
+                    horizontalAlignment = Alignment.CenterHorizontally // Center images horizontally
                 ) {
-                    Column(
-                        modifier = Modifier
-                            .align(Alignment.Center),
-                        horizontalAlignment = Alignment.CenterHorizontally // Center images horizontally
-                    ) {
 
-                        val imageResId: Int = R.drawable.ads
-                        val titleResId: Int = R.string.remove_ads_screen_title
-                        val textResId: Int = R.string.remove_ads_screen_text
+                    val imageResId: Int = R.drawable.ads
+                    val titleResId: Int = R.string.remove_ads_screen_title
+                    val textResId: Int = R.string.remove_ads_screen_text
 
 
-                        ImageTitleContentText(
-                            imageResId = imageResId,
-                            titleResId = titleResId,
-                            textResId = textResId,
-                            modifier = Modifier.fillMaxWidth() // Ensure it fills the width
-                        )
+                    ImageTitleContentText(
+                        imageResId = imageResId,
+                        titleResId = titleResId,
+                        textResId = textResId,
+                        modifier = Modifier.fillMaxWidth() // Ensure it fills the width
+                    )
 
-                    }
                 }
+            }
 
-                Box(
-                    modifier = Modifier.padding(start = 24.dp, end = 24.dp)
+            Box(
+                modifier = Modifier.padding(start = 24.dp, end = 24.dp)
+            ) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .align(Alignment.BottomCenter)
                 ) {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .align(Alignment.BottomCenter)
-                    ) {
-                        if (!purchaseInProgress) {
+                    if (!purchaseInProgress) {
 
-                            if (!adsDisabled) {
-                                Row(
-                                    modifier = Modifier
-                                        .fillMaxWidth(),
-                                    horizontalArrangement = Arrangement.Center
-                                ) {
-
-                                    UniversalButton(
-                                        text = stringResource(id = R.string.remove_ads_screen_button_text),
-                                        subText = stringResource(id = R.string.remove_ads_screen_button_subtext),
-                                        onClick = {
-                                            activity?.let {
-                                                Log.d("remove ads Storky", "1")
-                                                viewModel?.startPurchase(it)
-                                            }
-                                        },
-                                        disableInsetNavigationBarPadding = true,
-                                        bottomSpacer = false,
-                                        purchaseButton = true
-                                    )
-                                }
-                            }
-
-
-                            Spacer(
-                                modifier = Modifier.padding(bottom = 12.dp)
-                            )
-
-                            TextButton(
+                        if (!adsDisabled) {
+                            Row(
                                 modifier = Modifier
-                                    .fillMaxWidth().padding(top = 6.dp, bottom = 6.dp),
-                                onClick = {
-                                    //TODO
-                                }
+                                    .fillMaxWidth(),
+                                horizontalArrangement = Arrangement.Center
                             ) {
-                                Text(
-                                    text = stringResource(id = R.string.restore_purchase),
-                                    style = MaterialTheme.typography.labelLarge
+
+                                UniversalButton(
+                                    text = stringResource(id = R.string.remove_ads_screen_button_text),
+                                    subText = stringResource(id = R.string.remove_ads_screen_button_subtext),
+                                    onClick = {
+                                        activity?.let {
+                                            Log.d("remove ads Storky", "1")
+                                            viewModel?.startPurchase(it)
+                                        }
+                                    },
+                                    disableInsetNavigationBarPadding = true,
+                                    bottomSpacer = false,
+                                    purchaseButton = true
                                 )
                             }
-/*                            Spacer(
-                                modifier = Modifier.padding(bottom = 6.dp)
-                            )*/
-                                TextButton(
-                                    modifier = Modifier
-                                        .fillMaxWidth(),
-                                    onClick = {
-                                        //TODO
-                                    }
-                                ) {
-                                    Text(
-                                        text = buildAnnotatedString {
-                                            append(stringResource(id = R.string.you_agree_to_our) + " ")
-                                            withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.primary)) {
-                                                append(stringResource(id = R.string.terms_of_service) + " ")
-                                            }
-                                            append(stringResource(id = R.string.and) + " ")
-                                            withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.primary)) {
-                                                append(stringResource(id = R.string.privacy_policy))
-                                            }
-                                        },
-                                        style = MaterialTheme.typography.labelMedium,
-                                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                        textAlign = TextAlign.Center, // Ensures the text is centere
-                                    )
-                                }
+                        }
 
 
+                        Spacer(
+                            modifier = Modifier.padding(bottom = 12.dp)
+                        )
 
-
-                        } else {
-
-
-                            Box(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .align(Alignment.CenterHorizontally)
-                                    .padding(bottom = 100.dp), // Adjust padding to match the previous layout
-                                contentAlignment = Alignment.Center // Centers content both horizontally and vertically
-                            ) {
-                                CircularProgressIndicator()
+                        TextButton(
+                            modifier = Modifier
+                                .fillMaxWidth().padding(top = 6.dp, bottom = 6.dp),
+                            onClick = {
+                                //TODO
                             }
+                        ) {
+                            Text(
+                                text = stringResource(id = R.string.restore_purchase),
+                                style = MaterialTheme.typography.labelLarge
+                            )
+                        }
+                        TextButton(
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            onClick = {
+                                //TODO
+                            }
+                        ) {
+                            Text(
+                                text = buildAnnotatedString {
+                                    append(stringResource(id = R.string.you_agree_to_our) + " ")
+                                    withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.primary)) {
+                                        append(stringResource(id = R.string.terms_of_service) + " ")
+                                    }
+                                    append(stringResource(id = R.string.and) + " ")
+                                    withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.primary)) {
+                                        append(stringResource(id = R.string.privacy_policy))
+                                    }
+                                },
+                                style = MaterialTheme.typography.labelMedium,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                textAlign = TextAlign.Center, // Ensures the text is centere
+                            )
+                        }
 
 
+                    } else {
+
+                        Spacer(
+                            modifier = Modifier.padding(bottom = 24.dp)
+                        )
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .align(Alignment.CenterHorizontally)
+                                .padding(bottom = 118.dp), // Adjust padding to match the previous layout
+                            contentAlignment = Alignment.Center // Centers content both horizontally and vertically
+                        ) {
+                            CircularProgressIndicator()
                         }
 
 
                     }
+
+
                 }
-
-
+            }
 
 
         }
@@ -240,12 +239,12 @@ fun CustomSnackbar(text: String) {
         modifier = Modifier.padding(16.dp)
             .background(
                 color = MaterialTheme.colorScheme.surfaceContainerLow,
-        shape = RoundedCornerShape(24.dp)
-    ),
+                shape = RoundedCornerShape(24.dp)
+            ),
         containerColor = MaterialTheme.colorScheme.surfaceContainerLow,
         contentColor = MaterialTheme.colorScheme.onSurface,
 
-    ) {
+        ) {
         Text(
             text = text,
             style = MaterialTheme.typography.bodyLarge,

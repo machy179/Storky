@@ -252,13 +252,14 @@ fun UniversalButton(
         modifier: Modifier = Modifier,
         valueState: MutableState<String>,
         isSingleLine: Boolean = true,
-        keyboardType: KeyboardType = KeyboardType.Text,
+        keyboardType: KeyboardType = KeyboardType.Email,
         imeAction: ImeAction = ImeAction.Next,
         onAction: KeyboardActions = KeyboardActions.Default,
     ) {
 
         OutlinedTextField(
             value = valueState.value,
+
             onValueChange = { valueState.value = it },
             singleLine = isSingleLine,
             shape = RoundedCornerShape(100.dp), // Rounded corners
@@ -269,6 +270,7 @@ fun UniversalButton(
                 .height(64.dp), // dle Figma, tam je 56, ale uřezává mi to spodky, pořešit později
             keyboardOptions = KeyboardOptions(keyboardType = keyboardType, imeAction = imeAction),
             keyboardActions = onAction
+            
         )
 
 

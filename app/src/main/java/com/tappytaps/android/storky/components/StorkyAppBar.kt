@@ -32,9 +32,9 @@ fun StorkyAppBar(
     nextIconVisible: Boolean = false,
     onNext: (() -> Unit)? = null,
     scrollBehavior: TopAppBarScrollBehavior? = null,
-    useMediumTopAppBar: Boolean = true // Parametr pro volbu typu AppBar
+    useMediumTopAppBar: Boolean = true
 ) {
-    // Společná část pro titulek
+    // common part for title
     val titleContent: @Composable () -> Unit = {
         Text(
             text = titleNameOfScreen,
@@ -43,7 +43,7 @@ fun StorkyAppBar(
         )
     }
 
-    // Společná část pro navigační ikony
+    // common part for navigation icons
     val navigationIconContent: @Composable () -> Unit = {
         if (closeIconVisible) {
             IconButton(onClick = { onClose?.invoke() }) {
@@ -64,7 +64,7 @@ fun StorkyAppBar(
         }
     }
 
-    // Společná část pro akce
+    // common part for actions
     val actionsContent: @Composable RowScope.() -> Unit = {
         // Delete icon
         if (deleteIconVisible) {
@@ -90,7 +90,7 @@ fun StorkyAppBar(
         }
     }
 
-    // Zobrazení TopAppBar nebo MediumTopAppBar na základě parametru
+    // TopAppBar or MediumTopAppBar:
     if (useMediumTopAppBar) {
         MediumTopAppBar(
             title = titleContent,

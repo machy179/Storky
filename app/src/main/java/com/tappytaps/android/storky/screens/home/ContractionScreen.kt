@@ -1,7 +1,6 @@
 package com.tappytaps.android.storky.screens.home
 
-import android.app.Application
-import androidx.compose.foundation.ExperimentalFoundationApi
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -29,17 +28,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.compose.rememberNavController
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieConstants
-import com.tappytaps.android.storky.data.StorkyDatabaseDao
-import com.tappytaps.android.storky.model.StorkyStopwatchState
-import com.tappytaps.android.storky.repository.ContractionsRepository
-import com.tappytaps.android.storky.repository.EmailRepository
-import com.tappytaps.android.storky.screens.email.EmailScreen
-import com.tappytaps.android.storky.screens.email.EmailScreenViewModel
-import com.tappytaps.android.storky.screens.email.MockEmailScreenViewModel
-import com.tappytaps.android.storky.service.PdfCreatorAndSender
 import com.tappytaps.android.storky.ui.theme.AdsBackgroundColor
 
 
@@ -101,7 +91,9 @@ fun ContractionScreen(
                             modifier = Modifier
                                 .fillMaxSize(),
                             contentAlignment = Alignment.Center
+
                         ) {
+
                             LottieAnimation(
                                 composition = composition,
                                 iterations = LottieConstants.IterateForever

@@ -13,10 +13,11 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.imeNestedScroll
+import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.isImeVisible
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.verticalScroll
@@ -26,9 +27,11 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -47,6 +50,8 @@ import com.tappytaps.android.storky.components.StorkyAppBar
 import com.tappytaps.android.storky.navigation.StorkyScreens
 import com.tappytaps.android.storky.repository.EmailRepository
 import com.tappytaps.android.storky.utils.isValidEmail
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @ExperimentalMaterial3Api
 @ExperimentalFoundationApi
@@ -79,6 +84,18 @@ fun AskEmailScreen(
 
     val scrollState = rememberScrollState()
     val isImeVisible = WindowInsets.isImeVisible
+    val coroutineScope = rememberCoroutineScope()
+
+    LaunchedEffect(isImeVisible) {
+        //to ensure scroll the view to bottom wher keyboard is visible,
+        //because when the keyboard appears, it only moves the inputText, so it still has to be scrolled under the button
+        if (isImeVisible) {
+            coroutineScope.launch {
+                delay(200)
+                scrollState.animateScrollTo(scrollState.maxValue)
+            }
+        }
+    }
 
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
@@ -130,7 +147,7 @@ fun AskEmailScreen(
 
                 Spacer(modifier = Modifier.weight(1f))
                 Column(
-                    modifier = Modifier
+                    modifier = Modifier.windowInsetsPadding(WindowInsets.ime)
                         .fillMaxSize()
                 ) {
                     val email = rememberSaveable { mutableStateOf("") }
