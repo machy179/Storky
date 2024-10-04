@@ -1,6 +1,7 @@
 package com.tappytaps.android.storky.screens.history
 
 import android.content.Context
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -91,12 +92,18 @@ fun HistoryScreen(
     ) { paddingValues ->
         val rowOfActualContraction =
             remember { mutableStateOf(false) } //...if it is possible to show row of actual contraction
+        val isRunning =
+            remember { mutableStateOf(false) }
 
         if (homeViewModel.isRunning.value == true) {
             rowOfActualContraction.value = true
+            isRunning.value = true
         } else {
             rowOfActualContraction.value = false
+            isRunning.value = false
         }
+
+
 
 
         if ((listOfContractionsHistory.isNullOrEmpty()
@@ -158,6 +165,7 @@ fun HistoryScreen(
                 val sizeListOfActiveContractions = listOfActiveContractions.size
                 if (sizeListOfActiveContractions == 0
                     && rowOfActualContraction.value
+                    && isRunning.value
                 ) {
                     item {
                         FirstRowOfSetsOfActiveContractions(
@@ -174,7 +182,7 @@ fun HistoryScreen(
                     key = { index, activeContraction -> activeContraction.id }
                 ) { index, contraction ->
                     val reversedIndex = sizeListOfActiveContractions - index
-                    if (index == 0
+                    if (index == 0 && isRunning.value
                     ) {
                         FirstRowOfSetsOfActiveContractions(
                             listOfActiveContractions,
