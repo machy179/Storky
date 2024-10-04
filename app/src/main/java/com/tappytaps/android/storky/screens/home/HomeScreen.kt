@@ -129,9 +129,12 @@ fun AdaptiveBannerAd(onAdHeightCalculated: (Int) -> Unit) {
         if (BuildConfig.DEBUG) Constants.AD_UNIT_ID_BANNER_TEST else Constants.AD_UNIT_ID_BANNER_TAPPYTAPS
 
 
+    // Apply only if adUnitId has not been set yet - because of crasch during change Dark/Light mode
     adView.apply {
-        adUnitId = adUnitIdBanner
-        setAdSize(adSize)
+        if (adUnitId.isNullOrEmpty()) {
+            adUnitId = adUnitIdBanner
+            setAdSize(adSize)
+        }
     }
 
     val adRequest = remember { AdRequest.Builder().build() }

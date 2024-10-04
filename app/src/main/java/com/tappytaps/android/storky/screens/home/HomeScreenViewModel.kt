@@ -174,10 +174,12 @@ open class HomeScreenViewModel @Inject constructor(
     }
 
     fun pauseStopWatch() {
-        _pauseStopWatch.value = true //
         _currentLengthBetweenContractions.value =
             -1 //if timer was paused, then timeBetweenContractions is set as -1
+        saveContraction()
+        _pauseStopWatch.value = true
         buttonStopContractionAlreadyPresed = false
+        stopStopwatch()
     }
 
     fun newMonitoring() {
@@ -388,6 +390,4 @@ open class HomeScreenViewModel @Inject constructor(
 
 
     }
-
-
 }

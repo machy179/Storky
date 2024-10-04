@@ -19,7 +19,10 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.viewModelScope
+import com.tappytaps.android.storky.model.Contraction
 import com.tappytaps.android.storky.model.StorkyStopwatchState
+import com.tappytaps.android.storky.repository.ContractionsRepository
 import com.tappytaps.android.storky.utils.convertSecondsToTimeString
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
@@ -27,6 +30,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.util.Calendar
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -39,6 +44,10 @@ class StopwatchService : Service() {
     @Inject
     lateinit var storkyStopwatchState: StorkyStopwatchState
 
+    @Inject
+    lateinit var repository: ContractionsRepository
+
+
     private var serviceJob: Job? = null
     private val serviceScope = CoroutineScope(Dispatchers.Default)
 
@@ -46,6 +55,8 @@ class StopwatchService : Service() {
     private lateinit var currentLengthBetweenContractions: MutableState<Int>
     private lateinit var pauseStopWatch: MutableState<Boolean>
     private lateinit var showContractionlScreen: MutableState<Boolean>
+    private lateinit var currentContractionLength: MutableState<Int>
+
 
     private var notification: Notification? = null
     private var builder: NotificationCompat.Builder? = null
@@ -58,21 +69,38 @@ class StopwatchService : Service() {
         currentLengthBetweenContractions = storkyStopwatchState.currentLengthBetweenContractions
         showContractionlScreen = storkyStopwatchState.showContractionlScreen
         pauseStopWatch = storkyStopwatchState.pauseStopWatch
+        currentContractionLength = storkyStopwatchState.currentContractionLength
         try {
             startForegroundService()
         } catch (e: Exception) {
         }
     }
 
-    override fun onTaskRemoved(rootIntent: Intent?) { //if user kill the Activity, thi metod will be called - so this metod viwll destroy this service
+    override fun onTaskRemoved(rootIntent: Intent?) { //if user kill the Activity, this metod will be called - so this metod vwill destroy this service
         super.onTaskRemoved(rootIntent)
-        storkyStopwatchState.currentContractionLength.value = 0
+
+        CoroutineScope(Dispatchers.IO).launch {
+            saveContraction() //if user kill the Activity, it is necessary to save current contraction in regarding of the conditions in save Contraction method
+            // other operations they are running after saveContraction()
+            withContext(Dispatchers.Main) {
+                storkyStopwatchState.currentContractionLength.value = 0
+                storkyStopwatchState.currentLengthBetweenContractions.value = 0
+                storkyStopwatchState.showContractionlScreen.value = false
+                storkyStopwatchState.pauseStopWatch.value = true
+                storkyStopwatchState.isRunning.value = false
+                stopSelf()
+                Log.d("Storky destroy", "onTaskRemoved: ")
+            }
+        }
+
+
+/*        storkyStopwatchState.currentContractionLength.value = 0
         storkyStopwatchState.currentLengthBetweenContractions.value = 0
         storkyStopwatchState.showContractionlScreen.value = false
         storkyStopwatchState.pauseStopWatch.value = true
         storkyStopwatchState.isRunning.value = false
         stopSelf()
-        Log.d("Storky destroy", "onTaskRemoved: ")
+        Log.d("Storky destroy", "onTaskRemoved: ")*/
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -213,5 +241,23 @@ class StopwatchService : Service() {
         isRunning = false
         serviceJob?.cancel() // Cancel the running coroutine
         serviceJob = null
+    }
+
+    suspend fun saveContraction() {
+
+        if (isRunning && !showContractionlScreen.value) {
+                try {
+                    repository.addContraction(
+                        Contraction(
+                            lengthOfContraction = currentContractionLength.value,
+                            timeBetweenContractions = currentLengthBetweenContractions.value,
+                            contractionTime = Calendar.getInstance()
+                        )
+                    )
+                } catch (e: Exception) {
+                    Log.e("Save to database error:", e.toString())
+                }
+
+        }
     }
 }
