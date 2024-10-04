@@ -165,7 +165,6 @@ fun HistoryScreen(
                 val sizeListOfActiveContractions = listOfActiveContractions.size
                 if (sizeListOfActiveContractions == 0
                     && rowOfActualContraction.value
-                    && isRunning.value
                 ) {
                     item {
                         FirstRowOfSetsOfActiveContractions(
@@ -182,7 +181,7 @@ fun HistoryScreen(
                     key = { index, activeContraction -> activeContraction.id }
                 ) { index, contraction ->
                     val reversedIndex = sizeListOfActiveContractions - index
-                    if (index == 0 && isRunning.value
+                    if (index == 0
                     ) {
                         FirstRowOfSetsOfActiveContractions(
                             listOfActiveContractions,
@@ -289,7 +288,7 @@ private fun FirstRowOfSetsOfActiveContractions(
 
     )
 
-    if (homeViewModel.currentContractionLength.value > 0 || homeViewModel.currentLengthBetweenContractions.value > 0) {
+    if ((homeViewModel.currentContractionLength.value > 0 || homeViewModel.currentLengthBetweenContractions.value > 0) && homeViewModel.isRunning.value) {
         ContractionRow(
             lengthOfContraction = homeViewModel.currentContractionLength.value,
             contractionTime = homeViewModel.currentTimeDateContraction.value,
