@@ -22,8 +22,8 @@ android {
         applicationId = "com.tappytaps.android.storky"
         minSdk = 23
         targetSdk = 35
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 6
+        versionName = "1.0.6"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -33,7 +33,7 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -110,8 +110,6 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
 
     implementation(libs.lottie.compose)
-
-
 }
 
 

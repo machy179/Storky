@@ -1,10 +1,10 @@
 [versions]
 accompanistPager = "0.35.1-alpha"
-agp = "8.4.1"
+agp = "8.5.2"
 animation = "1.6.8"
 billing = "7.0.0"
 coilCompose = "2.1.0"
-gradle = "8.3.2"
+gradle = "8.5.2"
 hiltAndroidCompiler = "2.51.1"
 hiltNavigationCompose = "1.2.0"
 itextpdf = "5.5.13.4"
