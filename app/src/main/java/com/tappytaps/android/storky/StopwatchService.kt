@@ -19,7 +19,6 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.viewModelScope
 import com.tappytaps.android.storky.model.Contraction
 import com.tappytaps.android.storky.model.StorkyStopwatchState
 import com.tappytaps.android.storky.repository.ContractionsRepository
@@ -151,6 +150,7 @@ class StopwatchService : Service() {
                 NotificationManager.IMPORTANCE_HIGH
             ).apply {
                 setShowBadge(false) // Ensure the notification does not show a badge on the app icon
+                lockscreenVisibility = Notification.VISIBILITY_PUBLIC // Show notification on lock screen
             }
             notificationManager =
                 getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -192,6 +192,9 @@ class StopwatchService : Service() {
             .setOngoing(true) // Ensures the notification cannot be swiped away
             .setSilent(true) // Makes the notification silent
             .setColorized(false)
+            .setPriority(NotificationCompat.PRIORITY_HIGH) // Ensure high priority
+            .setVisibility(NotificationCompat.VISIBILITY_PUBLIC) // Ensure it's visible on lock screen
+
 
 
         if (showContractionlScreen.value) {

@@ -20,12 +20,6 @@ fun isValidEmail(email: String): Boolean {
     return emailRegex.matches(email)
 }
 
-fun convertSecondsToTimeString(seconds: Int): String {
-    val minutes = seconds / 60
-    val remainingSeconds = seconds % 60
-    return String.format("%01d:%02d", minutes, remainingSeconds)
-}
-
 @Composable
 fun convertSecondsToStringResource(seconds: Int): String {
     val resourceString: String
@@ -47,15 +41,23 @@ fun convertSecondsToStringResource(seconds: Int): String {
     return resourceString
 }
 
-fun convertSecondsToTimeString2(seconds: Int): String {
+fun convertSecondsToTimeString(seconds: Int): String { // Convert seconds to a formatted time string
     val minutes = seconds / 60
     val remainingSeconds = seconds % 60
-    return if (remainingSeconds == 0) {
-        String.format("%d min", minutes)
-    } else {
-        String.format("%d min %d sec", minutes, remainingSeconds)
+    return String.format("%01d:%02d", minutes, remainingSeconds)
+}
+
+fun convertSecondsToTimeString2(seconds: Int): String { // Convert seconds to a formatted time string in regarding minutes or second are 0
+    val minutes = seconds / 60
+    val remainingSeconds = seconds % 60
+
+    return when {
+        minutes == 0 -> String.format("%d sec", remainingSeconds)
+        remainingSeconds == 0 -> String.format("%d min", minutes)
+        else -> String.format("%d min %d sec", minutes, remainingSeconds)
     }
 }
+
 
 fun convertCalendarToText(time: Calendar): String {
     val hours = time.get(Calendar.HOUR_OF_DAY)

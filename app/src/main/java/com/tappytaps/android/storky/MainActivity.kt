@@ -27,6 +27,10 @@ import com.tappytaps.android.storky.navigation.StorkyNavigation
 import com.tappytaps.android.storky.screens.home.HomeScreenViewModel
 import com.tappytaps.android.storky.ui.theme.StorkyTheme
 import dagger.hilt.android.AndroidEntryPoint
+import com.google.android.ump.ConsentDebugSettings
+import com.google.android.ump.ConsentInformation
+import com.google.android.ump.ConsentRequestParameters
+import com.google.android.ump.UserMessagingPlatform
 
 @ExperimentalMaterial3Api
 @ExperimentalFoundationApi
@@ -38,6 +42,8 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        makeGDPRContent()
 
         if (!isTablet(this)) { //to determine if the device is a tablet
             requestedOrientation = android.content.pm.ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
@@ -66,6 +72,55 @@ class MainActivity : ComponentActivity() {
 
     }
 
+    private fun makeGDPRContent() {
+        val consentInformation = UserMessagingPlatform.getConsentInformation(this)
+        val params = ConsentRequestParameters.Builder()
+            .setConsentDebugSettings(
+                ConsentDebugSettings.Builder(this)
+                    .build()
+            )
+            .setTagForUnderAgeOfConsent(false) // If not for children, set to false
+            .build()
+
+        consentInformation.requestConsentInfoUpdate(
+            this,
+            params,
+            {
+                if (consentInformation.isConsentFormAvailable) {
+                    // View consent form if available
+                    loadConsentForm()
+                }
+            },
+            { error ->
+
+                Log.d("ErrorStorky"," no content form is available")
+            }
+        )
+    }
+
+    private fun loadConsentForm() {
+        UserMessagingPlatform.loadConsentForm(
+            this,
+            { consentForm ->
+                consentForm.show(this) { formError ->
+                    // Processing the result or error
+                    if (formError == null) {
+                        // Checking if the user has agreed or not
+                        if (UserMessagingPlatform.getConsentInformation(this).consentStatus == ConsentInformation.ConsentStatus.REQUIRED) {
+                            // The user must grant consent
+                            loadConsentForm()
+                        }
+                    } else {
+
+                    }
+                }
+            },
+            { loadError ->
+
+            }
+        )
+    }
+
 
     override fun onResume() {
         super.onResume()
@@ -80,6 +135,8 @@ class MainActivity : ComponentActivity() {
             homeViewModel.startService(this)
         }
     }
+
+
 
 
 
@@ -107,6 +164,8 @@ fun StorkyApp(intent: Intent?) {
 fun isTablet(context: Context): Boolean { //to determine if the device is a tablet
     return (context.resources.configuration.screenLayout and Configuration.SCREENLAYOUT_SIZE_MASK) >= Configuration.SCREENLAYOUT_SIZE_LARGE
 }
+
+
 
 
 @Preview(showBackground = true)

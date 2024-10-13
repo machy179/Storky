@@ -155,7 +155,7 @@ fun MainScreen(
                             drawContent()
 
                             // Calculate the starting and ending position of the gradient
-                            val gradientStartY = size.height * 0.75f
+                            val gradientStartY = size.height * 0.88f
                             val gradientEndY = size.height * 0.95f
 
                             drawRect(

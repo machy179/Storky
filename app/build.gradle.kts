@@ -110,7 +110,7 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
 
     implementation(libs.lottie.compose)
-
+    implementation(libs.user.messaging.platform)
 
 }
 
