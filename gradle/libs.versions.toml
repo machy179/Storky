@@ -25,6 +25,7 @@ navigationCompose = "2.7.7"
 playServicesAds = "23.3.0"
 roomRuntime = "2.6.1"
 runtimeLivedata = "1.6.8"
+userMessagingPlatform = "3.0.0"
 
 [libraries]
 accompanist-pager = { module = "com.google.accompanist:accompanist-pager", version.ref = "accompanistPager" }
@@ -62,6 +63,8 @@ kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", v
 lottie-compose = { module = "com.airbnb.android:lottie-compose", version.ref = "lottieCompose" }
 material3 = { module = "androidx.compose.material3:material3", version.ref = "material3" }
 play-services-ads = { module = "com.google.android.gms:play-services-ads", version.ref = "playServicesAds" }
+user-messaging-platform = { module = "com.google.android.ump:user-messaging-platform", version.ref = "userMessagingPlatform" }
+
 
 
 [plugins]

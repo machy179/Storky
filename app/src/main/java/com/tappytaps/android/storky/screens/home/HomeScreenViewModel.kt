@@ -34,6 +34,7 @@ import kotlinx.coroutines.launch
 import java.util.Calendar
 import javax.inject.Inject
 
+
 @HiltViewModel
 open class HomeScreenViewModel @Inject constructor(
     private val repository: ContractionsRepository,

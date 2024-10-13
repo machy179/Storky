@@ -98,6 +98,7 @@ class MainActivity : ComponentActivity() {
         )
     }
 
+
     private fun loadConsentForm() {
         UserMessagingPlatform.loadConsentForm(
             this,

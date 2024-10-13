@@ -47,6 +47,7 @@ fun convertSecondsToTimeString(seconds: Int): String { // Convert seconds to a f
     return String.format("%01d:%02d", minutes, remainingSeconds)
 }
 
+
 fun convertSecondsToTimeString2(seconds: Int): String { // Convert seconds to a formatted time string in regarding minutes or second are 0
     val minutes = seconds / 60
     val remainingSeconds = seconds % 60
